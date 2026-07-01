@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:    #06090F;
+  --bg2:   #090E17;
+  --bg3:   #0C1320;
+  --bg4:   #101828;
+  --card:  #0E1520;
+  --card2: #121C2C;
+
+  --teal:  #2DD4B4;
+  --teal2: #25B99B;
+  --teal3: #1A9A82;
+  --teal-g: rgba(45,212,180,.07);
+  --teal-b: rgba(45,212,180,.18);
+  --teal-s: rgba(45,212,180,.25);
+
+  --white: #E8F4FF;
+  --w2:    rgba(232,244,255,.62);
+  --w3:    rgba(232,244,255,.36);
+  --w4:    rgba(232,244,255,.16);
+  --w5:    rgba(232,244,255,.06);
+
+  --line2: rgba(255,255,255,.07);
+  --line3: rgba(255,255,255,.04);
+
+  --f:  'Bricolage Grotesque', sans-serif;
+  --fs: 'Lora', serif;
+  --fm: 'JetBrains Mono', monospace;
+}
+
+body {
+  font-family: var(--f);
+  background: var(--bg);
+  color: var(--white);
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--teal3); border-radius: 3px; }
