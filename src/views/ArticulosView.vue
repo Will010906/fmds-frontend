@@ -16,7 +16,19 @@
         <router-link to="/login" class="ng">Iniciar sesión</router-link>
         <router-link to="/registro" class="nf">Registrarse →</router-link>
       </div>
+      <button class="nav-burger" @click="mobileMenuOpen = !mobileMenuOpen" :aria-expanded="mobileMenuOpen" aria-label="Abrir menú">
+        <svg v-if="!mobileMenuOpen" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
     </nav>
+    <div class="nav-mobile" v-if="mobileMenuOpen">
+      <router-link to="/" class="nbn" @click="mobileMenuOpen = false">Congresos</router-link>
+      <router-link to="/articulos" class="nbn active" @click="mobileMenuOpen = false">Conocimientos</router-link>
+      <router-link to="/speakers" class="nbn" @click="mobileMenuOpen = false">Comunidad</router-link>
+      <router-link to="/registro" class="nbn" @click="mobileMenuOpen = false">Registro & Pago</router-link>
+      <router-link to="/login" class="ng" @click="mobileMenuOpen = false">Iniciar sesión</router-link>
+      <router-link to="/registro" class="nf" @click="mobileMenuOpen = false">Registrarse →</router-link>
+    </div>
 
     <!-- HERO -->
     <div class="art-hero">
@@ -70,6 +82,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 
+const mobileMenuOpen = ref(false)
 const categoriaActiva = ref('Todos')
 const categorias = ['Todos', 'Arquitectura', 'Seguridad', 'Metodologías', 'IA', 'Base de Datos']
 
@@ -102,6 +115,8 @@ const articulosFiltrados = computed(() => {
 .ng:hover { border-color:var(--teal-b);color:var(--white); }
 .nf { font-family:var(--f);font-size:12px;font-weight:700;border-radius:7px;padding:7px 16px;cursor:pointer;background:var(--teal);border:none;color:var(--bg);transition:background .15s;text-decoration:none; }
 .nf:hover { background:var(--teal2); }
+.nav-burger { display:none;background:none;border:none;color:var(--white);cursor:pointer;padding:6px;align-items:center;justify-content:center; }
+.nav-mobile { display:none; }
 
 .art-hero { padding:52px 44px 48px;border-bottom:1px solid var(--line3);background:linear-gradient(160deg,var(--bg),var(--bg3)); }
 .pill { display:inline-flex;align-items:center;gap:7px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:100px;padding:4px 12px;margin-bottom:20px; }
@@ -137,4 +152,21 @@ const articulosFiltrados = computed(() => {
 .art-cta { text-align:center;margin-top:48px; }
 .art-btn { background:var(--teal);color:var(--bg);border:none;border-radius:10px;padding:15px 36px;font-family:var(--f);font-size:14px;font-weight:700;cursor:pointer;transition:background .15s; }
 .art-btn:hover { background:var(--teal2); }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .nav { padding:0 20px; }
+  .nav-m, .nav-e { display:none; }
+  .nav-burger { display:flex; }
+  .nav-mobile { display:flex;flex-direction:column;gap:4px;position:fixed;top:60px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--line3);padding:16px 20px;z-index:999; }
+  .nav-mobile .nbn { text-align:left;padding:10px 11px; }
+  .nav-mobile .ng, .nav-mobile .nf { text-align:center;margin-top:6px; }
+
+  .art-hero { padding:44px 20px 36px; }
+  .art-title { font-size:36px; }
+  .art-wrap { padding:32px 20px 56px; }
+
+  .art-item { flex-direction:column;align-items:flex-start;gap:12px; }
+  .art-badge { align-self:flex-start; }
+}
 </style>

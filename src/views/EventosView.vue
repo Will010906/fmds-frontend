@@ -288,4 +288,15 @@ onMounted(cargarEventos)
   transition: all .15s;
 }
 .btn-ghost-sm:hover { border-color: var(--teal-b); color: var(--white); }
+
+/* RESPONSIVE */
+@media (max-width: 640px) {
+  .nav { padding: 0 16px; }
+  .nav-link { padding: 7px 8px; }
+  .hero { padding: 100px 20px 48px; }
+  .hero-t1 { font-size: 36px; }
+  .hero-t2 { font-size: 30px; }
+  .events-section { padding: 0 20px 56px; }
+  .events-grid { grid-template-columns: 1fr; }
+}
 </style>

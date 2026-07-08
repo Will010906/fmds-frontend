@@ -286,4 +286,12 @@ onMounted(cargarEvento)
   font-size: 11px;
   color: var(--w4);
 }
+
+@media (max-width: 480px) {
+  .nav { padding: 0 16px; }
+  .checkout-card { padding: 28px 20px; border-radius: 16px; }
+  .checkout-title { font-size: 19px; }
+  .fields { grid-template-columns: 1fr; }
+  .field.full { grid-column: span 1; }
+}
 </style>

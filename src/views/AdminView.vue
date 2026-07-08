@@ -48,7 +48,7 @@
 
       <!-- Tabla -->
       <div class="table-card">
-        <table class="table">
+        <table class="table" style="min-width:640px">
           <thead>
             <tr>
               <th>Título</th>
@@ -227,7 +227,7 @@ onMounted(cargarEventos)
   background: var(--card);
   border: 1px solid var(--line2);
   border-radius: 16px;
-  overflow: hidden;
+  overflow-x: auto;
 }
 .table { width: 100%; border-collapse: collapse; }
 .table thead tr {
@@ -304,4 +304,14 @@ onMounted(cargarEventos)
   padding: 4px 0;
 }
 .btn-danger:hover { color: #f87171; }
+
+@media (max-width: 640px) {
+  .nav { padding: 0 16px; }
+  .admin-wrap { padding: 84px 16px 48px; gap: 18px; }
+  .admin-header { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .admin-header .btn-primary { width: 100%; }
+  .form-card { padding: 20px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .field.full { grid-column: span 1; }
+}
 </style>

@@ -14,7 +14,19 @@
         <router-link to="/login" class="ng">Iniciar sesión</router-link>
         <router-link to="/eventos" class="nf">Registrarse →</router-link>
       </div>
+      <button class="nav-burger" @click="mobileMenuOpen = !mobileMenuOpen" :aria-expanded="mobileMenuOpen" aria-label="Abrir menú">
+        <svg v-if="!mobileMenuOpen" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
     </nav>
+    <div class="nav-mobile" v-if="mobileMenuOpen">
+      <router-link to="/eventos" class="nbn" @click="mobileMenuOpen = false">Congresos</router-link>
+      <router-link to="/articulos" class="nbn" @click="mobileMenuOpen = false">Conocimiento</router-link>
+      <span class="nbn">Comunidad</span>
+      <span class="nbn">Nosotros</span>
+      <router-link to="/login" class="ng" @click="mobileMenuOpen = false">Iniciar sesión</router-link>
+      <router-link to="/eventos" class="nf" @click="mobileMenuOpen = false">Registrarse →</router-link>
+    </div>
 
     <!-- HERO -->
 <div class="hero">
@@ -584,6 +596,7 @@ import api from '../services/api'
 const eventos = ref([])
 const proximoEvento = ref(null)
 const articulos = ref([])
+const mobileMenuOpen = ref(false)
 
 const cargarArticulos = async () => {
   const res = await api.get('/articulos')
@@ -635,6 +648,8 @@ onMounted(cargarEventos)
 .ng:hover { border-color:var(--teal-b);color:var(--white); }
 .nf { font-family:var(--f);font-size:12px;font-weight:700;border-radius:7px;padding:7px 16px;cursor:pointer;background:var(--teal);border:none;color:var(--bg);transition:background .15s;text-decoration:none; }
 .nf:hover { background:var(--teal2); }
+.nav-burger { display:none;background:none;border:none;color:var(--white);cursor:pointer;padding:6px;align-items:center;justify-content:center; }
+.nav-mobile { display:none; }
 
 /* HERO */
 .hero { display:grid;grid-template-columns:1fr 380px;min-height:calc(100vh - 60px);background:var(--bg);border-bottom:1px solid var(--line3);position:relative;overflow:hidden; }
@@ -890,4 +905,86 @@ onMounted(cargarEventos)
 .ft-badge { display:flex;align-items:center;gap:6px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:100px;padding:5px 12px; }
 .ft-bd { width:5px;height:5px;border-radius:50%;background:var(--teal); }
 .ft-bs { font-family:var(--fm);font-size:9px;color:var(--teal);letter-spacing:.06em; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 968px) {
+  .nav { padding:0 20px; }
+  .nav-m, .nav-e { display:none; }
+  .nav-burger { display:flex; }
+  .nav-mobile { display:flex;flex-direction:column;gap:4px;position:fixed;top:60px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--line3);padding:16px 20px;z-index:999;max-height:calc(100vh - 60px);overflow-y:auto; }
+  .nav-mobile .nbn { text-align:left;padding:10px 11px; }
+  .nav-mobile .ng, .nav-mobile .nf { text-align:center;margin-top:6px; }
+
+  .hero { grid-template-columns:1fr;min-height:auto; }
+  .h-l { padding:40px 24px 32px; }
+  .hh1, .hh3 { font-size:44px; }
+  .hh2 { font-size:38px; }
+  .h-nums { flex-wrap:wrap;gap:16px; }
+  .hn { flex:1 1 40%;padding-right:0;margin-right:0;border-right:none; }
+  .h-r { border-left:none;border-top:1px solid var(--line3); }
+
+  .fstrip { grid-template-columns:repeat(4,1fr); }
+  .fsc:nth-child(4) { border-right:none; }
+
+  .sec { padding:56px 20px; }
+  .bento { grid-template-columns:1fr;grid-template-rows:auto; }
+  .bc-wide, .bc-hack { grid-column:1;grid-row:auto; }
+
+  .stats-h { grid-template-columns:repeat(3,1fr); }
+  .sh:nth-child(3) { border-right:none; }
+  .sh { padding:24px 16px; }
+
+  .ms-grid { grid-template-columns:1fr; }
+  .ms-l, .ms-r { padding:44px 24px; }
+  .ms-l::after { display:none; }
+
+  .spk-mag { grid-template-columns:1fr; }
+  .sm-feat { grid-column:span 1; }
+
+  .gal-g { grid-template-columns:1fr 1fr;grid-template-rows:200px 200px 200px; }
+  .gp.t { grid-row:span 1;grid-column:span 2; }
+
+  .test-g { grid-template-columns:1fr; }
+
+  .inst { flex-wrap:wrap; }
+  .ic { flex:1 1 33%;border-bottom:1px solid var(--line3); }
+
+  .faq-g { grid-template-columns:1fr; }
+
+  .boletin { grid-template-columns:1fr;gap:24px;padding:44px 24px; }
+  .bol-ttl { font-size:32px; }
+
+  .ft-main { grid-template-columns:1fr 1fr;gap:32px;padding:40px 24px 32px; }
+  .ft-mid { flex-direction:column;gap:20px;padding:24px; }
+  .ft-stats { flex-wrap:wrap;gap:24px;justify-content:center; }
+  .ft-bot { flex-direction:column;gap:14px;padding:18px 24px;text-align:center; }
+}
+
+@media (max-width: 600px) {
+  .h-tag-t { font-size:8px; }
+  .hh1, .hh3 { font-size:34px; }
+  .hh2 { font-size:29px; }
+  .h-ctas { flex-direction:column; }
+  .h-ctas .btn-p, .h-ctas .btn-s { width:100%;justify-content:center; }
+  .hn { flex:1 1 100%; }
+
+  .fstrip { grid-template-columns:repeat(2,1fr); }
+  .fsc:nth-child(2n) { border-right:none; }
+  .fsc:nth-child(4) { border-right:1px solid var(--line3); }
+
+  .s-hd { flex-direction:column;align-items:flex-start;gap:12px; }
+  .s-ttl { font-size:26px; }
+
+  .stats-h { grid-template-columns:repeat(2,1fr); }
+  .sh:nth-child(2n) { border-right:none; }
+  .sh:nth-child(3) { border-right:1px solid var(--line3); }
+
+  .gal-g { grid-template-columns:1fr;grid-template-rows:repeat(5,200px); }
+  .gp.t { grid-column:span 1; }
+
+  .inst { flex-direction:column; }
+  .ic { border-right:none; }
+
+  .ft-main { grid-template-columns:1fr; }
+}
 </style>

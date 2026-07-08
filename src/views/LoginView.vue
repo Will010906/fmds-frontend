@@ -183,4 +183,9 @@ const handleLogin = async () => {
 }
 
 .auth-link:hover { text-decoration: underline; }
+
+@media (max-width: 480px) {
+  .auth-card { padding: 32px 24px; border-radius: 16px; }
+  .auth-logo { font-size: 24px; }
+}
 </style>
