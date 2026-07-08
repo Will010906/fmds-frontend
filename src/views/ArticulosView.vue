@@ -1,34 +1,7 @@
 <template>
   <div class="page">
 
-    <!-- NAV -->
-    <nav class="nav">
-      <router-link to="/" class="nav-logo">
-        <img src="/FMDSlogo.png" alt="FMDS" style="height:38px;" />
-      </router-link>
-      <div class="nav-m">
-        <router-link to="/" class="nbn">Congresos</router-link>
-        <router-link to="/articulos" class="nbn active">Conocimientos</router-link>
-        <router-link to="/speakers" class="nbn">Comunidad</router-link>
-        <router-link to="/registro" class="nbn">Registro & Pago</router-link>
-      </div>
-      <div class="nav-e">
-        <router-link to="/login" class="ng">Iniciar sesión</router-link>
-        <router-link to="/registro" class="nf">Registrarse →</router-link>
-      </div>
-      <button class="nav-burger" @click="mobileMenuOpen = !mobileMenuOpen" :aria-expanded="mobileMenuOpen" aria-label="Abrir menú">
-        <svg v-if="!mobileMenuOpen" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </nav>
-    <div class="nav-mobile" v-if="mobileMenuOpen">
-      <router-link to="/" class="nbn" @click="mobileMenuOpen = false">Congresos</router-link>
-      <router-link to="/articulos" class="nbn active" @click="mobileMenuOpen = false">Conocimientos</router-link>
-      <router-link to="/speakers" class="nbn" @click="mobileMenuOpen = false">Comunidad</router-link>
-      <router-link to="/registro" class="nbn" @click="mobileMenuOpen = false">Registro & Pago</router-link>
-      <router-link to="/login" class="ng" @click="mobileMenuOpen = false">Iniciar sesión</router-link>
-      <router-link to="/registro" class="nf" @click="mobileMenuOpen = false">Registrarse →</router-link>
-    </div>
+    <AppNav />
 
     <!-- HERO -->
     <div class="art-hero">
@@ -81,8 +54,8 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import AppNav from '../components/AppNav.vue'
 
-const mobileMenuOpen = ref(false)
 const categoriaActiva = ref('Todos')
 const categorias = ['Todos', 'Arquitectura', 'Seguridad', 'Metodologías', 'IA', 'Base de Datos']
 
@@ -105,18 +78,6 @@ const articulosFiltrados = computed(() => {
 
 <style scoped>
 .page { min-height:100vh;background:var(--bg);padding-top:60px; }
-
-.nav { height:60px;background:rgba(6,9,15,.96);backdrop-filter:blur(24px);border-bottom:1px solid var(--line3);display:flex;align-items:center;justify-content:space-between;padding:0 36px;position:fixed;top:0;left:0;right:0;z-index:1000; }
-.nav-m { display:flex;gap:2px; }
-.nbn { font-family:var(--f);font-size:12px;color:var(--w3);padding:8px 11px;border-radius:7px;transition:all .15s;text-decoration:none;background:none;border:none;cursor:pointer; }
-.nbn:hover,.nbn.active { color:var(--teal);background:var(--teal-g); }
-.nav-e { display:flex;gap:8px; }
-.ng { font-family:var(--f);font-size:12px;font-weight:500;border-radius:7px;padding:7px 14px;cursor:pointer;background:var(--w5);border:1px solid var(--line2);color:var(--w3);transition:all .15s;text-decoration:none; }
-.ng:hover { border-color:var(--teal-b);color:var(--white); }
-.nf { font-family:var(--f);font-size:12px;font-weight:700;border-radius:7px;padding:7px 16px;cursor:pointer;background:var(--teal);border:none;color:var(--bg);transition:background .15s;text-decoration:none; }
-.nf:hover { background:var(--teal2); }
-.nav-burger { display:none;background:none;border:none;color:var(--white);cursor:pointer;padding:6px;align-items:center;justify-content:center; }
-.nav-mobile { display:none; }
 
 .art-hero { padding:52px 44px 48px;border-bottom:1px solid var(--line3);background:linear-gradient(160deg,var(--bg),var(--bg3)); }
 .pill { display:inline-flex;align-items:center;gap:7px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:100px;padding:4px 12px;margin-bottom:20px; }
@@ -155,13 +116,6 @@ const articulosFiltrados = computed(() => {
 
 /* RESPONSIVE */
 @media (max-width: 900px) {
-  .nav { padding:0 20px; }
-  .nav-m, .nav-e { display:none; }
-  .nav-burger { display:flex; }
-  .nav-mobile { display:flex;flex-direction:column;gap:4px;position:fixed;top:60px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--line3);padding:16px 20px;z-index:999; }
-  .nav-mobile .nbn { text-align:left;padding:10px 11px; }
-  .nav-mobile .ng, .nav-mobile .nf { text-align:center;margin-top:6px; }
-
   .art-hero { padding:44px 20px 36px; }
   .art-title { font-size:36px; }
   .art-wrap { padding:32px 20px 56px; }

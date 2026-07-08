@@ -1,32 +1,7 @@
 <template>
   <div class="page">
 
-    <!-- NAV -->
-    <nav class="nav">
-      <span class="nav-logo">FMDS</span>
-      <div class="nav-m">
-        <router-link to="/eventos" class="nbn">Congresos</router-link>
-        <router-link to="/articulos" class="nbn">Conocimiento</router-link>
-        <span class="nbn">Comunidad</span>
-        <span class="nbn">Nosotros</span>
-      </div>
-      <div class="nav-e">
-        <router-link to="/login" class="ng">Iniciar sesión</router-link>
-        <router-link to="/eventos" class="nf">Registrarse →</router-link>
-      </div>
-      <button class="nav-burger" @click="mobileMenuOpen = !mobileMenuOpen" :aria-expanded="mobileMenuOpen" aria-label="Abrir menú">
-        <svg v-if="!mobileMenuOpen" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </nav>
-    <div class="nav-mobile" v-if="mobileMenuOpen">
-      <router-link to="/eventos" class="nbn" @click="mobileMenuOpen = false">Congresos</router-link>
-      <router-link to="/articulos" class="nbn" @click="mobileMenuOpen = false">Conocimiento</router-link>
-      <span class="nbn">Comunidad</span>
-      <span class="nbn">Nosotros</span>
-      <router-link to="/login" class="ng" @click="mobileMenuOpen = false">Iniciar sesión</router-link>
-      <router-link to="/eventos" class="nf" @click="mobileMenuOpen = false">Registrarse →</router-link>
-    </div>
+    <AppNav />
 
     <!-- HERO -->
 <div class="hero">
@@ -260,50 +235,33 @@
     </div>
     <button class="s-all">Ver todos →</button>
   </div>
-  <div class="spk-mag">
-    <div class="sm">
-      <div class="sm-av a">DR</div>
+  <div v-if="speakers.length === 0" class="spk-empty">Aún no hay speakers registrados.</div>
+  <div v-else class="spk-mag">
+    <div class="sm" v-for="(s, i) in otrosSpeakers.slice(0,2)" :key="s.idSpeaker" @click="$router.push('/speakers')">
+      <div class="sm-av" :class="i % 2 === 0 ? 'a' : 'b'">{{ iniciales(s.nombre) }}</div>
       <div>
-        <div class="sm-tag">Keynote · Arquitectura</div>
-        <div class="sm-nm">Dr. Alejandro Ramírez</div>
-        <div class="sm-rl">Director de Investigación · UNAM</div>
-        <div class="sm-tp">Microservicios y arquitectura cloud-native a escala nacional</div>
+        <div class="sm-tag">{{ s.area }}</div>
+        <div class="sm-nm">{{ s.nombre }}</div>
+        <div class="sm-rl">{{ s.rol }}</div>
+        <div class="sm-tp">{{ s.tema }}</div>
       </div>
     </div>
-    <div class="sm">
-      <div class="sm-av b">SC</div>
-      <div>
-        <div class="sm-tag">IA Aplicada</div>
-        <div class="sm-nm">Sofía Castro</div>
-        <div class="sm-rl">Investigadora Senior · UNAM</div>
-        <div class="sm-tp">Inteligencia artificial en el desarrollo de software moderno</div>
-      </div>
-    </div>
-    <div class="sm-feat">
-      <div class="sm-fav">FM</div>
+    <div class="sm-feat" v-if="speakerFeatured" @click="$router.push('/speakers')">
+      <div class="sm-fav">{{ iniciales(speakerFeatured.nombre) }}</div>
       <div>
         <div class="sm-ftag">Keynote principal · CIIS 2026</div>
-        <div class="sm-fnm">Dr. Fernando Méndez</div>
-        <div class="sm-frl">Director de Innovación · IPN · Arquitectura Cloud</div>
-        <div class="sm-fq">"El software mexicano está listo para competir a nivel global. Solo necesitamos los espacios correctos para demostrarlo."</div>
+        <div class="sm-fnm">{{ speakerFeatured.nombre }}</div>
+        <div class="sm-frl">{{ speakerFeatured.rol }}</div>
+        <div class="sm-fq" v-if="speakerFeatured.frase">"{{ speakerFeatured.frase }}"</div>
       </div>
     </div>
-    <div class="sm">
-      <div class="sm-av a">MR</div>
+    <div class="sm" v-for="(s, i) in otrosSpeakers.slice(2,4)" :key="s.idSpeaker" @click="$router.push('/speakers')">
+      <div class="sm-av" :class="i % 2 === 0 ? 'a' : 'b'">{{ iniciales(s.nombre) }}</div>
       <div>
-        <div class="sm-tag">DevOps · CTO</div>
-        <div class="sm-nm">Miguel Reyes</div>
-        <div class="sm-rl">CTO · FinTech México</div>
-        <div class="sm-tp">CI/CD y cultura DevOps en equipos distribuidos</div>
-      </div>
-    </div>
-    <div class="sm">
-      <div class="sm-av b">AL</div>
-      <div>
-        <div class="sm-tag">Security</div>
-        <div class="sm-nm">Ana López</div>
-        <div class="sm-rl">Security Lead · TEC Monterrey</div>
-        <div class="sm-tp">Ciberseguridad en aplicaciones REST modernas</div>
+        <div class="sm-tag">{{ s.area }}</div>
+        <div class="sm-nm">{{ s.nombre }}</div>
+        <div class="sm-rl">{{ s.rol }}</div>
+        <div class="sm-tp">{{ s.tema }}</div>
       </div>
     </div>
   </div>
@@ -590,22 +548,37 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import api from '../services/api'
+import AppNav from '../components/AppNav.vue'
 
 const eventos = ref([])
 const proximoEvento = ref(null)
 const articulos = ref([])
-const mobileMenuOpen = ref(false)
+const speakers = ref([])
+
+const TITULOS = ['dr.', 'dra.', 'mtro.', 'mtra.', 'ing.', 'lic.']
+const iniciales = (nombre) => {
+  const partes = nombre.split(' ').filter(p => !TITULOS.includes(p.toLowerCase()))
+  return partes.slice(0, 2).map(p => p[0]).join('').toUpperCase()
+}
+const speakerFeatured = computed(() => speakers.value.find(s => s.featured))
+const otrosSpeakers = computed(() => speakers.value.filter(s => !s.featured))
 
 const cargarArticulos = async () => {
   const res = await api.get('/articulos')
   articulos.value = res.data.slice(0, 4)
 }
 
+const cargarSpeakers = async () => {
+  const res = await api.get('/speakers')
+  speakers.value = res.data
+}
+
 onMounted(() => {
   cargarEventos()
   cargarArticulos()
+  cargarSpeakers()
 })
 
 const cargarEventos = async () => {
@@ -636,20 +609,6 @@ onMounted(cargarEventos)
 .bc-prize-lbl { font-family:var(--fm);font-size:8px;font-weight:500;color:var(--w4);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px; }
 .bc-prize { font-family:var(--f);font-size:32px;font-weight:800;color:var(--teal);letter-spacing:-.05em;line-height:1; }
 .bc-prize-sub { font-size:10px;color:var(--w4);margin-top:2px; }
-
-/* NAV */
-.nav { height:60px;background:rgba(6,9,15,.96);backdrop-filter:blur(24px);border-bottom:1px solid var(--line3);display:flex;align-items:center;justify-content:space-between;padding:0 36px;position:fixed;top:0;left:0;right:0;z-index:1000; }
-.nav-logo { font-size:16px;font-weight:800;color:var(--white);letter-spacing:-.03em; }
-.nav-m { display:flex;gap:2px; }
-.nbn { font-family:var(--f);font-size:12px;color:var(--w3);background:none;border:none;cursor:pointer;padding:8px 11px;border-radius:7px;transition:all .15s;text-decoration:none; }
-.nbn:hover { color:var(--teal);background:var(--teal-g); }
-.nav-e { display:flex;gap:8px; }
-.ng { font-family:var(--f);font-size:12px;font-weight:500;border-radius:7px;padding:7px 14px;cursor:pointer;background:var(--w5);border:1px solid var(--line2);color:var(--w3);transition:all .15s;text-decoration:none; }
-.ng:hover { border-color:var(--teal-b);color:var(--white); }
-.nf { font-family:var(--f);font-size:12px;font-weight:700;border-radius:7px;padding:7px 16px;cursor:pointer;background:var(--teal);border:none;color:var(--bg);transition:background .15s;text-decoration:none; }
-.nf:hover { background:var(--teal2); }
-.nav-burger { display:none;background:none;border:none;color:var(--white);cursor:pointer;padding:6px;align-items:center;justify-content:center; }
-.nav-mobile { display:none; }
 
 /* HERO */
 .hero { display:grid;grid-template-columns:1fr 380px;min-height:calc(100vh - 60px);background:var(--bg);border-bottom:1px solid var(--line3);position:relative;overflow:hidden; }
@@ -788,6 +747,7 @@ onMounted(cargarEventos)
 .vdesc { font-size:12px;color:var(--w3);font-weight:300; }
 
 /* SPEAKERS */
+.spk-empty { text-align:center;color:var(--w4);padding:48px 0; }
 .spk-mag { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
 .sm { background:var(--card);border:1px solid var(--line3);border-radius:14px;padding:28px 24px;display:flex;gap:18px;align-items:flex-start;cursor:pointer;transition:all .18s; }
 .sm:hover { border-color:var(--teal-b);transform:translateY(-2px); }
@@ -908,13 +868,6 @@ onMounted(cargarEventos)
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 968px) {
-  .nav { padding:0 20px; }
-  .nav-m, .nav-e { display:none; }
-  .nav-burger { display:flex; }
-  .nav-mobile { display:flex;flex-direction:column;gap:4px;position:fixed;top:60px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--line3);padding:16px 20px;z-index:999;max-height:calc(100vh - 60px);overflow-y:auto; }
-  .nav-mobile .nbn { text-align:left;padding:10px 11px; }
-  .nav-mobile .ng, .nav-mobile .nf { text-align:center;margin-top:6px; }
-
   .hero { grid-template-columns:1fr;min-height:auto; }
   .h-l { padding:40px 24px 32px; }
   .hh1, .hh3 { font-size:44px; }

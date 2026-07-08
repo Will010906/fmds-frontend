@@ -1,18 +1,7 @@
 <template>
   <div class="page">
 
-    <!-- Navbar -->
-    <nav class="nav">
-      <span class="nav-logo">FMDS</span>
-      <div class="nav-links">
-        <router-link to="/" class="nav-link">Inicio</router-link>
-        <router-link to="/eventos" class="nav-link active">Eventos</router-link>
-      </div>
-      <div class="nav-end">
-        <router-link v-if="!token" to="/login" class="btn-primary-sm">Iniciar sesión</router-link>
-        <button v-else @click="logout" class="btn-ghost-sm">Cerrar sesión</button>
-      </div>
-    </nav>
+    <AppNav />
 
     <!-- Hero -->
     <section class="hero">
@@ -65,6 +54,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../services/api'
+import AppNav from '../components/AppNav.vue'
 
 const router = useRouter()
 const eventos = ref([])
@@ -89,49 +79,11 @@ const comprar = (evento) => {
   router.push({ name: 'checkout', params: { idEvento: evento.idEvento } })
 }
 
-const logout = () => {
-  localStorage.clear()
-  router.push({ name: 'login' })
-}
-
 onMounted(cargarEventos)
 </script>
 
 <style scoped>
 .page { min-height: 100vh; background: var(--bg); }
-
-/* NAV */
-.nav {
-  height: 60px;
-  background: rgba(6,9,15,.96);
-  backdrop-filter: blur(24px);
-  border-bottom: 1px solid var(--line3);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 36px;
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-}
-.nav-logo {
-  font-family: var(--f);
-  font-size: 16px;
-  font-weight: 800;
-  color: var(--white);
-  letter-spacing: -.03em;
-}
-.nav-links { display: flex; gap: 4px; }
-.nav-link {
-  font-size: 12px;
-  color: var(--w3);
-  text-decoration: none;
-  padding: 7px 12px;
-  border-radius: 7px;
-  transition: all .15s;
-}
-.nav-link:hover, .nav-link.active { color: var(--teal); background: var(--teal-g); }
-.nav-end { display: flex; gap: 8px; }
 
 /* HERO */
 .hero {
@@ -291,8 +243,6 @@ onMounted(cargarEventos)
 
 /* RESPONSIVE */
 @media (max-width: 640px) {
-  .nav { padding: 0 16px; }
-  .nav-link { padding: 7px 8px; }
   .hero { padding: 100px 20px 48px; }
   .hero-t1 { font-size: 36px; }
   .hero-t2 { font-size: 30px; }
