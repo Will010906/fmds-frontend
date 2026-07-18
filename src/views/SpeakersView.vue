@@ -18,7 +18,8 @@
         <!-- Featured speaker -->
         <div class="spk-feat" v-if="featured">
           <div class="spk-feat-l">
-            <div class="spk-av lg">{{ iniciales(featured.nombre) }}</div>
+            <img v-if="featured.fotoUrl" :src="featured.fotoUrl" :alt="featured.nombre" class="spk-foto lg" />
+            <div v-else class="spk-av lg">{{ iniciales(featured.nombre) }}</div>
           </div>
           <div class="spk-feat-r">
             <div class="spk-feat-tag">Keynote principal · CIIS 2026</div>
@@ -32,7 +33,8 @@
         <div class="spk-card" v-for="s in otros" :key="s.idSpeaker">
           <div class="spk-card-bg">
             <div class="spk-area-tag">{{ s.area }}</div>
-            <div class="spk-av md">{{ iniciales(s.nombre) }}</div>
+            <img v-if="s.fotoUrl" :src="s.fotoUrl" :alt="s.nombre" class="spk-foto md" />
+            <div v-else class="spk-av md">{{ iniciales(s.nombre) }}</div>
           </div>
           <div class="spk-card-info">
             <div class="spk-nm">{{ s.nombre }}</div>
@@ -120,6 +122,9 @@ onMounted(cargarSpeakers)
 .spk-rl { font-size:12px;color:var(--w3);font-weight:300;margin-bottom:8px; }
 .spk-tp { font-size:12px;font-weight:600;color:var(--teal); }
 /* Avatares */
+.spk-foto { border-radius:50%;object-fit:cover;border:2px solid var(--teal-b);flex-shrink:0; }
+.spk-foto.lg { width:100px;height:100px; }
+.spk-foto.md { width:80px;height:80px;z-index:1; }
 .spk-av { border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--f);font-weight:800;color:var(--teal);background:var(--teal-g);border:2px solid var(--teal-b); }
 .spk-av.lg { width:100px;height:100px;font-size:28px; }
 .spk-av.md { width:72px;height:72px;font-size:18px;margin:32px auto 16px; }

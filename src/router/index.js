@@ -14,6 +14,11 @@ const router = createRouter({
       component: () => import('../views/LoginView.vue'),
     },
     {
+      path: '/crear-cuenta',
+      name: 'crear-cuenta',
+      component: () => import('../views/CrearCuentaView.vue'),
+    },
+    {
       path: '/eventos',
       name: 'eventos',
       component: () => import('../views/EventosView.vue'),
@@ -28,7 +33,6 @@ const router = createRouter({
       path: '/checkout/:idEvento',
       name: 'checkout',
       component: () => import('../views/CheckoutView.vue'),
-      meta: { requiresAuth: true },
     },
     {
   path: '/agenda',
@@ -71,7 +75,7 @@ router.beforeEach((to, from, next) => {
   const rol = localStorage.getItem('rol')
 
   if (to.meta.requiresAuth && !token) {
-    return next({ name: 'login' })
+    return next({ name: 'login', query: { redirect: to.fullPath } })
   }
 
   if (to.meta.role && rol !== to.meta.role) {

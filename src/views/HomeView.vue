@@ -21,22 +21,36 @@
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#06090F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         Ver congresos 2026
       </router-link>
-      <button class="btn-s">Explorar artículos</button>
+      <router-link to="/articulos" class="btn-s">Explorar artículos</router-link>
     </div>
     <div class="h-nums">
-      <div class="hn"><div class="hn-v">3,200<sup>+</sup></div><div class="hn-l">Miembros</div></div>
-      <div class="hn"><div class="hn-v">12</div><div class="hn-l">Estados</div></div>
-      <div class="hn"><div class="hn-v">48</div><div class="hn-l">Artículos</div></div>
-      <div class="hn"><div class="hn-v">3</div><div class="hn-l">Congresos</div></div>
+      <div class="hn"><div class="hn-v"><AnimatedNumber :value="3200" /><sup>+</sup></div><div class="hn-l">Miembros</div></div>
+      <div class="hn"><div class="hn-v"><AnimatedNumber :value="12" /></div><div class="hn-l">Estados</div></div>
+      <div class="hn"><div class="hn-v"><AnimatedNumber :value="48" /></div><div class="hn-l">Artículos</div></div>
+      <div class="hn"><div class="hn-v"><AnimatedNumber :value="3" /></div><div class="hn-l">Congresos</div></div>
     </div>
   </div>
 
   <div class="h-r">
     <div class="tp-h">
       <div class="tp-e">Próximo evento</div>
-      <div class="tp-n">Congreso Internacional de Ingeniería de Software 2026</div>
-      <div class="tp-w">CDMX · 14-16 Agosto · Presencial + Virtual</div>
+      <div class="tp-n">{{ proximoEvento ? proximoEvento.titulo : 'Sin eventos programados' }}</div>
+      <div class="tp-w" v-if="proximoEvento">{{ formatFecha(proximoEvento.fecha) }}</div>
     </div>
+
+    <div class="cd-strip" v-if="proximoEvento">
+      <template v-if="!countdown.terminado">
+        <div class="cd-lbl">El evento arranca en</div>
+        <div class="cd-row">
+          <div class="cd-box"><div class="cd-v">{{ pad(countdown.dias) }}</div><div class="cd-k">Días</div></div>
+          <div class="cd-box"><div class="cd-v">{{ pad(countdown.horas) }}</div><div class="cd-k">Hrs</div></div>
+          <div class="cd-box"><div class="cd-v">{{ pad(countdown.mins) }}</div><div class="cd-k">Min</div></div>
+          <div class="cd-box"><div class="cd-v">{{ pad(countdown.segs) }}</div><div class="cd-k">Seg</div></div>
+        </div>
+      </template>
+      <div v-else class="cd-done">Este evento ya concluyó</div>
+    </div>
+
     <div class="tp-b">
       <div class="t-box">
         <div class="tr"><span class="tr-n">Estudiante</span><span class="tr-p hi">$650 MXN</span></div>
@@ -48,11 +62,11 @@
         <span><strong>120 boletos</strong> con precio anticipado</span>
       </div>
       <router-link to="/eventos" class="tp-buy">Comprar boletos →</router-link>
-      <button class="tp-gh">Ver programa completo</button>
+      <router-link to="/agenda" class="tp-gh">Ver programa completo</router-link>
     </div>
     <div class="tp-f">
-      <div class="tfc"><div class="tfc-l">Inicio</div><div class="tfc-v">14 AGO</div></div>
-      <div class="tfc"><div class="tfc-l">Sede</div><div class="tfc-v" style="font-size:12px">Centro CDMX</div></div>
+      <div class="tfc"><div class="tfc-l">Inicio</div><div class="tfc-v">{{ proximoEvento ? fechaCorta(proximoEvento.fecha) : '—' }}</div></div>
+      <div class="tfc"><div class="tfc-l">Sede</div><div class="tfc-v" style="font-size:12px">Por confirmar</div></div>
     </div>
   </div>
 </div>
@@ -79,23 +93,23 @@
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
     <div class="fsc-n">Congresos</div><div class="fsc-s">3 eventos · 2026</div>
   </div>
-  <div class="fsc">
+  <div class="fsc" @click="$router.push('/speakers')">
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
     <div class="fsc-n">Speakers</div><div class="fsc-s">6 ponentes top</div>
   </div>
-  <div class="fsc">
+  <div class="fsc" @click="$router.push('/agenda')">
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
     <div class="fsc-n">Agenda</div><div class="fsc-s">24 sesiones</div>
   </div>
-  <div class="fsc">
+  <div class="fsc" @click="$router.push('/articulos')">
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
     <div class="fsc-n">Artículos</div><div class="fsc-s">48 publicaciones</div>
   </div>
-  <div class="fsc">
+  <div class="fsc" @click="$router.push('/cursos')">
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
     <div class="fsc-n">Cursos</div><div class="fsc-s">12 en línea</div>
   </div>
-  <div class="fsc">
+  <div class="fsc" @click="$router.push('/galeria')">
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
     <div class="fsc-n">Ediciones</div><div class="fsc-s">Galería 2024</div>
   </div>
@@ -148,7 +162,7 @@
         <div class="bc-prize">$25K</div>
         <div class="bc-prize-sub">MXN + incubación</div>
       </div>
-      <button class="bc-btn" style="margin-top:16px">Inscribir equipo</button>
+      <router-link to="/registro" class="bc-btn" style="margin-top:16px">Inscribir equipo</router-link>
     </div>
 
     <!-- Card simposio -->
@@ -162,7 +176,7 @@
       <div class="bc-tags"><span class="bt t">Presencial</span><span class="bt n">Labs</span></div>
       <div class="bc-ft">
         <div class="bc-pr">$980 <small>MXN</small></div>
-        <button class="bc-btn">Ver más</button>
+        <router-link to="/eventos" class="bc-btn">Ver más</router-link>
       </div>
     </div>
 
@@ -177,7 +191,7 @@
       <div class="bc-tags"><span class="bt t">Híbrido</span><span class="bt n">Cloud</span></div>
       <div class="bc-ft">
         <div class="bc-pr" style="font-size:14px;color:var(--w3);font-weight:400">Por definir</div>
-        <button class="bc-btn" style="background:var(--w5);color:var(--w3);border:1px solid var(--line2)">Notificarme</button>
+        <button class="bc-btn" style="background:var(--w5);color:var(--w3);border:1px solid var(--line2)" @click="scrollBoletin">Notificarme</button>
       </div>
     </div>
 
@@ -187,11 +201,11 @@
 
     <!-- STATS -->
     <div class="stats-h">
-      <div class="sh"><div class="sh-n">3,200+</div><div class="sh-l">Miembros activos</div></div>
-      <div class="sh"><div class="sh-n">100%</div><div class="sh-l">Divulgación neutral</div></div>
-      <div class="sh"><div class="sh-n">48</div><div class="sh-l">Artículos publicados</div></div>
-      <div class="sh"><div class="sh-n">12</div><div class="sh-l">Estados cubiertos</div></div>
-      <div class="sh"><div class="sh-n">$50K</div><div class="sh-l">En premios 2025</div></div>
+      <div class="sh"><div class="sh-n"><AnimatedNumber :value="3200" suffix="+" /></div><div class="sh-l">Miembros activos</div></div>
+      <div class="sh"><div class="sh-n"><AnimatedNumber :value="100" suffix="%" /></div><div class="sh-l">Divulgación neutral</div></div>
+      <div class="sh"><div class="sh-n"><AnimatedNumber :value="48" /></div><div class="sh-l">Artículos publicados</div></div>
+      <div class="sh"><div class="sh-n"><AnimatedNumber :value="12" /></div><div class="sh-l">Estados cubiertos</div></div>
+      <div class="sh"><div class="sh-n"><AnimatedNumber :value="50" prefix="$" suffix="K" /></div><div class="sh-l">En premios 2025</div></div>
     </div>
 
     <!-- MISIÓN -->
@@ -233,12 +247,13 @@
       <div class="pill"><div class="pill-d"></div><span class="pill-t">Ponentes 2026</span></div>
       <div class="s-ttl">Speakers <em>magistrales</em></div>
     </div>
-    <button class="s-all">Ver todos →</button>
+    <router-link to="/speakers" class="s-all">Ver todos →</router-link>
   </div>
   <div v-if="speakers.length === 0" class="spk-empty">Aún no hay speakers registrados.</div>
   <div v-else class="spk-mag">
     <div class="sm" v-for="(s, i) in otrosSpeakers.slice(0,2)" :key="s.idSpeaker" @click="$router.push('/speakers')">
-      <div class="sm-av" :class="i % 2 === 0 ? 'a' : 'b'">{{ iniciales(s.nombre) }}</div>
+      <img v-if="s.fotoUrl" :src="s.fotoUrl" :alt="s.nombre" class="sm-foto" />
+      <div v-else class="sm-av" :class="i % 2 === 0 ? 'a' : 'b'">{{ iniciales(s.nombre) }}</div>
       <div>
         <div class="sm-tag">{{ s.area }}</div>
         <div class="sm-nm">{{ s.nombre }}</div>
@@ -247,7 +262,8 @@
       </div>
     </div>
     <div class="sm-feat" v-if="speakerFeatured" @click="$router.push('/speakers')">
-      <div class="sm-fav">{{ iniciales(speakerFeatured.nombre) }}</div>
+      <img v-if="speakerFeatured.fotoUrl" :src="speakerFeatured.fotoUrl" :alt="speakerFeatured.nombre" class="sm-fav-foto" />
+      <div v-else class="sm-fav">{{ iniciales(speakerFeatured.nombre) }}</div>
       <div>
         <div class="sm-ftag">Keynote principal · CIIS 2026</div>
         <div class="sm-fnm">{{ speakerFeatured.nombre }}</div>
@@ -256,7 +272,8 @@
       </div>
     </div>
     <div class="sm" v-for="(s, i) in otrosSpeakers.slice(2,4)" :key="s.idSpeaker" @click="$router.push('/speakers')">
-      <div class="sm-av" :class="i % 2 === 0 ? 'a' : 'b'">{{ iniciales(s.nombre) }}</div>
+      <img v-if="s.fotoUrl" :src="s.fotoUrl" :alt="s.nombre" class="sm-foto" />
+      <div v-else class="sm-av" :class="i % 2 === 0 ? 'a' : 'b'">{{ iniciales(s.nombre) }}</div>
       <div>
         <div class="sm-tag">{{ s.area }}</div>
         <div class="sm-nm">{{ s.nombre }}</div>
@@ -274,7 +291,7 @@
       <div class="pill"><div class="pill-d"></div><span class="pill-t">Repositorio científico</span></div>
       <div class="s-ttl">Artículos <em>recientes</em></div>
     </div>
-    <button class="s-all">Ver todos →</button>
+    <router-link to="/articulos" class="s-all">Ver todos →</router-link>
   </div>
   <div class="art-ed">
     <div class="ae" v-for="(art, i) in articulos" :key="art.idArticulo">
@@ -296,7 +313,7 @@
       <div class="pill"><div class="pill-d"></div><span class="pill-t">Ediciones anteriores</span></div>
       <div class="s-ttl"><strong>Momentos que</strong> <em>inspiran</em></div>
     </div>
-    <button class="s-all">Ver galería →</button>
+    <router-link to="/galeria" class="s-all">Ver galería →</router-link>
   </div>
   <div class="gal-g">
 
@@ -464,10 +481,12 @@
   </div>
   <div class="bol-r">
     <p class="bol-desc">Convocatorias, artículos y descuentos anticipados para congresos. Directo en tu correo, sin spam.</p>
-    <div class="bol-form">
-      <input type="email" placeholder="tucorreo@ejemplo.com" class="bol-in" />
-      <button class="bol-btn">Suscribirse →</button>
+    <div class="bol-form" v-if="!suscrito">
+      <input v-model="bolCorreo" type="email" placeholder="tucorreo@ejemplo.com" class="bol-in" @keyup.enter="suscribir" />
+      <button class="bol-btn" @click="suscribir" :disabled="suscribiendo">{{ suscribiendo ? 'Enviando...' : 'Suscribirse →' }}</button>
     </div>
+    <div v-else class="bol-ok">✓ ¡Listo! Te llegarán las novedades de FMDS a tu correo.</div>
+    <p v-if="bolError" class="bol-err">{{ bolError }}</p>
   </div>
 </div>
 
@@ -481,21 +500,21 @@
     <div class="ft-col">
       <div class="ft-lbl">Congresos</div>
       <div class="ft-lnks">
-        <a>Congreso CIIS 2026</a>
-        <a>Simposio IA 2026</a>
-        <a>Summit Cloud 2026</a>
-        <a>Hackathon FMDS</a>
-        <a>Agenda completa</a>
+        <router-link to="/eventos">Congreso CIIS 2026</router-link>
+        <router-link to="/eventos">Simposio IA 2026</router-link>
+        <router-link to="/eventos">Summit Cloud 2026</router-link>
+        <router-link to="/registro">Hackathon FMDS</router-link>
+        <router-link to="/agenda">Agenda completa</router-link>
       </div>
     </div>
     <div class="ft-col">
       <div class="ft-lbl">Recursos</div>
       <div class="ft-lnks">
-        <a>Artículos científicos</a>
-        <a>Cursos en línea</a>
-        <a>Ediciones anteriores</a>
-        <a>Publicar artículo</a>
-        <a>Ser ponente</a>
+        <router-link to="/articulos">Artículos científicos</router-link>
+        <router-link to="/cursos">Cursos en línea</router-link>
+        <router-link to="/galeria">Ediciones anteriores</router-link>
+        <router-link to="/registro">Publicar artículo</router-link>
+        <router-link to="/registro">Ser ponente</router-link>
       </div>
     </div>
     <div class="ft-col">
@@ -548,14 +567,50 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import api from '../services/api'
 import AppNav from '../components/AppNav.vue'
+import AnimatedNumber from '../components/AnimatedNumber.vue'
 
 const eventos = ref([])
 const proximoEvento = ref(null)
 const articulos = ref([])
 const speakers = ref([])
+
+const countdown = ref({ dias: 0, horas: 0, mins: 0, segs: 0, terminado: false })
+const pad = (n) => String(n).padStart(2, '0')
+const fechaCorta = (fecha) => {
+  return new Date(fecha).toLocaleDateString('es-MX', { day: '2-digit', month: 'short' }).toUpperCase()
+}
+
+let countdownTimer = null
+const actualizarCountdown = () => {
+  if (!proximoEvento.value) return
+  const diff = new Date(proximoEvento.value.fecha).getTime() - Date.now()
+  if (diff <= 0) {
+    countdown.value = { dias: 0, horas: 0, mins: 0, segs: 0, terminado: true }
+    return
+  }
+  countdown.value = {
+    dias:  Math.floor(diff / 86400000),
+    horas: Math.floor((diff % 86400000) / 3600000),
+    mins:  Math.floor((diff % 3600000) / 60000),
+    segs:  Math.floor((diff % 60000) / 1000),
+    terminado: false,
+  }
+}
+
+watch(proximoEvento, (nuevo) => {
+  if (countdownTimer) clearInterval(countdownTimer)
+  if (nuevo) {
+    actualizarCountdown()
+    countdownTimer = setInterval(actualizarCountdown, 1000)
+  }
+})
+
+onUnmounted(() => {
+  if (countdownTimer) clearInterval(countdownTimer)
+})
 
 const TITULOS = ['dr.', 'dra.', 'mtro.', 'mtra.', 'ing.', 'lic.']
 const iniciales = (nombre) => {
@@ -584,7 +639,9 @@ onMounted(() => {
 const cargarEventos = async () => {
   const res = await api.get('/eventos')
   eventos.value = res.data
-  proximoEvento.value = res.data[0] || null
+  const ahora = Date.now()
+  const futuros = res.data.filter(e => new Date(e.fecha).getTime() >= ahora)
+  proximoEvento.value = futuros[0] || res.data[0] || null
 }
 
 const formatFecha = (fecha) => {
@@ -593,7 +650,32 @@ const formatFecha = (fecha) => {
   })
 }
 
-onMounted(cargarEventos)
+// ── BOLETÍN ──
+const bolCorreo = ref('')
+const bolError = ref('')
+const suscrito = ref(false)
+const suscribiendo = ref(false)
+
+const suscribir = async () => {
+  bolError.value = ''
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(bolCorreo.value)) {
+    bolError.value = 'Ingresa un correo válido'
+    return
+  }
+  suscribiendo.value = true
+  try {
+    await api.post('/suscriptores', { correo: bolCorreo.value })
+    suscrito.value = true
+  } catch (err) {
+    bolError.value = err.response?.data?.error || 'Error al suscribirte, intenta de nuevo'
+  } finally {
+    suscribiendo.value = false
+  }
+}
+
+const scrollBoletin = () => {
+  document.querySelector('.boletin')?.scrollIntoView({ behavior: 'smooth' })
+}
 </script>
 
 <style scoped>
@@ -632,7 +714,7 @@ onMounted(cargarEventos)
 .h-ctas { display:flex;gap:10px; }
 .btn-p { background:var(--teal);color:var(--bg);border:none;padding:13px 22px;border-radius:8px;font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:background .15s;text-decoration:none; }
 .btn-p:hover { background:var(--teal2); }
-.btn-s { background:var(--w5);color:var(--w2);border:1px solid var(--line2);padding:13px 18px;border-radius:8px;font-family:var(--f);font-size:13px;cursor:pointer;transition:all .15s; }
+.btn-s { background:var(--w5);color:var(--w2);border:1px solid var(--line2);padding:13px 18px;border-radius:8px;font-family:var(--f);font-size:13px;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center; }
 .btn-s:hover { border-color:var(--teal-b);color:var(--white); }
 
 .h-nums { display:flex;gap:0;border-top:1px solid var(--line3);padding-top:28px; }
@@ -650,6 +732,15 @@ onMounted(cargarEventos)
 .tp-n { font-family:var(--fs);font-style:italic;font-size:20px;color:var(--white);line-height:1.38;margin-bottom:8px; }
 .tp-w { font-size:11px;color:var(--w4); }
 
+/* COUNTDOWN */
+.cd-strip { padding:20px 28px;border-bottom:1px solid var(--line3); }
+.cd-lbl { font-family:var(--fm);font-size:8px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--w4);margin-bottom:12px; }
+.cd-row { display:grid;grid-template-columns:repeat(4,1fr);gap:8px; }
+.cd-box { background:rgba(0,0,0,.25);border:1px solid var(--teal-b);border-radius:8px;padding:10px 4px;text-align:center; }
+.cd-v { font-family:var(--f);font-size:22px;font-weight:800;color:var(--teal);letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums; }
+.cd-k { font-family:var(--fm);font-size:8px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--w4);margin-top:5px; }
+.cd-done { font-size:12px;color:var(--w4); }
+
 .tp-b { padding:24px 28px;flex:1;display:flex;flex-direction:column;gap:14px; }
 .t-box { background:rgba(0,0,0,.25);border:1px solid var(--line3);border-radius:9px;overflow:hidden; }
 .tr { display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line3); }
@@ -665,7 +756,7 @@ onMounted(cargarEventos)
 .tp-buy { background:var(--teal);color:var(--bg);border:none;padding:14px;border-radius:8px;font-family:var(--f);font-size:14px;font-weight:700;cursor:pointer;transition:background .15s;text-align:center;text-decoration:none;display:block; }
 .tp-buy:hover { background:var(--teal2); }
 
-.tp-gh { background:none;border:none;color:var(--w4);font-size:12px;font-family:var(--f);cursor:pointer;padding:5px;transition:color .15s;text-align:center; }
+.tp-gh { background:none;border:none;color:var(--w4);font-size:12px;font-family:var(--f);cursor:pointer;padding:5px;transition:color .15s;text-align:center;text-decoration:none;display:block; }
 .tp-gh:hover { color:var(--w2); }
 
 .tp-f { padding:18px 28px;border-top:1px solid var(--line3);display:grid;grid-template-columns:1fr 1fr;gap:8px; }
@@ -714,7 +805,7 @@ onMounted(cargarEventos)
 .bc-ft { display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid var(--line3); }
 .bc-pr { font-family:var(--f);font-size:18px;font-weight:800;color:var(--teal);letter-spacing:-.03em; }
 .bc-pr small { font-size:10px;font-weight:400;color:var(--w4); }
-.bc-btn { font-size:11px;font-weight:600;padding:8px 15px;border-radius:7px;border:1px solid var(--teal-b);cursor:pointer;font-family:var(--f);background:var(--teal-g);color:var(--teal);transition:all .15s; }
+.bc-btn { font-size:11px;font-weight:600;padding:8px 15px;border-radius:7px;border:1px solid var(--teal-b);cursor:pointer;font-family:var(--f);background:var(--teal-g);color:var(--teal);transition:all .15s;text-decoration:none;display:inline-block;text-align:center; }
 .bc-btn:hover { background:var(--teal-s); }
 .bc-prize { font-family:var(--f);font-size:32px;font-weight:800;color:var(--teal);letter-spacing:-.05em;line-height:1;margin-bottom:3px; }
 
@@ -748,6 +839,8 @@ onMounted(cargarEventos)
 
 /* SPEAKERS */
 .spk-empty { text-align:center;color:var(--w4);padding:48px 0; }
+.sm-foto { width:50px;height:50px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid var(--teal-b); }
+.sm-fav-foto { width:68px;height:68px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid var(--teal-b); }
 .spk-mag { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
 .sm { background:var(--card);border:1px solid var(--line3);border-radius:14px;padding:28px 24px;display:flex;gap:18px;align-items:flex-start;cursor:pointer;transition:all .18s; }
 .sm:hover { border-color:var(--teal-b);transform:translateY(-2px); }
@@ -832,6 +925,9 @@ onMounted(cargarEventos)
 .bol-in::placeholder { color:var(--w4); }
 .bol-btn { background:var(--teal);color:var(--bg);border:none;border-radius:10px;padding:14px 24px;font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;transition:background .15s;white-space:nowrap; }
 .bol-btn:hover { background:var(--teal2); }
+.bol-btn:disabled { opacity:.6;cursor:not-allowed; }
+.bol-ok { background:var(--teal-g);border:1px solid var(--teal-b);border-radius:10px;padding:14px 18px;font-size:13px;color:var(--teal);font-weight:600; }
+.bol-err { font-size:12px;color:#f87171;margin-top:8px; }
 
 /* FOOTER */
 .footer { background:var(--bg2); }

@@ -45,7 +45,7 @@
 
       <!-- CTA -->
       <div class="art-cta">
-        <button class="art-btn">Publicar artículo ⟶</button>
+        <router-link to="/registro" class="art-btn">Publicar artículo ⟶</router-link>
       </div>
     </div>
 
@@ -111,7 +111,7 @@ const articulosFiltrados = computed(() => {
 .art-badge { font-size:10px;font-weight:600;padding:5px 14px;border-radius:100px;background:var(--teal-g);color:var(--teal);border:1px solid var(--teal-b);white-space:nowrap;flex-shrink:0; }
 
 .art-cta { text-align:center;margin-top:48px; }
-.art-btn { background:var(--teal);color:var(--bg);border:none;border-radius:10px;padding:15px 36px;font-family:var(--f);font-size:14px;font-weight:700;cursor:pointer;transition:background .15s; }
+.art-btn { background:var(--teal);color:var(--bg);border:none;border-radius:10px;padding:15px 36px;font-family:var(--f);font-size:14px;font-weight:700;cursor:pointer;transition:background .15s;text-decoration:none;display:inline-block; }
 .art-btn:hover { background:var(--teal2); }
 
 /* RESPONSIVE */

@@ -104,7 +104,7 @@
     <div class="nav-e">
       <template v-if="!token">
         <router-link to="/login" class="ng">Iniciar sesión</router-link>
-        <router-link to="/registro" class="nf">Registrarse →</router-link>
+        <router-link to="/crear-cuenta" class="nf">Crear cuenta →</router-link>
       </template>
       <template v-else>
         <span class="nav-user">{{ nombre }}</span>
@@ -128,7 +128,7 @@
     <router-link to="/registro" class="nbn" @click="mobileOpen = false">Registro & Pago</router-link>
     <template v-if="!token">
       <router-link to="/login" class="ng" @click="mobileOpen = false">Iniciar sesión</router-link>
-      <router-link to="/registro" class="nf" @click="mobileOpen = false">Registrarse →</router-link>
+      <router-link to="/crear-cuenta" class="nf" @click="mobileOpen = false">Crear cuenta →</router-link>
     </template>
     <template v-else>
       <button class="ng" @click="logout">Cerrar sesión</button>

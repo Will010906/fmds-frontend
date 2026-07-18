@@ -12,43 +12,46 @@
 
     <!-- TABS -->
     <div class="ag-wrap">
-      <div class="ag-tabs">
-        <button
-          v-for="(dia, i) in dias"
-          :key="i"
-          class="ag-tab"
-          :class="{ active: diaActivo === i }"
-          @click="diaActivo = i"
-        >
-          {{ dia.label }}
-        </button>
-      </div>
+      <div v-if="sesiones.length === 0" class="ag-empty">Aún no hay sesiones registradas en la agenda.</div>
+      <template v-else>
+        <div class="ag-tabs">
+          <button
+            v-for="dia in diasDisponibles"
+            :key="dia"
+            class="ag-tab"
+            :class="{ active: diaActivo === dia }"
+            @click="diaActivo = dia"
+          >
+            Día {{ dia }}
+          </button>
+        </div>
 
-      <!-- SESIONES -->
-      <div class="ag-list">
-        <div
-          v-for="(sesion, i) in dias[diaActivo].sesiones"
-          :key="i"
-          class="ag-item"
-        >
-          <div class="ag-time">
-            <div class="ag-hr">{{ sesion.hora }}</div>
-            <div class="ag-dur">{{ sesion.duracion }}</div>
-          </div>
-          <div class="ag-sep"></div>
-          <div class="ag-info">
-            <div class="ag-tipo">
-              <span class="ag-dot" :style="{ background: sesion.color }"></span>
-              {{ sesion.tipo }}
+        <!-- SESIONES -->
+        <div class="ag-list">
+          <div
+            v-for="sesion in sesionesDelDia"
+            :key="sesion.idSesion"
+            class="ag-item"
+          >
+            <div class="ag-time">
+              <div class="ag-hr">{{ formatHora(sesion.hora) }}</div>
+              <div class="ag-dur">{{ sesion.duracion }}</div>
             </div>
-            <div class="ag-nm">{{ sesion.nombre }}</div>
-            <div class="ag-by">{{ sesion.ponente }}</div>
-          </div>
-          <div class="ag-badge" :style="{ borderColor: sesion.color, color: sesion.color }">
-            {{ sesion.badge }}
+            <div class="ag-sep"></div>
+            <div class="ag-info">
+              <div class="ag-tipo">
+                <span class="ag-dot" :style="{ background: colorBadge(sesion.badge) }"></span>
+                {{ sesion.tipo }}
+              </div>
+              <div class="ag-nm">{{ sesion.nombre }}</div>
+              <div class="ag-by">{{ sesion.ponente }}</div>
+            </div>
+            <div class="ag-badge" :style="{ borderColor: colorBadge(sesion.badge), color: colorBadge(sesion.badge) }">
+              {{ sesion.badge }}
+            </div>
           </div>
         </div>
-      </div>
+      </template>
 
       <!-- CTA -->
       <div class="ag-cta">
@@ -60,44 +63,35 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import api from '../services/api'
 import AppNav from '../components/AppNav.vue'
 
-const diaActivo = ref(0)
+const sesiones = ref([])
+const diaActivo = ref(1)
 
-const dias = [
-  {
-    label: 'Día 1 · 14 Agosto',
-    sesiones: [
-      { hora: '9:00',  duracion: '90 min', tipo: 'Keynote de apertura',   nombre: 'La nueva era del software mexicano',                    ponente: 'Dr. Alejandro Ramírez · UNAM',          badge: 'Keynote',  color: '#2DD4B4' },
-      { hora: '11:00', duracion: '60 min', tipo: 'Workshop técnico',      nombre: 'Arquitectura de microservicios con Node.js y Docker',   ponente: 'Ing. Mario Torres · Microsoft México',   badge: 'Workshop', color: '#F59E0B' },
-      { hora: '13:00', duracion: '60 min', tipo: 'Panel de discusión',    nombre: 'IA en el desarrollo: oportunidades y riesgos reales',   ponente: 'Panel con 4 ponentes internacionales',   badge: 'Panel',    color: '#6B7280' },
-      { hora: '15:30', duracion: '90 min', tipo: 'Conferencia magistral', nombre: 'Seguridad en APIs REST: del JWT al Zero Trust',         ponente: 'Dra. Ana López · TEC de Monterrey',     badge: 'Keynote',  color: '#2DD4B4' },
-      { hora: '17:30', duracion: '45 min', tipo: 'Workshop práctico',     nombre: 'CI/CD con GitHub Actions: de cero a producción',        ponente: 'Miguel Reyes · FinTech México',          badge: 'Workshop', color: '#F59E0B' },
-      { hora: '19:00', duracion: '60 min', tipo: 'Cierre del día',        nombre: 'Networking & Feria de proyectos estudiantiles',         ponente: 'Todos los asistentes',                   badge: 'Social',   color: '#6B7280' },
-    ]
-  },
-  {
-    label: 'Día 2 · 15 Agosto',
-    sesiones: [
-      { hora: '9:00',  duracion: '90 min', tipo: 'Keynote',               nombre: 'El futuro de la IA en México',                         ponente: 'Dra. Sofía Castro · UNAM',               badge: 'Keynote',  color: '#2DD4B4' },
-      { hora: '11:00', duracion: '60 min', tipo: 'Workshop técnico',      nombre: 'Vue.js 3 + TypeScript en producción',                  ponente: 'Ing. Luis Herrera · Google México',      badge: 'Workshop', color: '#F59E0B' },
-      { hora: '13:00', duracion: '60 min', tipo: 'Panel de discusión',    nombre: 'Startups de software: casos de éxito nacionales',      ponente: 'Panel con 5 fundadores',                 badge: 'Panel',    color: '#6B7280' },
-      { hora: '15:30', duracion: '90 min', tipo: 'Conferencia magistral', nombre: 'Machine Learning aplicado al desarrollo ágil',         ponente: 'Dr. Fernando Méndez · IPN',              badge: 'Keynote',  color: '#2DD4B4' },
-      { hora: '17:30', duracion: '45 min', tipo: 'Workshop práctico',     nombre: 'Docker + Kubernetes para equipos pequeños',            ponente: 'Carlos Vega · AWS México',               badge: 'Workshop', color: '#F59E0B' },
-      { hora: '19:00', duracion: '60 min', tipo: 'Cierre del día',        nombre: 'Cena de networking y premiación parcial',              ponente: 'Todos los asistentes',                   badge: 'Social',   color: '#6B7280' },
-    ]
-  },
-  {
-    label: 'Día 3 · 16 Agosto',
-    sesiones: [
-      { hora: '9:00',  duracion: '60 min', tipo: 'Keynote de cierre',     nombre: 'Hacia una federación sólida de software en México',    ponente: 'Comité directivo FMDS',                  badge: 'Keynote',  color: '#2DD4B4' },
-      { hora: '10:30', duracion: '90 min', tipo: 'Feria de proyectos',    nombre: 'Presentación de proyectos estudiantiles',              ponente: 'Equipos inscritos',                       badge: 'Social',   color: '#6B7280' },
-      { hora: '13:00', duracion: '60 min', tipo: 'Workshop técnico',      nombre: 'Publicación de artículos científicos paso a paso',     ponente: 'Comité editorial FMDS',                  badge: 'Workshop', color: '#F59E0B' },
-      { hora: '15:00', duracion: '90 min', tipo: 'Ceremonia de clausura', nombre: 'Premiación hackathon + mejores ponencias',             ponente: 'Todos los asistentes',                   badge: 'Keynote',  color: '#2DD4B4' },
-    ]
-  },
-]
+const COLORES = { Keynote: '#2DD4B4', Workshop: '#F59E0B', Panel: '#6B7280', Social: '#6B7280' }
+const colorBadge = (badge) => COLORES[badge] || '#6B7280'
+
+const formatHora = (hora) => {
+  const [h, m] = String(hora).split(':')
+  return `${parseInt(h)}:${m}`
+}
+
+const diasDisponibles = computed(() =>
+  [...new Set(sesiones.value.map(s => s.dia))].sort((a, b) => a - b)
+)
+const sesionesDelDia = computed(() =>
+  sesiones.value.filter(s => s.dia === diaActivo.value)
+)
+
+const cargarSesiones = async () => {
+  const res = await api.get('/sesiones')
+  sesiones.value = res.data
+  if (res.data.length) diaActivo.value = diasDisponibles.value[0]
+}
+
+onMounted(cargarSesiones)
 </script>
 
 <style scoped>
@@ -114,6 +108,7 @@ const dias = [
 .ag-sub { font-size:14px;color:var(--w3);font-weight:300; }
 
 .ag-wrap { max-width:900px;margin:0 auto;padding:48px 44px 80px; }
+.ag-empty { text-align:center;color:var(--w4);padding:48px 0; }
 
 .ag-tabs { display:flex;gap:0;border-bottom:1px solid var(--line3);margin-bottom:36px; }
 .ag-tab { background:none;border:none;border-bottom:2px solid transparent;padding:12px 20px;font-family:var(--f);font-size:13px;font-weight:500;color:var(--w4);cursor:pointer;transition:all .15s;margin-bottom:-1px; }

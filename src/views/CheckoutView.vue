@@ -18,6 +18,17 @@
         <div v-if="mensaje" class="alert-success">{{ mensaje }}</div>
         <div v-if="error" class="alert-error">{{ error }}</div>
 
+        <div class="fields" v-if="!haySesion">
+          <div class="field full">
+            <label class="field-label">Tu nombre completo</label>
+            <input v-model="comprador.nombre" type="text" placeholder="Andrés López" class="field-input" />
+          </div>
+          <div class="field full">
+            <label class="field-label">Tu correo electrónico (aquí llega tu boleto)</label>
+            <input v-model="comprador.correo" type="email" placeholder="tucorreo@ejemplo.com" class="field-input" />
+          </div>
+        </div>
+
         <div class="fields">
           <div class="field full">
             <label class="field-label">Nombre en la tarjeta</label>
@@ -72,8 +83,10 @@ const evento  = ref(null)
 const loading = ref(false)
 const error   = ref('')
 const mensaje = ref('')
+const haySesion = !!localStorage.getItem('token')
 
 const form = ref({ nombre: '', numero: '', mes: '', anio: '', cvv: '', cantidad: 1 })
+const comprador = ref({ nombre: '', correo: '' })
 
 const total = computed(() => {
   return evento.value ? (evento.value.precio * form.value.cantidad).toFixed(2) : 0
@@ -87,6 +100,12 @@ const cargarEvento = async () => {
 const pagar = async () => {
   error.value = ''
   mensaje.value = ''
+
+  if (!haySesion && (!comprador.value.nombre || !comprador.value.correo)) {
+    error.value = 'Completa tu nombre y correo electrónico para recibir tu boleto.'
+    return
+  }
+
   loading.value = true
 
   const OpenPay = window.OpenPay
@@ -111,6 +130,8 @@ const pagar = async () => {
         idEvento:   parseInt(route.params.idEvento),
         cantidad:   form.value.cantidad,
         montoTotal: parseFloat(total.value),
+        nombre:     comprador.value.nombre,
+        correo:     comprador.value.correo,
       })
       mensaje.value = '¡Pago exitoso! Tus boletos han sido reservados.'
       setTimeout(() => router.push({ name: 'eventos' }), 2500)

@@ -118,10 +118,13 @@
       <!-- RESUMEN -->
       <div class="rg-summary">
         <div class="sum-title">Resumen de tu registro</div>
-        <div class="sum-event">
-          <div class="sum-ev-tag">CIIS 2026</div>
-          <div class="sum-ev-nm">Congreso Internacional de Ingeniería de Software</div>
-          <div class="sum-ev-dt">🇲🇽 14–16 Agosto 2026 · Centro CDMX</div>
+        <div class="sum-event" v-if="eventoActual">
+          <div class="sum-ev-tag">Evento</div>
+          <div class="sum-ev-nm">{{ eventoActual.titulo }}</div>
+          <div class="sum-ev-dt">{{ formatFecha(eventoActual.fecha) }}</div>
+        </div>
+        <div class="sum-event" v-else>
+          <div class="sum-ev-nm">No hay eventos disponibles por el momento</div>
         </div>
         <div class="sum-plan">
           <div class="sum-plan-tag">Plan seleccionado</div>
@@ -134,7 +137,7 @@
           <div class="sum-line"><span>Cargo por servicio</span><span>$0 MXN</span></div>
           <div class="sum-line total"><span>Total</span><span :class="{ teal: planes[planActivo].precio === 'Gratis' }">{{ planes[planActivo].precio === 'Gratis' ? 'Gratis' : '$' + (parseInt(planes[planActivo].precio) - 100) + ' MXN' }}</span></div>
         </div>
-        <button class="sum-btn" @click="confirmar">Confirmar y pagar →</button>
+        <button class="sum-btn" @click="confirmar" :disabled="!eventoActual">Confirmar y pagar →</button>
         <p class="sum-secure">🔒 Pago 100% seguro · con Openpay</p>
         <div class="sum-incl">
           <div class="sum-incl-t">Incluye en tu plan</div>
@@ -151,7 +154,7 @@
 
 <script setup>
 import api from '../services/api'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import AppNav from '../components/AppNav.vue'
 
@@ -159,9 +162,23 @@ const router = useRouter()
 const planActivo = ref(2)
 const metodoActivo = ref('Tarjeta')
 const metodos = ['Tarjeta', 'OXXO pay', 'Transferencia']
+const eventoActual = ref(null)
 
 const form = ref({ nombre: '', apellidos: '', correo: '', telefono: '', institucion: '', estado: '' })
 const pago = ref({ numero: '', expiracion: '', cvv: '', nombre: '' })
+
+const formatFecha = (fecha) => {
+  return new Date(fecha).toLocaleDateString('es-MX', {
+    year: 'numeric', month: 'long', day: 'numeric'
+  })
+}
+
+const cargarEvento = async () => {
+  const res = await api.get('/eventos')
+  eventoActual.value = res.data[0] || null
+}
+
+onMounted(cargarEvento)
 
 const planes = [
   {
@@ -199,6 +216,11 @@ const planes = [
 const confirmar = async () => {
   const plan = planes[planActivo.value]
 
+  if (!eventoActual.value) {
+    alert('No hay ningún evento disponible para registrarte en este momento.')
+    return
+  }
+
   if (plan.precio === 'Gratis') {
     alert('Solicitud de ponente enviada. Te contactaremos pronto.')
     return
@@ -206,6 +228,12 @@ const confirmar = async () => {
 
   if (metodoActivo.value !== 'Tarjeta') {
     alert('Método de pago no implementado aún.')
+    return
+  }
+
+  // Sin sesión iniciada se compra como invitado: nombre y correo obligatorios
+  if (!localStorage.getItem('token') && (!form.value.nombre || !form.value.correo)) {
+    alert('Completa tu nombre y correo electrónico para continuar.')
     return
   }
 
@@ -230,9 +258,11 @@ const confirmar = async () => {
       await api.post('/checkout', {
         token_id,
         deviceSessionId,
-        idEvento: 1,
+        idEvento: eventoActual.value.idEvento,
         cantidad: 1,
         montoTotal,
+        nombre: `${form.value.nombre} ${form.value.apellidos}`.trim(),
+        correo: form.value.correo,
       })
 
       alert('¡Registro exitoso! Revisa tu correo para el boleto.')
@@ -320,6 +350,7 @@ const confirmar = async () => {
 .sum-line.total .teal { color:var(--teal); }
 .sum-btn { background:var(--teal);color:var(--bg);border:none;border-radius:10px;padding:14px;font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;transition:background .15s;width:100%; }
 .sum-btn:hover { background:var(--teal2); }
+.sum-btn:disabled { opacity:.5;cursor:not-allowed; }
 .sum-secure { text-align:center;font-size:11px;color:var(--w4); }
 .sum-incl { border-top:1px solid var(--line3);padding-top:14px;display:flex;flex-direction:column;gap:8px; }
 .sum-incl-t { font-family:var(--fm);font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--w4);margin-bottom:4px; }

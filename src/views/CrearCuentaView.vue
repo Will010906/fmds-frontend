@@ -4,29 +4,37 @@
 
       <div class="auth-brand">
         <span class="auth-logo">FMDS</span>
-        <span class="auth-tag">Panel de acceso</span>
+        <span class="auth-tag">Crear cuenta</span>
       </div>
 
       <div v-if="error" class="auth-error">{{ error }}</div>
 
       <div class="auth-fields">
         <div class="field">
+          <label class="field-label">Nombre completo</label>
+          <input v-model="nombre" type="text" placeholder="Andrés López" class="field-input" />
+        </div>
+        <div class="field">
           <label class="field-label">Correo electrónico</label>
-          <input v-model="correo" type="email" placeholder="admin@fmds.mx" class="field-input" />
+          <input v-model="correo" type="email" placeholder="tucorreo@ejemplo.com" class="field-input" />
         </div>
         <div class="field">
           <label class="field-label">Contraseña</label>
-          <input v-model="contrasenia" type="password" placeholder="••••••••" class="field-input" />
+          <input v-model="contrasenia" type="password" placeholder="Mínimo 6 caracteres" class="field-input" />
+        </div>
+        <div class="field">
+          <label class="field-label">Confirmar contraseña</label>
+          <input v-model="confirmar" type="password" placeholder="••••••••" class="field-input" />
         </div>
       </div>
 
-      <button @click="handleLogin" :disabled="loading" class="btn-primary">
-        {{ loading ? 'Ingresando...' : 'Iniciar sesión' }}
+      <button @click="handleRegistro" :disabled="loading" class="btn-primary">
+        {{ loading ? 'Creando cuenta...' : 'Crear cuenta' }}
       </button>
 
       <p class="auth-footer">
-        ¿No tienes cuenta?
-        <router-link :to="{ name: 'crear-cuenta', query: $route.query }" class="auth-link">Regístrate</router-link>
+        ¿Ya tienes cuenta?
+        <router-link :to="{ name: 'login', query: $route.query }" class="auth-link">Inicia sesión</router-link>
       </p>
 
     </div>
@@ -38,18 +46,35 @@ import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import api from '../services/api'
 
-const router     = useRouter()
-const route      = useRoute()
-const correo     = ref('')
+const router      = useRouter()
+const route       = useRoute()
+const nombre      = ref('')
+const correo      = ref('')
 const contrasenia = ref('')
-const error      = ref('')
-const loading    = ref(false)
+const confirmar   = ref('')
+const error       = ref('')
+const loading     = ref(false)
 
-const handleLogin = async () => {
-  error.value   = ''
+const handleRegistro = async () => {
+  error.value = ''
+
+  if (!nombre.value || !correo.value || !contrasenia.value) {
+    error.value = 'Completa todos los campos'
+    return
+  }
+  if (contrasenia.value.length < 6) {
+    error.value = 'La contraseña debe tener al menos 6 caracteres'
+    return
+  }
+  if (contrasenia.value !== confirmar.value) {
+    error.value = 'Las contraseñas no coinciden'
+    return
+  }
+
   loading.value = true
   try {
-    const res = await api.post('/auth/login', {
+    const res = await api.post('/auth/registro', {
+      nombre: nombre.value,
       correo: correo.value,
       contrasenia: contrasenia.value,
     })
@@ -58,15 +83,9 @@ const handleLogin = async () => {
     localStorage.setItem('nombre', res.data.usuario.nombre)
     localStorage.setItem('correo', res.data.usuario.correo)
 
-    if (route.query.redirect) {
-      router.push(route.query.redirect)
-    } else if (res.data.usuario.rol === 'Administrador') {
-      router.push({ name: 'admin' })
-    } else {
-      router.push({ name: 'home' })
-    }
+    router.push(route.query.redirect || { name: 'home' })
   } catch (err) {
-    error.value = err.response?.data?.error || 'Error al iniciar sesión'
+    error.value = err.response?.data?.error || 'Error al crear la cuenta'
   } finally {
     loading.value = false
   }

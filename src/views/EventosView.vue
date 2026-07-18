@@ -58,7 +58,6 @@ import AppNav from '../components/AppNav.vue'
 
 const router = useRouter()
 const eventos = ref([])
-const token = localStorage.getItem('token')
 
 const cargarEventos = async () => {
   const res = await api.get('/eventos')
@@ -72,10 +71,6 @@ const formatFecha = (fecha) => {
 }
 
 const comprar = (evento) => {
-  if (!token) {
-    router.push({ name: 'login' })
-    return
-  }
   router.push({ name: 'checkout', params: { idEvento: evento.idEvento } })
 }
 

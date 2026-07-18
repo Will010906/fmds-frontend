@@ -16,6 +16,11 @@
         <button class="admin-tab" :class="{ active: tab === 'eventos' }" @click="cambiarTab('eventos')">Eventos</button>
         <button class="admin-tab" :class="{ active: tab === 'articulos' }" @click="cambiarTab('articulos')">Artículos</button>
         <button class="admin-tab" :class="{ active: tab === 'speakers' }" @click="cambiarTab('speakers')">Speakers</button>
+        <button class="admin-tab" :class="{ active: tab === 'agenda' }" @click="cambiarTab('agenda')">Agenda</button>
+        <button class="admin-tab" :class="{ active: tab === 'cursos' }" @click="cambiarTab('cursos')">Cursos</button>
+        <button class="admin-tab" :class="{ active: tab === 'ventas' }" @click="cambiarTab('ventas')">Ventas</button>
+        <button class="admin-tab" :class="{ active: tab === 'usuarios' }" @click="cambiarTab('usuarios')">Usuarios</button>
+        <button class="admin-tab" :class="{ active: tab === 'boletin' }" @click="cambiarTab('boletin')">Boletín</button>
       </div>
 
       <!-- ═══ EVENTOS ═══ -->
@@ -168,6 +173,10 @@
               <input v-model="formSpeaker.tema" type="text" placeholder="Ciberseguridad en APIs REST modernas" class="field-input" />
             </div>
             <div class="field full">
+              <label class="field-label">Foto (URL, opcional — si se deja vacío se muestran las iniciales)</label>
+              <input v-model="formSpeaker.fotoUrl" type="url" placeholder="https://ejemplo.com/foto.jpg" class="field-input" />
+            </div>
+            <div class="field full">
               <label class="field-label">Frase destacada (opcional, solo si es speaker principal)</label>
               <textarea v-model="formSpeaker.frase" rows="2" placeholder="Cita textual del speaker" class="field-input"></textarea>
             </div>
@@ -182,13 +191,17 @@
         </div>
 
         <div class="table-card">
-          <table class="table" style="min-width:640px">
+          <table class="table" style="min-width:680px">
             <thead>
-              <tr><th>Nombre</th><th>Área</th><th>Rol</th><th>Destacado</th><th>Acciones</th></tr>
+              <tr><th>Foto</th><th>Nombre</th><th>Área</th><th>Rol</th><th>Destacado</th><th>Acciones</th></tr>
             </thead>
             <tbody>
-              <tr v-if="speakers.length === 0"><td colspan="5" class="empty">No hay speakers registrados</td></tr>
+              <tr v-if="speakers.length === 0"><td colspan="6" class="empty">No hay speakers registrados</td></tr>
               <tr v-for="speaker in speakers" :key="speaker.idSpeaker">
+                <td>
+                  <img v-if="speaker.fotoUrl" :src="speaker.fotoUrl" :alt="speaker.nombre" class="sp-thumb" />
+                  <span v-else class="sp-thumb-ini">{{ iniciales(speaker.nombre) }}</span>
+                </td>
                 <td class="td-title">{{ speaker.nombre }}</td>
                 <td class="td-teal">{{ speaker.area }}</td>
                 <td class="td-muted">{{ speaker.rol }}</td>
@@ -203,12 +216,244 @@
         </div>
       </template>
 
+      <!-- ═══ AGENDA ═══ -->
+      <template v-if="tab === 'agenda'">
+        <div class="admin-header">
+          <div>
+            <h1 class="admin-title">Agenda del Congreso</h1>
+            <p class="admin-sub">{{ sesiones.length }} {{ sesiones.length === 1 ? 'sesión programada' : 'sesiones programadas' }}</p>
+          </div>
+          <button @click="toggleFormulario" class="btn-primary">
+            {{ mostrarFormulario ? '✕ Cancelar' : '+ Nueva Sesión' }}
+          </button>
+        </div>
+
+        <div v-if="mostrarFormulario" class="form-card">
+          <h3 class="form-title">{{ editandoId ? 'Editar Sesión' : 'Nueva Sesión' }}</h3>
+          <div class="form-grid">
+            <div class="field full">
+              <label class="field-label">Nombre de la sesión</label>
+              <input v-model="formSesion.nombre" type="text" placeholder="Seguridad en APIs REST: del JWT al Zero Trust" class="field-input" />
+            </div>
+            <div class="field">
+              <label class="field-label">Día (1, 2, 3...)</label>
+              <input v-model="formSesion.dia" type="number" min="1" placeholder="1" class="field-input" />
+            </div>
+            <div class="field">
+              <label class="field-label">Hora</label>
+              <input v-model="formSesion.hora" type="time" class="field-input" />
+            </div>
+            <div class="field">
+              <label class="field-label">Duración</label>
+              <input v-model="formSesion.duracion" type="text" placeholder="90 min" class="field-input" />
+            </div>
+            <div class="field">
+              <label class="field-label">Tipo</label>
+              <input v-model="formSesion.tipo" type="text" placeholder="Conferencia magistral" class="field-input" />
+            </div>
+            <div class="field">
+              <label class="field-label">Ponente</label>
+              <input v-model="formSesion.ponente" type="text" placeholder="Dra. Ana López · TEC" class="field-input" />
+            </div>
+            <div class="field">
+              <label class="field-label">Categoría</label>
+              <select v-model="formSesion.badge" class="field-input">
+                <option>Keynote</option>
+                <option>Workshop</option>
+                <option>Panel</option>
+                <option>Social</option>
+              </select>
+            </div>
+          </div>
+          <button @click="guardarSesion" class="btn-primary">{{ editandoId ? 'Guardar cambios' : 'Guardar Sesión' }}</button>
+        </div>
+
+        <div class="table-card">
+          <table class="table" style="min-width:680px">
+            <thead>
+              <tr><th>Día</th><th>Hora</th><th>Sesión</th><th>Ponente</th><th>Categoría</th><th>Acciones</th></tr>
+            </thead>
+            <tbody>
+              <tr v-if="sesiones.length === 0"><td colspan="6" class="empty">No hay sesiones registradas</td></tr>
+              <tr v-for="sesion in sesiones" :key="sesion.idSesion">
+                <td class="td-teal">Día {{ sesion.dia }}</td>
+                <td class="td-muted">{{ String(sesion.hora).slice(0, 5) }} · {{ sesion.duracion }}</td>
+                <td class="td-title">{{ sesion.nombre }}</td>
+                <td class="td-muted">{{ sesion.ponente }}</td>
+                <td><span class="stock-badge">{{ sesion.badge }}</span></td>
+                <td class="td-actions">
+                  <button @click="editarSesion(sesion)" class="btn-edit">Editar</button>
+                  <button @click="eliminarSesion(sesion.idSesion)" class="btn-danger">Eliminar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </template>
+
+      <!-- ═══ CURSOS ═══ -->
+      <template v-if="tab === 'cursos'">
+        <div class="admin-header">
+          <div>
+            <h1 class="admin-title">Gestión de Cursos</h1>
+            <p class="admin-sub">{{ cursos.length }} curso{{ cursos.length !== 1 ? 's' : '' }} en el catálogo</p>
+          </div>
+          <button @click="toggleFormulario" class="btn-primary">
+            {{ mostrarFormulario ? '✕ Cancelar' : '+ Nuevo Curso' }}
+          </button>
+        </div>
+
+        <div v-if="mostrarFormulario" class="form-card">
+          <h3 class="form-title">{{ editandoId ? 'Editar Curso' : 'Nuevo Curso' }}</h3>
+          <div class="form-grid">
+            <div class="field full">
+              <label class="field-label">Nombre del curso</label>
+              <input v-model="formCurso.nombre" type="text" placeholder="Node.js y Express para APIs" class="field-input" />
+            </div>
+            <div class="field full">
+              <label class="field-label">Descripción</label>
+              <textarea v-model="formCurso.descripcion" rows="3" placeholder="Qué aprenderá el alumno en este curso" class="field-input"></textarea>
+            </div>
+            <div class="field">
+              <label class="field-label">Horas</label>
+              <input v-model="formCurso.horas" type="number" min="1" placeholder="24" class="field-input" />
+            </div>
+            <div class="field">
+              <label class="field-label">Nivel</label>
+              <input v-model="formCurso.nivel" type="text" placeholder="Intermedio" class="field-input" />
+            </div>
+            <div class="field">
+              <label class="field-label">Precio (MXN)</label>
+              <input v-model="formCurso.precio" type="number" min="0" placeholder="450" class="field-input" />
+            </div>
+            <div class="field">
+              <label class="field-label">Etiqueta (opcional)</label>
+              <select v-model="formCurso.badge" class="field-input">
+                <option value="">Sin etiqueta</option>
+                <option>Nuevo</option>
+                <option>Popular</option>
+              </select>
+            </div>
+          </div>
+          <button @click="guardarCurso" class="btn-primary">{{ editandoId ? 'Guardar cambios' : 'Guardar Curso' }}</button>
+        </div>
+
+        <div class="table-card">
+          <table class="table" style="min-width:680px">
+            <thead>
+              <tr><th>Curso</th><th>Horas</th><th>Nivel</th><th>Precio</th><th>Etiqueta</th><th>Acciones</th></tr>
+            </thead>
+            <tbody>
+              <tr v-if="cursos.length === 0"><td colspan="6" class="empty">No hay cursos registrados</td></tr>
+              <tr v-for="curso in cursos" :key="curso.idCurso">
+                <td class="td-title">{{ curso.nombre }}</td>
+                <td class="td-muted">{{ curso.horas }} hrs</td>
+                <td class="td-muted">{{ curso.nivel }}</td>
+                <td class="td-teal">${{ Math.round(curso.precio) }}</td>
+                <td><span v-if="curso.badge" class="stock-badge featured">{{ curso.badge }}</span><span v-else class="td-muted">—</span></td>
+                <td class="td-actions">
+                  <button @click="editarCurso(curso)" class="btn-edit">Editar</button>
+                  <button @click="eliminarCurso(curso.idCurso)" class="btn-danger">Eliminar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </template>
+
+      <!-- ═══ BOLETÍN ═══ -->
+      <template v-if="tab === 'boletin'">
+        <div class="admin-header">
+          <div>
+            <h1 class="admin-title">Suscriptores del Boletín</h1>
+            <p class="admin-sub">{{ suscriptores.length }} correo{{ suscriptores.length !== 1 ? 's' : '' }} suscrito{{ suscriptores.length !== 1 ? 's' : '' }}</p>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <table class="table" style="min-width:480px">
+            <thead>
+              <tr><th>Correo</th><th>Fecha de suscripción</th></tr>
+            </thead>
+            <tbody>
+              <tr v-if="suscriptores.length === 0"><td colspan="2" class="empty">Aún no hay suscriptores</td></tr>
+              <tr v-for="s in suscriptores" :key="s.idSuscriptor">
+                <td class="td-title">{{ s.correo }}</td>
+                <td class="td-muted">{{ formatFecha(s.creadoEn) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </template>
+
+      <!-- ═══ VENTAS ═══ -->
+      <template v-if="tab === 'ventas'">
+        <div class="admin-header">
+          <div>
+            <h1 class="admin-title">Ventas</h1>
+            <p class="admin-sub">{{ ventas.length }} transacci{{ ventas.length === 1 ? 'ón' : 'ones' }} · Total ${{ totalVentas }} MXN</p>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <table class="table" style="min-width:680px">
+            <thead>
+              <tr><th>ID transacción</th><th>Cliente</th><th>Correo</th><th>Monto</th><th>Fecha</th></tr>
+            </thead>
+            <tbody>
+              <tr v-if="ventas.length === 0"><td colspan="5" class="empty">Aún no hay ventas registradas</td></tr>
+              <tr v-for="venta in ventas" :key="venta.idTransaccion">
+                <td class="td-muted" style="font-family:var(--fm);font-size:11px">{{ venta.idTransaccion }}</td>
+                <td class="td-title">{{ venta.usuario }}</td>
+                <td class="td-muted">{{ venta.correo }}</td>
+                <td class="td-teal">${{ venta.montoTotal }}</td>
+                <td class="td-muted">{{ formatFecha(venta.fechaPago) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </template>
+
+      <!-- ═══ USUARIOS ═══ -->
+      <template v-if="tab === 'usuarios'">
+        <div class="admin-header">
+          <div>
+            <h1 class="admin-title">Usuarios</h1>
+            <p class="admin-sub">{{ usuarios.length }} usuario{{ usuarios.length !== 1 ? 's' : '' }} registrado{{ usuarios.length !== 1 ? 's' : '' }}</p>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <table class="table" style="min-width:640px">
+            <thead>
+              <tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Acciones</th></tr>
+            </thead>
+            <tbody>
+              <tr v-if="usuarios.length === 0"><td colspan="4" class="empty">No hay usuarios registrados</td></tr>
+              <tr v-for="u in usuarios" :key="u.idUsuario">
+                <td class="td-title">{{ u.nombre }} <span v-if="u.esInvitado" class="stock-badge invitado">Invitado</span></td>
+                <td class="td-muted">{{ u.correo }}</td>
+                <td>
+                  <select :value="u.rol" @change="cambiarRolUsuario(u, $event.target.value)" class="rol-select">
+                    <option>Usuario General</option>
+                    <option>Administrador</option>
+                  </select>
+                </td>
+                <td class="td-actions">
+                  <button @click="eliminarUsuario(u.idUsuario)" class="btn-danger">Eliminar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </template>
+
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../services/api'
 
@@ -222,10 +467,27 @@ const editandoId = ref(null)
 const eventos = ref([])
 const articulos = ref([])
 const speakers = ref([])
+const sesiones = ref([])
+const cursos = ref([])
+const ventas = ref([])
+const usuarios = ref([])
+const suscriptores = ref([])
+
+const totalVentas = computed(() =>
+  ventas.value.reduce((suma, v) => suma + Number(v.montoTotal), 0).toLocaleString('en-US')
+)
+
+const TITULOS = ['dr.', 'dra.', 'mtro.', 'mtra.', 'ing.', 'lic.']
+const iniciales = (nombreCompleto) => {
+  const partes = nombreCompleto.split(' ').filter(p => !TITULOS.includes(p.toLowerCase()))
+  return partes.slice(0, 2).map(p => p[0]).join('').toUpperCase()
+}
 
 const formEvento = ref({ titulo: '', fecha: '', precio: '', stockBoletos: '' })
 const formArticulo = ref({ titulo: '', cuerpo: '', autor: '', categoria: '', fechaPublicacion: '' })
-const formSpeaker = ref({ nombre: '', rol: '', area: '', tema: '', frase: '', featured: false })
+const formSpeaker = ref({ nombre: '', rol: '', area: '', tema: '', frase: '', featured: false, fotoUrl: '' })
+const formSesion = ref({ dia: 1, hora: '', duracion: '', tipo: '', nombre: '', ponente: '', badge: 'Keynote' })
+const formCurso = ref({ nombre: '', descripcion: '', horas: '', nivel: '', precio: '', badge: '' })
 
 const cambiarTab = (nuevoTab) => {
   tab.value = nuevoTab
@@ -242,7 +504,9 @@ const toggleFormulario = () => {
 const resetFormularioActivo = () => {
   formEvento.value = { titulo: '', fecha: '', precio: '', stockBoletos: '' }
   formArticulo.value = { titulo: '', cuerpo: '', autor: '', categoria: '', fechaPublicacion: '' }
-  formSpeaker.value = { nombre: '', rol: '', area: '', tema: '', frase: '', featured: false }
+  formSpeaker.value = { nombre: '', rol: '', area: '', tema: '', frase: '', featured: false, fotoUrl: '' }
+  formSesion.value = { dia: 1, hora: '', duracion: '', tipo: '', nombre: '', ponente: '', badge: 'Keynote' }
+  formCurso.value = { nombre: '', descripcion: '', horas: '', nivel: '', precio: '', badge: '' }
 }
 
 const formatFecha = (fecha) => {
@@ -325,7 +589,7 @@ const guardarSpeaker = async () => {
   } else {
     await api.post('/speakers', formSpeaker.value)
   }
-  formSpeaker.value = { nombre: '', rol: '', area: '', tema: '', frase: '', featured: false }
+  resetFormularioActivo()
   mostrarFormulario.value = false
   editandoId.value = null
   cargarSpeakers()
@@ -339,6 +603,7 @@ const editarSpeaker = (speaker) => {
     tema: speaker.tema,
     frase: speaker.frase || '',
     featured: !!speaker.featured,
+    fotoUrl: speaker.fotoUrl || '',
   }
   mostrarFormulario.value = true
 }
@@ -346,6 +611,123 @@ const eliminarSpeaker = async (id) => {
   if (!confirm('¿Eliminar este speaker?')) return
   await api.delete(`/speakers/${id}`)
   cargarSpeakers()
+}
+
+// ── AGENDA ──
+const cargarSesiones = async () => {
+  const res = await api.get('/sesiones')
+  sesiones.value = res.data
+}
+const guardarSesion = async () => {
+  if (editandoId.value) {
+    await api.put(`/sesiones/${editandoId.value}`, formSesion.value)
+  } else {
+    await api.post('/sesiones', formSesion.value)
+  }
+  resetFormularioActivo()
+  mostrarFormulario.value = false
+  editandoId.value = null
+  cargarSesiones()
+}
+const editarSesion = (sesion) => {
+  editandoId.value = sesion.idSesion
+  formSesion.value = {
+    dia: sesion.dia,
+    hora: String(sesion.hora).slice(0, 5),
+    duracion: sesion.duracion,
+    tipo: sesion.tipo,
+    nombre: sesion.nombre,
+    ponente: sesion.ponente,
+    badge: sesion.badge,
+  }
+  mostrarFormulario.value = true
+}
+const eliminarSesion = async (id) => {
+  if (!confirm('¿Eliminar esta sesión de la agenda?')) return
+  await api.delete(`/sesiones/${id}`)
+  cargarSesiones()
+}
+
+// ── CURSOS ──
+const cargarCursos = async () => {
+  const res = await api.get('/cursos')
+  cursos.value = res.data
+}
+const guardarCurso = async () => {
+  if (editandoId.value) {
+    await api.put(`/cursos/${editandoId.value}`, formCurso.value)
+  } else {
+    await api.post('/cursos', formCurso.value)
+  }
+  resetFormularioActivo()
+  mostrarFormulario.value = false
+  editandoId.value = null
+  cargarCursos()
+}
+const editarCurso = (curso) => {
+  editandoId.value = curso.idCurso
+  formCurso.value = {
+    nombre: curso.nombre,
+    descripcion: curso.descripcion,
+    horas: curso.horas,
+    nivel: curso.nivel,
+    precio: Math.round(curso.precio),
+    badge: curso.badge || '',
+  }
+  mostrarFormulario.value = true
+}
+const eliminarCurso = async (id) => {
+  if (!confirm('¿Eliminar este curso?')) return
+  await api.delete(`/cursos/${id}`)
+  cargarCursos()
+}
+
+// ── BOLETÍN ──
+const cargarSuscriptores = async () => {
+  try {
+    const res = await api.get('/suscriptores')
+    suscriptores.value = res.data
+  } catch (err) {
+    suscriptores.value = []
+  }
+}
+
+// ── VENTAS ──
+const cargarVentas = async () => {
+  try {
+    const res = await api.get('/transacciones')
+    ventas.value = res.data
+  } catch (err) {
+    ventas.value = []
+  }
+}
+
+// ── USUARIOS ──
+const cargarUsuarios = async () => {
+  try {
+    const res = await api.get('/usuarios')
+    usuarios.value = res.data
+  } catch (err) {
+    usuarios.value = []
+  }
+}
+const cambiarRolUsuario = async (usuario, nuevoRol) => {
+  try {
+    await api.put(`/usuarios/${usuario.idUsuario}`, { rol: nuevoRol })
+    usuario.rol = nuevoRol
+  } catch (err) {
+    alert(err.response?.data?.error || 'Error al cambiar el rol')
+    cargarUsuarios()
+  }
+}
+const eliminarUsuario = async (id) => {
+  if (!confirm('¿Eliminar este usuario? Esta acción no se puede deshacer.')) return
+  try {
+    await api.delete(`/usuarios/${id}`)
+    cargarUsuarios()
+  } catch (err) {
+    alert(err.response?.data?.error || 'Error al eliminar usuario')
+  }
 }
 
 const logout = () => {
@@ -357,6 +739,11 @@ onMounted(() => {
   cargarEventos()
   cargarArticulos()
   cargarSpeakers()
+  cargarSesiones()
+  cargarCursos()
+  cargarVentas()
+  cargarUsuarios()
+  cargarSuscriptores()
 })
 </script>
 
@@ -519,6 +906,28 @@ onMounted(() => {
   font-family: var(--fm);
 }
 .stock-badge.featured { background: var(--teal-g); border-color: var(--teal-b); color: var(--teal); }
+.stock-badge.invitado { font-size: 10px; padding: 2px 8px; color: var(--w3); margin-left: 6px; }
+
+.sp-thumb { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1px solid var(--teal-b); display: block; }
+.sp-thumb-ini {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--teal-g); border: 1px solid var(--teal-b);
+  color: var(--teal); font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.rol-select {
+  background: var(--bg3);
+  border: 1px solid var(--line2);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-family: var(--f);
+  font-size: 12px;
+  color: var(--white);
+  cursor: pointer;
+  outline: none;
+}
+.rol-select:focus { border-color: var(--teal-b); }
 
 .empty { text-align: center; color: var(--w4); padding: 48px; }
 
