@@ -64,6 +64,17 @@ const router = createRouter({
   name: 'galeria',
   component: () => import('../views/GaleriaView.vue'),
 },
+{
+  path: '/mis-boletos',
+  name: 'mis-boletos',
+  component: () => import('../views/MisBoletosView.vue'),
+  meta: { requiresAuth: true },
+},
+{
+  path: '/:pathMatch(.*)*',
+  name: 'not-found',
+  component: () => import('../views/NotFoundView.vue'),
+},
   ]
 })
 

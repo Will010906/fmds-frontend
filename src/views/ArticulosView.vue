@@ -49,12 +49,14 @@
       </div>
     </div>
 
+    <AppFooter />
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 import AppNav from '../components/AppNav.vue'
+import AppFooter from '../components/AppFooter.vue'
 
 const categoriaActiva = ref('Todos')
 const categorias = ['Todos', 'Arquitectura', 'Seguridad', 'Metodologías', 'IA', 'Base de Datos']

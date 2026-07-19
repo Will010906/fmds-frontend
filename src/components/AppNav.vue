@@ -1,5 +1,5 @@
 <template>
-  <nav class="nav">
+  <nav class="nav" :class="{ scrolled }">
     <router-link to="/" class="nav-logo">
       <img src="/FMDSlogo.png" alt="FMDS" style="height:32px" />
     </router-link>
@@ -108,6 +108,7 @@
       </template>
       <template v-else>
         <span class="nav-user">{{ nombre }}</span>
+        <router-link to="/mis-boletos" class="ng">Mis boletos</router-link>
         <button @click="logout" class="ng">Cerrar sesión</button>
       </template>
     </div>
@@ -131,20 +132,30 @@
       <router-link to="/crear-cuenta" class="nf" @click="mobileOpen = false">Crear cuenta →</router-link>
     </template>
     <template v-else>
+      <router-link to="/mis-boletos" class="ng" @click="mobileOpen = false">Mis boletos</router-link>
       <button class="ng" @click="logout">Cerrar sesión</button>
     </template>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
 const mobileOpen = ref(false)
+const scrolled = ref(false)
 const token = localStorage.getItem('token')
 const nombre = localStorage.getItem('nombre')
+
+const onScroll = () => { scrolled.value = window.scrollY > 8 }
+
+onMounted(() => {
+  onScroll()
+  window.addEventListener('scroll', onScroll, { passive: true })
+})
+onUnmounted(() => window.removeEventListener('scroll', onScroll))
 
 const logout = () => {
   localStorage.clear()
@@ -153,7 +164,8 @@ const logout = () => {
 </script>
 
 <style scoped>
-.nav { height:60px;background:rgba(6,9,15,.96);backdrop-filter:blur(24px);border-bottom:1px solid var(--line3);display:flex;align-items:center;justify-content:space-between;padding:0 36px;position:fixed;top:0;left:0;right:0;z-index:1000; }
+.nav { height:60px;background:rgba(6,9,15,.96);backdrop-filter:blur(24px);border-bottom:1px solid var(--line3);display:flex;align-items:center;justify-content:space-between;padding:0 36px;position:fixed;top:0;left:0;right:0;z-index:1000;transition:background .25s,box-shadow .25s,border-color .25s; }
+.nav.scrolled { background:rgba(6,9,15,.99);border-bottom-color:var(--line2);box-shadow:0 10px 36px rgba(0,0,0,.45); }
 .nav-logo { cursor:pointer;display:flex;align-items:center; }
 
 .nav-m { display:flex;gap:2px;align-items:center; }

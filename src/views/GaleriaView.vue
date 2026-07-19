@@ -59,11 +59,13 @@
       </div>
     </div>
 
+    <AppFooter />
   </div>
 </template>
 
 <script setup>
 import AppNav from '../components/AppNav.vue'
+import AppFooter from '../components/AppFooter.vue'
 </script>
 
 <style scoped>

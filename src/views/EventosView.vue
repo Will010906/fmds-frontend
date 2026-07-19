@@ -47,6 +47,7 @@
       </div>
     </section>
 
+    <AppFooter />
   </div>
 </template>
 
@@ -55,6 +56,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../services/api'
 import AppNav from '../components/AppNav.vue'
+import AppFooter from '../components/AppFooter.vue'
 
 const router = useRouter()
 const eventos = ref([])

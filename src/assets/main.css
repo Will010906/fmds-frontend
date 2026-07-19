@@ -44,3 +44,48 @@ body {
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg2); }
 ::-webkit-scrollbar-thumb { background: var(--teal3); border-radius: 3px; }
+
+/* Selección de texto y focus accesible */
+::selection { background: rgba(45,212,180,.3); color: var(--white); }
+:focus-visible { outline: 2px solid var(--teal-s); outline-offset: 2px; border-radius: 4px; }
+
+html { scroll-behavior: smooth; }
+
+/* Transición entre páginas */
+.page-fade-enter-active,
+.page-fade-leave-active { transition: opacity .18s ease, transform .18s ease; }
+.page-fade-enter-from { opacity: 0; transform: translateY(10px); }
+.page-fade-leave-to { opacity: 0; }
+
+/* Aparición de secciones al hacer scroll (directiva v-reveal) */
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity .65s cubic-bezier(.22,.61,.36,1), transform .65s cubic-bezier(.22,.61,.36,1); }
+.reveal-visible { opacity: 1; transform: none; }
+
+/* Microinteracciones: glow en botones primarios (el prefijo #app gana a los estilos scoped) */
+#app .btn-p, #app .tp-buy, #app .bol-btn, #app .sum-btn,
+#app .ag-btn, #app .sp-btn, #app .art-btn, #app .nf, #app .btn-primary {
+  transition: background .15s, box-shadow .25s, transform .15s;
+}
+#app .btn-p:hover, #app .tp-buy:hover, #app .bol-btn:hover, #app .sum-btn:hover,
+#app .ag-btn:hover, #app .sp-btn:hover, #app .art-btn:hover, #app .nf:hover, #app .btn-primary:hover {
+  box-shadow: 0 6px 28px rgba(45,212,180,.28);
+  transform: translateY(-1px);
+}
+
+/* Glow sutil al pasar sobre tarjetas */
+#app .bc:hover, #app .sm:hover, #app .tc:hover, #app .faq-i:hover,
+#app .cc:hover, #app .spk-card:hover, #app .event-card:hover,
+#app .plan-card:hover, #app .gs:hover {
+  box-shadow: 0 14px 44px rgba(0,0,0,.45), 0 0 0 1px var(--teal-b);
+}
+
+/* El ticker se pausa al pasar el mouse */
+.ticker:hover .ti { animation-play-state: paused; }
+
+/* Respeto a usuarios que prefieren menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .page-fade-enter-active, .page-fade-leave-active { transition: none; }
+  .ti { animation: none; }
+}

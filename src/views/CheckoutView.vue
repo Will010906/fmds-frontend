@@ -15,7 +15,10 @@
           <p class="checkout-price">${{ evento?.precio }} <span>MXN por boleto</span></p>
         </div>
 
-        <div v-if="mensaje" class="alert-success">{{ mensaje }}</div>
+        <div v-if="mensaje" class="alert-success">
+          {{ mensaje }}
+          <router-link v-if="haySesion" to="/mis-boletos" class="alert-link">Ver mis boletos ⟶</router-link>
+        </div>
         <div v-if="error" class="alert-error">{{ error }}</div>
 
         <div class="fields" v-if="!haySesion">
@@ -133,8 +136,13 @@ const pagar = async () => {
         nombre:     comprador.value.nombre,
         correo:     comprador.value.correo,
       })
-      mensaje.value = '¡Pago exitoso! Tus boletos han sido reservados.'
-      setTimeout(() => router.push({ name: 'eventos' }), 2500)
+      if (haySesion) {
+        mensaje.value = '¡Pago exitoso! Tus boletos han sido reservados.'
+        setTimeout(() => router.push({ name: 'mis-boletos' }), 2500)
+      } else {
+        mensaje.value = '¡Pago exitoso! Crea una cuenta con este mismo correo para consultar tus boletos cuando quieras.'
+        setTimeout(() => router.push({ name: 'crear-cuenta' }), 3500)
+      }
     } catch (err) {
       error.value = err.response?.data?.error || 'Error al procesar el pago'
     } finally {
@@ -222,6 +230,13 @@ onMounted(cargarEvento)
   padding: 12px 16px;
   border-radius: 10px;
   font-size: 13px;
+}
+.alert-link {
+  display: block;
+  margin-top: 6px;
+  color: var(--teal);
+  font-weight: 700;
+  text-decoration: underline;
 }
 .alert-error {
   background: rgba(239,68,68,.1);

@@ -120,7 +120,7 @@
 </div>
 
    <!-- EVENTOS BENTO -->
-<div class="sec" style="background:var(--bg);border-top:1px solid var(--line3)">
+<div v-reveal class="sec" style="background:var(--bg);border-top:1px solid var(--line3)">
   <div class="s-hd">
     <div>
       <div class="pill"><div class="pill-d"></div><span class="pill-t">Agenda académica</span></div>
@@ -200,7 +200,7 @@
 
 
     <!-- STATS -->
-    <div class="stats-h">
+    <div v-reveal class="stats-h">
       <div class="sh"><div class="sh-n"><AnimatedNumber :value="3200" suffix="+" /></div><div class="sh-l">Miembros activos</div></div>
       <div class="sh"><div class="sh-n"><AnimatedNumber :value="100" suffix="%" /></div><div class="sh-l">Divulgación neutral</div></div>
       <div class="sh"><div class="sh-n"><AnimatedNumber :value="48" /></div><div class="sh-l">Artículos publicados</div></div>
@@ -208,8 +208,52 @@
       <div class="sh"><div class="sh-n"><AnimatedNumber :value="50" prefix="$" suffix="K" /></div><div class="sh-l">En premios 2025</div></div>
     </div>
 
+    <!-- POR QUÉ ASISTIR -->
+    <div v-reveal class="sec pq">
+      <div class="s-hd">
+        <div>
+          <div class="pill"><div class="pill-d"></div><span class="pill-t">La experiencia</span></div>
+          <div class="s-ttl"><strong>¿Por qué</strong> <em>asistir?</em></div>
+        </div>
+      </div>
+      <div class="pq-g">
+        <div class="pq-c">
+          <div class="pq-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+          <div class="pq-t">Aprende de los mejores</div>
+          <p class="pq-s">Conferencias magistrales y talleres prácticos con investigadores y líderes de la industria del software en México.</p>
+        </div>
+        <div class="pq-c">
+          <div class="pq-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div class="pq-t">Haz networking real</div>
+          <p class="pq-s">Conecta con estudiantes, docentes, desarrolladores y empresas de 12 estados en un mismo lugar.</p>
+        </div>
+        <div class="pq-c">
+          <div class="pq-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+          <div class="pq-t">Impulsa tu carrera</div>
+          <p class="pq-s">Convocatorias para publicar artículos, cursos con certificado y contacto directo con instituciones aliadas.</p>
+        </div>
+        <div class="pq-c">
+          <div class="pq-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+          <div class="pq-t">Vive la experiencia</div>
+          <p class="pq-s">Hackathon con $25K en premios, feria de proyectos estudiantiles y actividades de comunidad los 3 días.</p>
+        </div>
+      </div>
+      <div class="pq-quien">
+        <span class="pq-q-l">¿Quiénes asisten?</span>
+        <div class="pq-chips">
+          <span class="pq-chip">Estudiantes</span>
+          <span class="pq-chip">Docentes e investigadores</span>
+          <span class="pq-chip">Desarrolladores</span>
+          <span class="pq-chip">Emprendedores</span>
+          <span class="pq-chip">Empresas de software</span>
+          <span class="pq-chip">Egresados</span>
+          <span class="pq-chip">Entusiastas tech</span>
+        </div>
+      </div>
+    </div>
+
     <!-- MISIÓN -->
-    <div class="ms-grid">
+    <div v-reveal class="ms-grid">
       <div class="ms-l">
         <div class="ms-over">Nuestra misión</div>
         <div class="ms-q">El software mexicano merece una <span>voz independiente</span> de calidad internacional.</div>
@@ -241,7 +285,7 @@
     </div>
 
 <!-- SPEAKERS -->
-<div class="sec" style="background:var(--bg);border-top:1px solid var(--line3)">
+<div v-reveal class="sec" style="background:var(--bg);border-top:1px solid var(--line3)">
   <div class="s-hd">
     <div>
       <div class="pill"><div class="pill-d"></div><span class="pill-t">Ponentes 2026</span></div>
@@ -285,7 +329,7 @@
 </div>
 
 <!-- ARTÍCULOS -->
-<div class="sec" style="background:var(--bg2);border-top:1px solid var(--line3)">
+<div v-reveal class="sec" style="background:var(--bg2);border-top:1px solid var(--line3)">
   <div class="s-hd">
     <div>
       <div class="pill"><div class="pill-d"></div><span class="pill-t">Repositorio científico</span></div>
@@ -307,7 +351,7 @@
 </div>
 
 <!-- EDICIONES / GALERÍA -->
-<div class="sec" style="background:var(--bg);border-top:1px solid var(--line3)">
+<div v-reveal class="sec" style="background:var(--bg);border-top:1px solid var(--line3)">
   <div class="s-hd">
     <div>
       <div class="pill"><div class="pill-d"></div><span class="pill-t">Ediciones anteriores</span></div>
@@ -365,7 +409,7 @@
 </div>
 
    <!-- COMUNIDAD -->
-<div class="sec" style="background:var(--bg2);border-top:1px solid var(--line3)">
+<div v-reveal class="sec" style="background:var(--bg2);border-top:1px solid var(--line3)">
   <div class="s-hd" style="margin-bottom:40px">
     <div>
       <div class="pill"><div class="pill-d"></div><span class="pill-t">Comunidad</span></div>
@@ -401,7 +445,7 @@
 </div>
 
 <!-- INSTITUCIONES ALIADAS -->
-<div class="inst-sec">
+<div v-reveal class="inst-sec">
   <p class="inst-lbl">Instituciones aliadas</p>
   <div class="inst">
     <div class="ic">
@@ -432,7 +476,7 @@
 </div>
 
 <!-- FAQ -->
-<div class="sec" style="background:var(--bg);border-top:1px solid var(--line3)">
+<div v-reveal class="sec" style="background:var(--bg);border-top:1px solid var(--line3)">
   <div class="s-hd" style="margin-bottom:40px">
     <div>
       <div class="pill"><div class="pill-d"></div><span class="pill-t">FAQ</span></div>
@@ -443,7 +487,7 @@
     <div class="faq-i">
       <div class="faq-n">01</div>
       <div class="faq-q">¿Cómo compro mi boleto?</div>
-      <div class="faq-a">Selecciona el evento, elige tu plan de acceso y completa el pago. Recibirás tu boleto con QR al correo en minutos.</div>
+      <div class="faq-a">Selecciona el evento, elige tu plan de acceso y paga en línea. Tu boleto queda registrado al instante con su folio en la sección "Mis boletos".</div>
     </div>
     <div class="faq-i">
       <div class="faq-n">02</div>
@@ -473,8 +517,33 @@
   </div>
 </div>
 
+<!-- CTA FINAL -->
+<div v-reveal class="cierre" v-if="proximoEvento">
+  <div class="pill" style="margin:0 auto 20px"><div class="pill-d"></div><span class="pill-t">Última llamada</span></div>
+  <div class="cierre-ttl"><strong>Asegura tu lugar en</strong><br><em>{{ proximoEvento.titulo }}</em></div>
+  <div class="cierre-cd" v-if="!countdown.terminado">
+    <div class="ccd-box"><div class="ccd-v">{{ pad(countdown.dias) }}</div><div class="ccd-k">Días</div></div>
+    <div class="ccd-sep">:</div>
+    <div class="ccd-box"><div class="ccd-v">{{ pad(countdown.horas) }}</div><div class="ccd-k">Horas</div></div>
+    <div class="ccd-sep">:</div>
+    <div class="ccd-box"><div class="ccd-v">{{ pad(countdown.mins) }}</div><div class="ccd-k">Min</div></div>
+    <div class="ccd-sep">:</div>
+    <div class="ccd-box"><div class="ccd-v">{{ pad(countdown.segs) }}</div><div class="ccd-k">Seg</div></div>
+  </div>
+  <div class="cierre-stock" v-if="stockProximo !== null">
+    <template v-if="stockProximo > 0">
+      <span class="cs-dot"></span> Quedan <strong>{{ stockProximo }} boletos</strong> disponibles
+    </template>
+    <template v-else>Boletos agotados para este evento</template>
+  </div>
+  <div class="cierre-ctas">
+    <router-link to="/registro" class="cierre-btn" v-if="stockProximo === null || stockProximo > 0">Comprar mi boleto ⟶</router-link>
+    <router-link to="/agenda" class="cierre-gh">Ver la agenda</router-link>
+  </div>
+</div>
+
 <!-- BOLETÍN -->
-<div class="boletin">
+<div v-reveal class="boletin">
   <div class="bol-l">
     <div class="bol-tag">Boletín académico</div>
     <div class="bol-ttl"><strong>Mantente</strong><br><em>al frente</em></div>
@@ -491,77 +560,7 @@
 </div>
 
 <!-- FOOTER -->
-<footer class="footer">
-  <div class="ft-main">
-    <div class="ft-brand">
-      <img src="/FMDSlogo.png" alt="FMDS" style="height:48px;margin-bottom:14px;" />
-      <p class="ft-tag">Federación Mexicana de Desarrolladores de Software.</p>
-    </div>
-    <div class="ft-col">
-      <div class="ft-lbl">Congresos</div>
-      <div class="ft-lnks">
-        <router-link to="/eventos">Congreso CIIS 2026</router-link>
-        <router-link to="/eventos">Simposio IA 2026</router-link>
-        <router-link to="/eventos">Summit Cloud 2026</router-link>
-        <router-link to="/registro">Hackathon FMDS</router-link>
-        <router-link to="/agenda">Agenda completa</router-link>
-      </div>
-    </div>
-    <div class="ft-col">
-      <div class="ft-lbl">Recursos</div>
-      <div class="ft-lnks">
-        <router-link to="/articulos">Artículos científicos</router-link>
-        <router-link to="/cursos">Cursos en línea</router-link>
-        <router-link to="/galeria">Ediciones anteriores</router-link>
-        <router-link to="/registro">Publicar artículo</router-link>
-        <router-link to="/registro">Ser ponente</router-link>
-      </div>
-    </div>
-    <div class="ft-col">
-      <div class="ft-lbl">Contacto</div>
-      <div class="ft-ct-col">
-        <div class="ft-ct">
-          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          contacto@fmds.mx
-        </div>
-        <div class="ft-ct">
-          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          Morelia, Michoacán · México
-        </div>
-        <div class="ft-ct">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          Lun-Vie · 9:00–18:00 hrs
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="ft-mid">
-    <div class="ft-stats">
-      <div class="ft-s"><div class="ft-sn">3,200+</div><div class="ft-sl">Miembros</div></div>
-      <div class="ft-s"><div class="ft-sn">12</div><div class="ft-sl">Estados</div></div>
-      <div class="ft-s"><div class="ft-sn">48</div><div class="ft-sl">Artículos</div></div>
-      <div class="ft-s"><div class="ft-sn">3</div><div class="ft-sl">Congresos</div></div>
-    </div>
-    <div class="ft-award">
-      <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-      <div>
-        <div class="ft-at">Plataforma verificada</div>
-        <div class="ft-as">Comunidad académica de México</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="ft-bot">
-    <span class="ft-copy">© 2025 FMDS · Federación Mexicana de Desarrolladores de Software · Todos los derechos reservados</span>
-    <div class="ft-legal">
-      <a>Privacidad</a>
-      <a>Términos</a>
-      <a>Cookies</a>
-    </div>
-    <div class="ft-badge"><div class="ft-bd"></div><span class="ft-bs">fmds.mx</span></div>
-  </div>
-</footer>
+<AppFooter />
 
   </div>
 </template>
@@ -570,6 +569,7 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import api from '../services/api'
 import AppNav from '../components/AppNav.vue'
+import AppFooter from '../components/AppFooter.vue'
 import AnimatedNumber from '../components/AnimatedNumber.vue'
 
 const eventos = ref([])
@@ -619,6 +619,12 @@ const iniciales = (nombre) => {
 }
 const speakerFeatured = computed(() => speakers.value.find(s => s.featured))
 const otrosSpeakers = computed(() => speakers.value.filter(s => !s.featured))
+
+// Stock real del próximo evento para la urgencia del CTA final
+const stockProximo = computed(() => {
+  const stock = proximoEvento.value?.stockBoletos
+  return stock === undefined || stock === null ? null : Number(stock)
+})
 
 const cargarArticulos = async () => {
   const res = await api.get('/articulos')
@@ -929,38 +935,39 @@ const scrollBoletin = () => {
 .bol-ok { background:var(--teal-g);border:1px solid var(--teal-b);border-radius:10px;padding:14px 18px;font-size:13px;color:var(--teal);font-weight:600; }
 .bol-err { font-size:12px;color:#f87171;margin-top:8px; }
 
-/* FOOTER */
-.footer { background:var(--bg2); }
-.ft-main { display:grid;grid-template-columns:200px 1fr 1fr 1fr;gap:48px;padding:52px 44px 40px;border-bottom:1px solid var(--line3); }
-.ft-brand { display:flex;flex-direction:column; }
-.ft-tag { font-size:12px;color:var(--w4);font-weight:300;line-height:1.8;max-width:180px; }
-.ft-col { display:flex;flex-direction:column;gap:16px; }
-.ft-lbl { font-family:var(--fm);font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--w4); }
-.ft-lnks { display:flex;flex-direction:column;gap:10px; }
-.ft-lnks a { font-size:13px;color:var(--w3);text-decoration:none;font-weight:300;transition:color .15s;cursor:pointer; }
-.ft-lnks a:hover { color:var(--teal); }
-.ft-ct-col { display:flex;flex-direction:column;gap:12px; }
-.ft-ct { display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--w3);font-weight:300;line-height:1.55; }
-.ft-ct svg { width:13px;height:13px;fill:none;stroke:var(--teal);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;margin-top:2px; }
+/* POR QUÉ ASISTIR */
+.pq { background:var(--bg2);border-top:1px solid var(--line3); }
+.pq-g { display:grid;grid-template-columns:repeat(4,1fr);gap:14px; }
+.pq-c { background:var(--card);border:1px solid var(--line3);border-radius:14px;padding:26px 24px;transition:border-color .15s; }
+.pq-c:hover { border-color:var(--teal-b); }
+.pq-ic { width:38px;height:38px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px; }
+.pq-ic svg { width:17px;height:17px; }
+.pq-t { font-size:15px;font-weight:700;color:var(--white);letter-spacing:-.02em;margin-bottom:8px; }
+.pq-s { font-size:12px;color:var(--w3);font-weight:300;line-height:1.7; }
+.pq-quien { display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:28px;padding-top:24px;border-top:1px solid var(--line3); }
+.pq-q-l { font-family:var(--fm);font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--w4);white-space:nowrap; }
+.pq-chips { display:flex;gap:8px;flex-wrap:wrap; }
+.pq-chip { font-size:11px;font-weight:500;color:var(--w2);background:var(--w5);border:1px solid var(--line2);border-radius:100px;padding:6px 14px;transition:all .15s; }
+.pq-chip:hover { border-color:var(--teal-b);color:var(--teal); }
 
-.ft-mid { display:flex;justify-content:space-between;align-items:center;padding:28px 44px;border-bottom:1px solid var(--line3); }
-.ft-stats { display:flex;gap:40px; }
-.ft-s { display:flex;flex-direction:column;gap:4px; }
-.ft-sn { font-family:var(--f);font-size:22px;font-weight:800;color:var(--teal);letter-spacing:-.04em; }
-.ft-sl { font-family:var(--fm);font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--w4); }
-.ft-award { display:flex;align-items:center;gap:12px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:10px;padding:14px 20px; }
-.ft-award svg { width:20px;height:20px;flex-shrink:0; }
-.ft-at { font-size:13px;font-weight:700;color:var(--teal); }
-.ft-as { font-size:11px;color:var(--w4);margin-top:2px; }
-
-.ft-bot { display:flex;justify-content:space-between;align-items:center;padding:18px 44px; }
-.ft-copy { font-size:11px;color:var(--w4); }
-.ft-legal { display:flex;gap:18px; }
-.ft-legal a { font-size:11px;color:var(--w4);text-decoration:none;cursor:pointer;transition:color .15s; }
-.ft-legal a:hover { color:var(--teal); }
-.ft-badge { display:flex;align-items:center;gap:6px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:100px;padding:5px 12px; }
-.ft-bd { width:5px;height:5px;border-radius:50%;background:var(--teal); }
-.ft-bs { font-family:var(--fm);font-size:9px;color:var(--teal);letter-spacing:.06em; }
+/* CTA FINAL */
+.cierre { background:linear-gradient(160deg,var(--bg3),var(--bg));border-top:1px solid var(--line3);padding:72px 44px;text-align:center; }
+.cierre-ttl { font-size:40px;font-weight:800;letter-spacing:-.04em;line-height:1.15;margin-bottom:32px; }
+.cierre-ttl strong { color:var(--white); }
+.cierre-ttl em { font-family:var(--fs);font-style:italic;font-weight:400;color:var(--teal); }
+.cierre-cd { display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:26px; }
+.ccd-box { background:var(--card);border:1px solid var(--line2);border-radius:14px;padding:18px 22px;min-width:88px; }
+.ccd-v { font-family:var(--f);font-size:36px;font-weight:800;color:var(--teal);letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums; }
+.ccd-k { font-family:var(--fm);font-size:8px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--w4);margin-top:8px; }
+.ccd-sep { font-size:26px;font-weight:800;color:var(--w4); }
+.cierre-stock { font-size:13px;color:var(--w2);font-weight:300;margin-bottom:28px;display:flex;align-items:center;justify-content:center;gap:8px; }
+.cierre-stock strong { color:var(--teal);font-weight:700; }
+.cs-dot { width:7px;height:7px;border-radius:50%;background:var(--teal);animation:pulse 2.5s infinite; }
+.cierre-ctas { display:flex;gap:12px;justify-content:center;flex-wrap:wrap; }
+.cierre-btn { background:var(--teal);color:var(--bg);border:none;border-radius:10px;padding:15px 36px;font-family:var(--f);font-size:14px;font-weight:700;cursor:pointer;transition:background .15s;text-decoration:none;display:inline-block; }
+.cierre-btn:hover { background:var(--teal2); }
+.cierre-gh { background:var(--w5);border:1px solid var(--line2);color:var(--w2);border-radius:10px;padding:15px 30px;font-family:var(--f);font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-block; }
+.cierre-gh:hover { border-color:var(--teal-b);color:var(--white); }
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 968px) {
@@ -1003,10 +1010,6 @@ const scrollBoletin = () => {
   .boletin { grid-template-columns:1fr;gap:24px;padding:44px 24px; }
   .bol-ttl { font-size:32px; }
 
-  .ft-main { grid-template-columns:1fr 1fr;gap:32px;padding:40px 24px 32px; }
-  .ft-mid { flex-direction:column;gap:20px;padding:24px; }
-  .ft-stats { flex-wrap:wrap;gap:24px;justify-content:center; }
-  .ft-bot { flex-direction:column;gap:14px;padding:18px 24px;text-align:center; }
 }
 
 @media (max-width: 600px) {
@@ -1034,6 +1037,16 @@ const scrollBoletin = () => {
   .inst { flex-direction:column; }
   .ic { border-right:none; }
 
-  .ft-main { grid-template-columns:1fr; }
+  .pq-g { grid-template-columns:1fr 1fr; }
+  .cierre { padding:52px 20px; }
+  .cierre-ttl { font-size:30px; }
+  .cierre-cd { gap:6px; }
+  .ccd-box { padding:12px 10px;min-width:64px; }
+  .ccd-v { font-size:24px; }
+  .ccd-sep { display:none; }
+}
+
+@media (max-width: 560px) {
+  .pq-g { grid-template-columns:1fr; }
 }
 </style>

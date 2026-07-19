@@ -59,6 +59,7 @@
       </div>
     </div>
 
+    <AppFooter />
   </div>
 </template>
 
@@ -66,6 +67,7 @@
 import { ref, computed, onMounted } from 'vue'
 import api from '../services/api'
 import AppNav from '../components/AppNav.vue'
+import AppFooter from '../components/AppFooter.vue'
 
 const sesiones = ref([])
 const diaActivo = ref(1)

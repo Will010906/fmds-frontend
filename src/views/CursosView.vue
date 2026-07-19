@@ -24,14 +24,20 @@
           <div class="cc-body">
             <p class="cc-desc">{{ curso.descripcion }}</p>
             <div class="cc-ft">
-              <div class="cc-pr">${{ Math.round(curso.precio) }} MXN</div>
+              <div class="cc-pr">${{ Math.round(curso.precio) }} MXN <span class="cc-pr-n">valor individual</span></div>
               <router-link to="/registro" class="cc-btn">Inscribirme</router-link>
             </div>
           </div>
         </div>
       </div>
+
+      <div class="cur-nota">
+        <div class="cur-nota-t">¿Cómo me inscribo?</div>
+        <p class="cur-nota-s">El acceso a los cursos se adquiere junto con tu registro al congreso. Al hacer clic en "Inscribirme" verás los planes disponibles — todos incluyen el acceso a los cursos en línea de esta edición.</p>
+      </div>
     </div>
 
+    <AppFooter />
   </div>
 </template>
 
@@ -39,6 +45,7 @@
 import { ref, onMounted } from 'vue'
 import api from '../services/api'
 import AppNav from '../components/AppNav.vue'
+import AppFooter from '../components/AppFooter.vue'
 
 const cursos = ref([])
 
@@ -99,6 +106,11 @@ onMounted(cargarCursos)
 .cc-desc { font-size:12px;color:var(--w3);font-weight:300;line-height:1.75;margin-bottom:16px; }
 .cc-ft { display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--line3); }
 .cc-pr { font-family:var(--f);font-size:17px;font-weight:800;color:var(--teal);letter-spacing:-.03em; }
+.cc-pr-n { display:block;font-size:9px;font-weight:400;color:var(--w4);letter-spacing:.04em;text-transform:uppercase; }
+
+.cur-nota { max-width:680px;margin:48px auto 0;background:var(--card);border:1px solid var(--line3);border-left:3px solid var(--teal);border-radius:12px;padding:20px 26px; }
+.cur-nota-t { font-size:13px;font-weight:700;color:var(--white);margin-bottom:6px; }
+.cur-nota-s { font-size:12px;color:var(--w3);font-weight:300;line-height:1.7; }
 .cc-btn { font-size:11px;font-weight:600;padding:8px 15px;border-radius:7px;border:1px solid var(--teal-b);cursor:pointer;font-family:var(--f);background:var(--teal-g);color:var(--teal);transition:all .15s;text-decoration:none; }
 .cc-btn:hover { background:var(--teal-s); }
 

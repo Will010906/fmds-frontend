@@ -26,6 +26,9 @@
           <span class="plan-num" :class="{ teal: plan.precio === 'Gratis' }">{{ plan.precio }}</span>
           <span class="plan-per" v-if="plan.precio !== 'Gratis'">MXN</span>
         </div>
+        <div class="plan-save" v-if="plan.precio !== 'Gratis'">
+          Hoy pagas <strong>${{ parseInt(plan.precio) - 100 }}</strong> con descuento anticipado · ≈ ${{ Math.round((parseInt(plan.precio) - 100) / 3) }} por día
+        </div>
         <div class="plan-name">{{ plan.nombre }}</div>
         <div class="plan-desc">{{ plan.desc }}</div>
         <ul class="plan-feats">
@@ -36,6 +39,41 @@
         </ul>
         <div v-if="plan.featured" class="plan-sel-dot"></div>
       </div>
+    </div>
+
+    <!-- TABLA COMPARATIVA -->
+    <div class="rg-compara">
+      <div class="cmp-title"><strong>Compara los</strong> <em>planes</em></div>
+      <div class="cmp-scroll">
+        <table class="cmp-t">
+          <thead>
+            <tr>
+              <th class="cmp-feat-h">Beneficios</th>
+              <th
+                v-for="(plan, i) in planes"
+                :key="i"
+                class="cmp-plan-h"
+                :class="{ active: planActivo === i }"
+                @click="planActivo = i"
+              >
+                <div class="cmp-plan">{{ plan.nombre.replace('Acceso ', '') }}</div>
+                <div class="cmp-precio">{{ plan.precio === 'Gratis' ? 'Gratis' : '$' + plan.precio + ' MXN' }}</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="fila in comparativa" :key="fila.nombre">
+              <td class="cmp-feat">{{ fila.nombre }}</td>
+              <td v-for="(valor, i) in fila.valores" :key="i" class="cmp-v" :class="{ active: planActivo === i }">
+                <span v-if="valor === true" class="cmp-si">✓</span>
+                <span v-else-if="valor === false" class="cmp-no">—</span>
+                <span v-else class="cmp-txt">{{ valor }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="cmp-nota">Haz clic en una columna para seleccionar ese plan.</p>
     </div>
 
     <!-- FORM + RESUMEN -->
@@ -149,6 +187,7 @@
       </div>
     </div>
 
+    <AppFooter />
   </div>
 </template>
 
@@ -157,6 +196,7 @@ import api from '../services/api'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import AppNav from '../components/AppNav.vue'
+import AppFooter from '../components/AppFooter.vue'
 
 const router = useRouter()
 const planActivo = ref(2)
@@ -183,7 +223,7 @@ onMounted(cargarEvento)
 const planes = [
   {
     label: 'Precio anticipado',
-    badge: 'Más popular', badgeColor: 'green',
+    badge: 'Más elegido', badgeColor: 'green',
     precio: '500',
     nombre: 'Acceso Estudiante',
     desc: 'Para estudiantes con credencial vigente de cualquier institución educativa.',
@@ -211,6 +251,18 @@ const planes = [
     feats: ['Acceso completo al evento', 'Slot de presentación propio', 'Certificado de ponente', 'Publicación en repositorio', 'Workshops premium'],
     featured: true,
   },
+]
+
+// Filas de la tabla comparativa: valores por plan [Estudiante, General, Ponente]
+const comparativa = [
+  { nombre: 'Sesiones plenarias los 3 días', valores: [true, true, true] },
+  { nombre: 'Talleres y workshops premium', valores: [true, true, true] },
+  { nombre: 'Cursos en línea de la edición', valores: [true, true, true] },
+  { nombre: 'Grabaciones por 30 días', valores: [true, true, true] },
+  { nombre: 'Certificado digital', valores: ['FMDS', 'FMDS', 'De ponente'] },
+  { nombre: 'Acceso a comunidad FMDS', valores: [true, true, true] },
+  { nombre: 'Slot de presentación propio', valores: [false, false, true] },
+  { nombre: 'Publicación en repositorio', valores: [false, false, true] },
 ]
 
 const confirmar = async () => {
@@ -265,8 +317,13 @@ const confirmar = async () => {
         correo: form.value.correo,
       })
 
-      alert('¡Registro exitoso! Revisa tu correo para el boleto.')
-      router.push({ name: 'home' })
+      if (localStorage.getItem('token')) {
+        alert('¡Pago exitoso! Tu boleto ya aparece en "Mis boletos".')
+        router.push({ name: 'mis-boletos' })
+      } else {
+        alert('¡Pago exitoso! Crea una cuenta con este mismo correo para consultar tus boletos cuando quieras.')
+        router.push({ name: 'crear-cuenta' })
+      }
     } catch (err) {
       alert(err.response?.data?.error || 'Error al procesar el pago')
     }
@@ -311,6 +368,30 @@ const confirmar = async () => {
 .plan-feats li { display:flex;align-items:center;gap:8px;font-size:12px;color:var(--w3); }
 .plan-feats li svg { width:13px;height:13px;fill:none;stroke:var(--teal);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0; }
 .plan-sel-dot { width:10px;height:10px;border-radius:50%;background:var(--teal);position:absolute;top:16px;left:16px; }
+.plan-save { font-size:11px;color:var(--w3);font-weight:300;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:8px;padding:7px 10px;line-height:1.5; }
+.plan-save strong { color:var(--teal);font-weight:700; }
+
+/* TABLA COMPARATIVA */
+.rg-compara { padding:48px 44px;border-bottom:1px solid var(--line3);background:var(--bg2); }
+.cmp-title { font-size:26px;font-weight:800;letter-spacing:-.04em;margin-bottom:24px; }
+.cmp-title strong { color:var(--white); }
+.cmp-title em { font-family:var(--fs);font-style:italic;font-weight:400;color:var(--teal); }
+.cmp-scroll { overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line3);border-radius:14px; }
+.cmp-t { width:100%;border-collapse:collapse;min-width:560px;background:var(--card); }
+.cmp-t th, .cmp-t td { padding:13px 18px;text-align:center;border-bottom:1px solid var(--line3); }
+.cmp-t tbody tr:last-child td { border-bottom:none; }
+.cmp-feat-h { text-align:left;font-family:var(--fm);font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--w4); }
+.cmp-plan-h { cursor:pointer;transition:background .15s;border-bottom:2px solid var(--line3) !important; }
+.cmp-plan-h:hover { background:var(--teal-g); }
+.cmp-plan-h.active { background:var(--teal-g);border-bottom-color:var(--teal) !important; }
+.cmp-plan { font-size:14px;font-weight:700;color:var(--white); }
+.cmp-precio { font-family:var(--fm);font-size:10px;color:var(--teal);margin-top:3px; }
+.cmp-feat { text-align:left !important;font-size:12px;color:var(--w2);font-weight:300; }
+.cmp-v.active { background:rgba(45,212,180,.04); }
+.cmp-si { color:var(--teal);font-weight:800;font-size:14px; }
+.cmp-no { color:var(--w4); }
+.cmp-txt { font-size:11px;color:var(--w2);font-weight:500; }
+.cmp-nota { font-size:11px;color:var(--w4);margin-top:12px;text-align:center; }
 
 /* FORM BODY */
 .rg-body { display:grid;grid-template-columns:1fr 320px;gap:24px;padding:40px 44px 80px;align-items:start; }
@@ -365,6 +446,8 @@ const confirmar = async () => {
   .rg-planes { grid-template-columns:1fr;padding:32px 20px;gap:14px; }
   .rg-body { grid-template-columns:1fr;padding:32px 20px 56px; }
   .rg-summary { position:static; }
+  .rg-compara { padding:32px 20px; }
+  .cmp-title { font-size:22px; }
 }
 
 @media (max-width: 560px) {

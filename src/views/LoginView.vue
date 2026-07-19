@@ -7,6 +7,7 @@
         <span class="auth-tag">Panel de acceso</span>
       </div>
 
+      <div v-if="sesionExpirada" class="auth-aviso">Tu sesión expiró. Vuelve a iniciar sesión para continuar.</div>
       <div v-if="error" class="auth-error">{{ error }}</div>
 
       <div class="auth-fields">
@@ -44,6 +45,7 @@ const correo     = ref('')
 const contrasenia = ref('')
 const error      = ref('')
 const loading    = ref(false)
+const sesionExpirada = route.query.expirada === '1'
 
 const handleLogin = async () => {
   error.value   = ''
@@ -121,6 +123,15 @@ const handleLogin = async () => {
   background: rgba(239,68,68,.1);
   border: 1px solid rgba(239,68,68,.3);
   color: #f87171;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.auth-aviso {
+  background: var(--teal-g);
+  border: 1px solid var(--teal-b);
+  color: var(--teal);
   padding: 12px 16px;
   border-radius: 10px;
   font-size: 13px;
