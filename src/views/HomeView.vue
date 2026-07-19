@@ -91,23 +91,23 @@
 <div class="fstrip">
   <div class="fsc" @click="$router.push('/eventos')">
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-    <div class="fsc-n">Congresos</div><div class="fsc-s">3 eventos · 2026</div>
+    <div class="fsc-n">Congresos</div><div class="fsc-s">{{ eventos.length }} {{ eventos.length === 1 ? 'evento' : 'eventos' }}</div>
   </div>
   <div class="fsc" @click="$router.push('/speakers')">
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-    <div class="fsc-n">Speakers</div><div class="fsc-s">6 ponentes top</div>
+    <div class="fsc-n">Speakers</div><div class="fsc-s">{{ speakers.length }} {{ speakers.length === 1 ? 'ponente' : 'ponentes' }}</div>
   </div>
   <div class="fsc" @click="$router.push('/agenda')">
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
-    <div class="fsc-n">Agenda</div><div class="fsc-s">24 sesiones</div>
+    <div class="fsc-n">Agenda</div><div class="fsc-s">{{ totalSesiones }} {{ totalSesiones === 1 ? 'sesión' : 'sesiones' }}</div>
   </div>
   <div class="fsc" @click="$router.push('/articulos')">
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-    <div class="fsc-n">Artículos</div><div class="fsc-s">48 publicaciones</div>
+    <div class="fsc-n">Artículos</div><div class="fsc-s">{{ totalArticulos }} {{ totalArticulos === 1 ? 'publicación' : 'publicaciones' }}</div>
   </div>
   <div class="fsc" @click="$router.push('/cursos')">
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
-    <div class="fsc-n">Cursos</div><div class="fsc-s">12 en línea</div>
+    <div class="fsc-n">Cursos</div><div class="fsc-s">{{ totalCursos }} en línea</div>
   </div>
   <div class="fsc" @click="$router.push('/galeria')">
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
@@ -115,7 +115,7 @@
   </div>
   <div class="fsc" @click="$router.push('/eventos')">
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
-    <div class="fsc-n">Registros</div><div class="fsc-s">Desde $550 MXN</div>
+    <div class="fsc-n">Registros</div><div class="fsc-s">{{ precioMin ? 'Desde $' + precioMin : 'Ver planes' }}</div>
   </div>
 </div>
 
@@ -128,33 +128,30 @@
     </div>
     <router-link to="/eventos" class="s-all">Ver todos →</router-link>
   </div>
-  <div class="bento">
+  <div v-if="eventos.length === 0" class="bento-empty">Aún no hay eventos publicados. ¡Vuelve pronto!</div>
+  <div v-else class="bento">
 
-    <!-- Card principal ancha -->
-    <div class="bc bc-wide" v-for="evento in eventos.slice(0,1)" :key="evento.idEvento">
-      <div class="bc-chip">14-16 AGOSTO · 2026</div>
-      <div class="bc-nm">{{ evento.titulo }}</div>
-      <div class="bc-loc">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--teal3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        Ciudad de México
-      </div>
+    <!-- Card principal ancha: primer evento real -->
+    <div class="bc bc-wide">
+      <div class="bc-chip">{{ fechaCorta(eventos[0].fecha) }} · {{ anio(eventos[0].fecha) }}</div>
+      <div class="bc-nm">{{ eventos[0].titulo }}</div>
       <div class="bc-tags">
-        <span class="bt t">Presencial</span>
-        <span class="bt t">Virtual</span>
-        <span class="bt n">850 cupos</span>
+        <span class="bt t" v-if="eventos[0].stockBoletos > 0">Inscripción abierta</span>
+        <span class="bt n" v-if="eventos[0].stockBoletos > 0">{{ eventos[0].stockBoletos }} cupos</span>
+        <span class="bt n" v-else>Agotado</span>
       </div>
       <div class="bc-ft">
-        <div class="bc-pr">${{ evento.precio }} <small>MXN</small></div>
-        <button class="bc-btn" @click="$router.push({name:'checkout', params:{idEvento: evento.idEvento}})">Inscribirse</button>
+        <div class="bc-pr">${{ eventos[0].precio }} <small>MXN</small></div>
+        <button class="bc-btn" @click="$router.push({name:'checkout', params:{idEvento: eventos[0].idEvento}})">Inscribirse</button>
       </div>
     </div>
 
-    <!-- Hackathon -->
+    <!-- Hackathon (experiencia destacada del evento) -->
     <div class="bc bc-hack">
       <div>
         <div class="bc-chip-dot">
           <span class="bc-dot"></span>
-          MARZO · 2026
+          Reto del congreso
         </div>
         <div class="bc-hack-title">FMDS Hackathon</div>
         <div class="bc-hack-sub">48 hrs · Equipos de 3–5 personas · Mentoría experta</div>
@@ -165,33 +162,18 @@
       <router-link to="/registro" class="bc-btn" style="margin-top:16px">Inscribir equipo</router-link>
     </div>
 
-    <!-- Card simposio -->
-    <div class="bc">
-      <div class="bc-chip">5-7 NOV · 2026</div>
-      <div class="bc-nm">Simposio Nacional de Inteligencia Artificial Aplicada</div>
-      <div class="bc-loc">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--teal3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        Guadalajara, Jalisco
+    <!-- Resto de eventos reales -->
+    <div class="bc" v-for="evento in eventos.slice(1, 3)" :key="evento.idEvento">
+      <div class="bc-chip">{{ fechaCorta(evento.fecha) }} · {{ anio(evento.fecha) }}</div>
+      <div class="bc-nm">{{ evento.titulo }}</div>
+      <div class="bc-tags">
+        <span class="bt t" v-if="evento.stockBoletos > 0">Inscripción abierta</span>
+        <span class="bt n" v-if="evento.stockBoletos > 0">{{ evento.stockBoletos }} cupos</span>
+        <span class="bt n" v-else>Agotado</span>
       </div>
-      <div class="bc-tags"><span class="bt t">Presencial</span><span class="bt n">Labs</span></div>
       <div class="bc-ft">
-        <div class="bc-pr">$980 <small>MXN</small></div>
-        <router-link to="/eventos" class="bc-btn">Ver más</router-link>
-      </div>
-    </div>
-
-    <!-- Card summit -->
-    <div class="bc">
-      <div class="bc-chip">MARZO · 2026</div>
-      <div class="bc-nm">Summit Cloud & Tecnologías Emergentes</div>
-      <div class="bc-loc">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--teal3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        Monterrey, N.L.
-      </div>
-      <div class="bc-tags"><span class="bt t">Híbrido</span><span class="bt n">Cloud</span></div>
-      <div class="bc-ft">
-        <div class="bc-pr" style="font-size:14px;color:var(--w3);font-weight:400">Por definir</div>
-        <button class="bc-btn" style="background:var(--w5);color:var(--w3);border:1px solid var(--line2)" @click="scrollBoletin">Notificarme</button>
+        <div class="bc-pr">${{ evento.precio }} <small>MXN</small></div>
+        <button class="bc-btn" @click="$router.push({name:'checkout', params:{idEvento: evento.idEvento}})">Comprar</button>
       </div>
     </div>
 
@@ -484,35 +466,19 @@
     </div>
   </div>
   <div class="faq-g">
-    <div class="faq-i">
-      <div class="faq-n">01</div>
-      <div class="faq-q">¿Cómo compro mi boleto?</div>
-      <div class="faq-a">Selecciona el evento, elige tu plan de acceso y paga en línea. Tu boleto queda registrado al instante con su folio en la sección "Mis boletos".</div>
-    </div>
-    <div class="faq-i">
-      <div class="faq-n">02</div>
-      <div class="faq-q">¿Puedo publicar un artículo?</div>
-      <div class="faq-a">Sí. Docentes, estudiantes y profesionales pueden enviar artículos para revisión por pares antes de publicarse.</div>
-    </div>
-    <div class="faq-i">
-      <div class="faq-n">03</div>
-      <div class="faq-q">¿Qué incluye el plan estudiante?</div>
-      <div class="faq-a">Todas las sesiones plenarias, talleres y grabaciones por 30 días. Requiere credencial vigente de tu institución.</div>
-    </div>
-    <div class="faq-i">
-      <div class="faq-n">04</div>
-      <div class="faq-q">¿Cómo me registro como ponente?</div>
-      <div class="faq-a">Envía tu propuesta antes del cierre de convocatoria. El comité evalúa cada propuesta en máximo 15 días hábiles.</div>
-    </div>
-    <div class="faq-i">
-      <div class="faq-n">05</div>
-      <div class="faq-q">¿Los cursos tienen certificado?</div>
-      <div class="faq-a">Todos emiten certificado digital al completar el 80% del contenido y aprobar la evaluación final del curso.</div>
-    </div>
-    <div class="faq-i">
-      <div class="faq-n">06</div>
-      <div class="faq-q">¿Puedo pedir reembolso?</div>
-      <div class="faq-a">Puedes solicitar reembolso hasta 10 días antes o cambiar a modalidad virtual sin costo adicional alguno.</div>
+    <div
+      class="faq-i"
+      v-for="(faq, i) in faqs"
+      :key="i"
+      :class="{ open: faqAbierta === i }"
+      @click="faqAbierta = faqAbierta === i ? -1 : i"
+    >
+      <div class="faq-top">
+        <div class="faq-n">{{ String(i + 1).padStart(2, '0') }}</div>
+        <div class="faq-q">{{ faq.q }}</div>
+        <svg class="faq-ch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="faq-a" v-show="faqAbierta === i">{{ faq.a }}</div>
     </div>
   </div>
 </div>
@@ -577,11 +543,17 @@ const proximoEvento = ref(null)
 const articulos = ref([])
 const speakers = ref([])
 
+// Conteos reales para la tira de accesos rápidos
+const totalArticulos = ref(0)
+const totalSesiones = ref(0)
+const totalCursos = ref(0)
+
 const countdown = ref({ dias: 0, horas: 0, mins: 0, segs: 0, terminado: false })
 const pad = (n) => String(n).padStart(2, '0')
 const fechaCorta = (fecha) => {
   return new Date(fecha).toLocaleDateString('es-MX', { day: '2-digit', month: 'short' }).toUpperCase()
 }
+const anio = (fecha) => new Date(fecha).getFullYear()
 
 let countdownTimer = null
 const actualizarCountdown = () => {
@@ -626,8 +598,15 @@ const stockProximo = computed(() => {
   return stock === undefined || stock === null ? null : Number(stock)
 })
 
+// Precio de acceso más bajo entre los eventos, para "Desde $X"
+const precioMin = computed(() => {
+  const precios = eventos.value.map(e => Number(e.precio)).filter(p => p > 0)
+  return precios.length ? Math.min(...precios).toLocaleString('en-US') : null
+})
+
 const cargarArticulos = async () => {
   const res = await api.get('/articulos')
+  totalArticulos.value = res.data.length
   articulos.value = res.data.slice(0, 4)
 }
 
@@ -636,10 +615,22 @@ const cargarSpeakers = async () => {
   speakers.value = res.data
 }
 
+// Conteos de agenda y cursos para la tira (no necesitamos el detalle, solo el total)
+const cargarConteos = async () => {
+  try {
+    const [ses, cur] = await Promise.all([api.get('/sesiones'), api.get('/cursos')])
+    totalSesiones.value = ses.data.length
+    totalCursos.value = cur.data.length
+  } catch {
+    // si algo falla, los contadores quedan en 0 y el texto lo refleja sin romper la página
+  }
+}
+
 onMounted(() => {
   cargarEventos()
   cargarArticulos()
   cargarSpeakers()
+  cargarConteos()
 })
 
 const cargarEventos = async () => {
@@ -655,6 +646,17 @@ const formatFecha = (fecha) => {
     year: 'numeric', month: 'short', day: 'numeric'
   })
 }
+
+// ── FAQ (acordeón: solo la respuesta activa se muestra) ──
+const faqAbierta = ref(0)
+const faqs = [
+  { q: '¿Cómo compro mi boleto?', a: 'Selecciona el evento, elige tu plan de acceso y paga en línea. Tu boleto queda registrado al instante con su folio en la sección "Mis boletos".' },
+  { q: '¿Puedo publicar un artículo?', a: 'Sí. Docentes, estudiantes y profesionales pueden enviar artículos para revisión por pares antes de publicarse.' },
+  { q: '¿Qué incluye el plan estudiante?', a: 'Todas las sesiones plenarias, talleres y grabaciones por 30 días. Requiere credencial vigente de tu institución.' },
+  { q: '¿Cómo me registro como ponente?', a: 'Envía tu propuesta antes del cierre de convocatoria. El comité evalúa cada propuesta en máximo 15 días hábiles.' },
+  { q: '¿Los cursos tienen certificado?', a: 'Todos emiten certificado digital al completar el 80% del contenido y aprobar la evaluación final del curso.' },
+  { q: '¿Puedo pedir reembolso?', a: 'Puedes solicitar reembolso hasta 10 días antes o cambiar a modalidad virtual sin costo adicional alguno.' },
+]
 
 // ── BOLETÍN ──
 const bolCorreo = ref('')
@@ -798,6 +800,7 @@ const scrollBoletin = () => {
 .s-all { font-size:11px;font-weight:600;color:var(--w3);background:var(--w5);border:1px solid var(--line2);padding:8px 14px;border-radius:7px;cursor:pointer;font-family:var(--f);transition:all .15s;text-decoration:none; }
 .s-all:hover { border-color:var(--teal-b);color:var(--teal); }
 .bento { display:grid;grid-template-columns:1fr 300px;grid-template-rows:auto auto;gap:16px; }
+.bento-empty { text-align:center;color:var(--w4);padding:48px 0;font-size:14px; }
 .bc { background:var(--card);border:1px solid var(--line3);border-radius:14px;padding:30px 28px;cursor:pointer;transition:all .18s; }
 .bc:hover { border-color:var(--teal-b);transform:translateY(-2px); }
 .bc-wide { grid-column:1; }
@@ -912,7 +915,12 @@ const scrollBoletin = () => {
 
 /* FAQ */
 .faq-g { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
-.faq-i { background:var(--card);border:1px solid var(--line3);border-radius:14px;padding:28px 26px;display:flex;flex-direction:column;gap:10px;transition:border-color .15s;cursor:pointer; }
+.faq-i { background:var(--card);border:1px solid var(--line3);border-radius:14px;padding:22px 24px;display:flex;flex-direction:column;gap:0;transition:border-color .15s;cursor:pointer; }
+.faq-i.open { border-color:var(--teal-b); }
+.faq-top { display:flex;align-items:center;gap:14px; }
+.faq-ch { width:14px;height:14px;color:var(--w4);margin-left:auto;flex-shrink:0;transition:transform .2s; }
+.faq-i.open .faq-ch { transform:rotate(180deg);color:var(--teal); }
+.faq-i.open .faq-a { margin-top:12px; }
 .faq-i:hover { border-color:var(--teal-b); }
 .faq-n { font-family:var(--fm);font-size:9px;font-weight:500;color:var(--teal);letter-spacing:.1em; }
 .faq-q { font-size:15px;font-weight:700;color:var(--white);letter-spacing:-.02em; }
@@ -1013,40 +1021,64 @@ const scrollBoletin = () => {
 }
 
 @media (max-width: 600px) {
+  /* Hero compacto: menos aire, stats en 2x2 */
   .h-tag-t { font-size:8px; }
-  .hh1, .hh3 { font-size:34px; }
-  .hh2 { font-size:29px; }
+  .h-l { padding:32px 20px 24px; }
+  .hh1, .hh3 { font-size:32px; }
+  .hh2 { font-size:27px; }
+  .h-desc { font-size:13px; }
   .h-ctas { flex-direction:column; }
   .h-ctas .btn-p, .h-ctas .btn-s { width:100%;justify-content:center; }
-  .hn { flex:1 1 100%; }
 
-  .fstrip { grid-template-columns:repeat(2,1fr); }
-  .fsc:nth-child(2n) { border-right:none; }
-  .fsc:nth-child(4) { border-right:1px solid var(--line3); }
+  /* Feature strip: carrusel horizontal deslizable */
+  .fstrip { display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;scrollbar-width:none; }
+  .fstrip::-webkit-scrollbar { display:none; }
+  .fsc { flex:0 0 31%;min-width:112px;scroll-snap-align:start;border-right:1px solid var(--line3);padding:16px 10px; }
 
   .s-hd { flex-direction:column;align-items:flex-start;gap:12px; }
-  .s-ttl { font-size:26px; }
+  .s-ttl { font-size:24px; }
+  .sec { padding:44px 18px; }
 
   .stats-h { grid-template-columns:repeat(2,1fr); }
   .sh:nth-child(2n) { border-right:none; }
   .sh:nth-child(3) { border-right:1px solid var(--line3); }
 
-  .gal-g { grid-template-columns:1fr;grid-template-rows:repeat(5,200px); }
-  .gp.t { grid-column:span 1; }
+  /* Speakers: carrusel horizontal, el keynote primero */
+  .spk-mag { display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;scrollbar-width:none;gap:12px;padding-bottom:6px; }
+  .spk-mag::-webkit-scrollbar { display:none; }
+  .sm { flex:0 0 80%;scroll-snap-align:start;padding:20px 18px; }
+  .sm-feat { flex:0 0 88%;scroll-snap-align:start;order:-1;grid-template-columns:1fr;gap:14px;padding:22px 20px; }
 
-  .inst { flex-direction:column; }
-  .ic { border-right:none; }
+  /* Galería compacta en 2 columnas */
+  .gal-g { grid-template-columns:1fr 1fr;grid-template-rows:150px 150px 150px; }
+  .gp.t { grid-column:span 2;grid-row:span 1; }
 
-  .pq-g { grid-template-columns:1fr 1fr; }
-  .cierre { padding:52px 20px; }
-  .cierre-ttl { font-size:30px; }
+  /* Testimonios: carrusel horizontal */
+  .test-g { display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;scrollbar-width:none;gap:12px;padding-bottom:6px; }
+  .test-g::-webkit-scrollbar { display:none; }
+  .tc { flex:0 0 82%;scroll-snap-align:start;padding:22px 20px; }
+
+  /* Instituciones: cuadrícula 2x3 compacta */
+  .inst { display:grid;grid-template-columns:1fr 1fr; }
+  .ic { border-right:1px solid var(--line3);padding:18px 12px; }
+  .ic:nth-child(2n) { border-right:none; }
+
+  /* Por qué asistir: 2x2 compacta */
+  .pq-g { grid-template-columns:1fr 1fr;gap:10px; }
+  .pq-c { padding:18px 16px; }
+  .pq-ic { width:30px;height:30px;margin-bottom:10px; }
+  .pq-ic svg { width:14px;height:14px; }
+  .pq-t { font-size:13px; }
+  .pq-s { font-size:11px;line-height:1.6; }
+
+  .cierre { padding:48px 18px; }
+  .cierre-ttl { font-size:28px; }
   .cierre-cd { gap:6px; }
-  .ccd-box { padding:12px 10px;min-width:64px; }
-  .ccd-v { font-size:24px; }
+  .ccd-box { padding:12px 8px;min-width:0;flex:1;max-width:82px; }
+  .ccd-v { font-size:22px; }
   .ccd-sep { display:none; }
-}
 
-@media (max-width: 560px) {
-  .pq-g { grid-template-columns:1fr; }
+  .boletin { padding:36px 18px; }
+  .bol-ttl { font-size:28px; }
 }
 </style>

@@ -118,6 +118,18 @@
   .ft-bot { flex-direction:column;gap:14px;padding:18px 24px;text-align:center; }
 }
 @media (max-width: 520px) {
-  .ft-main { grid-template-columns:1fr; }
+  /* Compacto: la marca ocupa el ancho y las columnas quedan en 2x2 */
+  .ft-main { gap:24px 20px;padding:32px 18px 24px; }
+  .ft-brand { grid-column:1 / -1;flex-direction:row;align-items:center;gap:14px; }
+  .ft-brand img { margin-bottom:0 !important;height:36px !important; }
+  .ft-tag { max-width:none; }
+  .ft-col { gap:10px; }
+  .ft-lnks { gap:7px; }
+  .ft-lnks a { font-size:12px; }
+  .ft-mid { padding:18px;gap:14px; }
+  .ft-stats { gap:18px; }
+  .ft-sn { font-size:18px; }
+  .ft-award { padding:10px 16px; }
+  .ft-bot { padding:14px 18px;gap:10px; }
 }
 </style>

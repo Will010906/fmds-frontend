@@ -120,12 +120,7 @@
             <div class="rg-sec-ic"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
             <span>Método de pago</span>
           </div>
-          <div class="pay-tabs">
-            <button v-for="m in metodos" :key="m" class="pay-tab" :class="{ active: metodoActivo === m }" @click="metodoActivo = m">
-              {{ m }}
-            </button>
-          </div>
-          <div class="rg-grid" v-if="metodoActivo === 'Tarjeta'">
+          <div class="rg-grid">
             <div class="field full">
               <label class="field-label">Número de tarjeta</label>
               <input v-model="pago.numero" type="text" placeholder="1234 5678 9012 3456" class="field-input" />
@@ -143,12 +138,7 @@
               <input v-model="pago.nombre" type="text" placeholder="Como aparece en la tarjeta" class="field-input" />
             </div>
           </div>
-          <div v-else-if="metodoActivo === 'OXXO pay'" class="pay-info">
-            Genera tu referencia y paga en cualquier OXXO del país. Recibirás tu boleto en 24 hrs.
-          </div>
-          <div v-else class="pay-info">
-            Realiza tu transferencia a la cuenta CLABE indicada. Envía tu comprobante a pagos@fmds.mx
-          </div>
+          <p class="pay-secure">🔒 Pago procesado de forma segura con Openpay. Aceptamos Visa, MasterCard y American Express.</p>
         </div>
 
       </div>
@@ -197,11 +187,10 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import AppNav from '../components/AppNav.vue'
 import AppFooter from '../components/AppFooter.vue'
+import { pagarConTarjeta } from '../services/pago'
 
 const router = useRouter()
 const planActivo = ref(2)
-const metodoActivo = ref('Tarjeta')
-const metodos = ['Tarjeta', 'OXXO pay', 'Transferencia']
 const eventoActual = ref(null)
 
 const form = ref({ nombre: '', apellidos: '', correo: '', telefono: '', institucion: '', estado: '' })
@@ -278,58 +267,35 @@ const confirmar = async () => {
     return
   }
 
-  if (metodoActivo.value !== 'Tarjeta') {
-    alert('Método de pago no implementado aún.')
-    return
-  }
-
   // Sin sesión iniciada se compra como invitado: nombre y correo obligatorios
   if (!localStorage.getItem('token') && (!form.value.nombre || !form.value.correo)) {
     alert('Completa tu nombre y correo electrónico para continuar.')
     return
   }
 
-  const OpenPay = window.OpenPay
-  OpenPay.setId(import.meta.env.VITE_OPENPAY_MERCHANT_ID)
-  OpenPay.setApiKey(import.meta.env.VITE_OPENPAY_PUBLIC_KEY)
-  OpenPay.setSandboxMode(true)
+  // La expiración se captura como "MM / AA"; el servicio la espera separada
+  const [mes, anio] = pago.value.expiracion.split('/').map((p) => p?.trim())
 
-  const deviceSessionId = OpenPay.deviceData.setup()
+  try {
+    await pagarConTarjeta({
+      tarjeta: { numero: pago.value.numero, nombre: pago.value.nombre, mes, anio, cvv: pago.value.cvv },
+      idEvento: eventoActual.value.idEvento,
+      cantidad: 1,
+      montoTotal: parseInt(plan.precio) - 100, // descuento anticipado
+      nombre: `${form.value.nombre} ${form.value.apellidos}`.trim(),
+      correo: form.value.correo,
+    })
 
-  OpenPay.token.create({
-    card_number:      pago.value.numero.replace(/\s/g, ''),
-    holder_name:      pago.value.nombre,
-    expiration_year:  pago.value.expiracion.split('/')[1]?.trim(),
-    expiration_month: pago.value.expiracion.split('/')[0]?.trim(),
-    cvv2:             pago.value.cvv,
-  }, async (response) => {
-    try {
-      const token_id = response.data.id
-      const montoTotal = parseInt(plan.precio) - 100 // descuento anticipado
-
-      await api.post('/checkout', {
-        token_id,
-        deviceSessionId,
-        idEvento: eventoActual.value.idEvento,
-        cantidad: 1,
-        montoTotal,
-        nombre: `${form.value.nombre} ${form.value.apellidos}`.trim(),
-        correo: form.value.correo,
-      })
-
-      if (localStorage.getItem('token')) {
-        alert('¡Pago exitoso! Tu boleto ya aparece en "Mis boletos".')
-        router.push({ name: 'mis-boletos' })
-      } else {
-        alert('¡Pago exitoso! Crea una cuenta con este mismo correo para consultar tus boletos cuando quieras.')
-        router.push({ name: 'crear-cuenta' })
-      }
-    } catch (err) {
-      alert(err.response?.data?.error || 'Error al procesar el pago')
+    if (localStorage.getItem('token')) {
+      alert('¡Pago exitoso! Tu boleto ya aparece en "Mis boletos".')
+      router.push({ name: 'mis-boletos' })
+    } else {
+      alert('¡Pago exitoso! Crea una cuenta con este mismo correo para consultar tus boletos cuando quieras.')
+      router.push({ name: 'crear-cuenta' })
     }
-  }, (err) => {
-    alert(err.data?.description || 'Error al tokenizar la tarjeta')
-  })
+  } catch (err) {
+    alert(err.message)
+  }
 }
 </script>
 
@@ -408,10 +374,7 @@ const confirmar = async () => {
 .field-input:focus { border-color:var(--teal-b); }
 .field-input::placeholder { color:var(--w4); }
 
-.pay-tabs { display:flex;gap:8px;margin-bottom:20px; }
-.pay-tab { flex:1;background:var(--bg3);border:1px solid var(--line2);border-radius:8px;padding:10px;font-family:var(--f);font-size:12px;font-weight:500;color:var(--w3);cursor:pointer;transition:all .15s; }
-.pay-tab.active { border-color:var(--teal-b);color:var(--teal);background:var(--teal-g); }
-.pay-info { font-size:13px;color:var(--w3);line-height:1.7;padding:16px;background:var(--bg3);border:1px solid var(--line2);border-radius:10px; }
+.pay-secure { font-size:11px;color:var(--w4);margin-top:14px;line-height:1.6; }
 
 /* RESUMEN */
 .rg-summary { background:var(--card);border:1px solid var(--line3);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:16px;position:sticky;top:80px; }
@@ -454,6 +417,10 @@ const confirmar = async () => {
   .rg-grid { grid-template-columns:1fr; }
   .field.full { grid-column:span 1; }
   .rg-sec { padding:20px; }
-  .pay-tabs { flex-direction:column; }
+
+  /* Tarjetas de plan compactas: el detalle completo está en la tabla comparativa */
+  .plan-card { padding:20px 18px;gap:8px; }
+  .plan-feats { display:none; }
+  .plan-num { font-size:32px; }
 }
 </style>

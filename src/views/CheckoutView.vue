@@ -27,7 +27,7 @@
             <input v-model="comprador.nombre" type="text" placeholder="Andrés López" class="field-input" />
           </div>
           <div class="field full">
-            <label class="field-label">Tu correo electrónico (aquí llega tu boleto)</label>
+            <label class="field-label">Tu correo electrónico (con él consultas tu boleto)</label>
             <input v-model="comprador.correo" type="email" placeholder="tucorreo@ejemplo.com" class="field-input" />
           </div>
         </div>
@@ -79,6 +79,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import api from '../services/api'
+import { pagarConTarjeta } from '../services/pago'
 
 const route   = useRoute()
 const router  = useRouter()
@@ -105,53 +106,38 @@ const pagar = async () => {
   mensaje.value = ''
 
   if (!haySesion && (!comprador.value.nombre || !comprador.value.correo)) {
-    error.value = 'Completa tu nombre y correo electrónico para recibir tu boleto.'
+    error.value = 'Completa tu nombre y correo electrónico para asociar tu boleto.'
     return
   }
 
   loading.value = true
-
-  const OpenPay = window.OpenPay
-  OpenPay.setId(import.meta.env.VITE_OPENPAY_MERCHANT_ID)
-  OpenPay.setApiKey(import.meta.env.VITE_OPENPAY_PUBLIC_KEY)
-  OpenPay.setSandboxMode(true)
-
-  const deviceSessionId = OpenPay.deviceData.setup()
-
-  OpenPay.token.create({
-    card_number:      form.value.numero,
-    holder_name:      form.value.nombre,
-    expiration_year:  form.value.anio,
-    expiration_month: form.value.mes,
-    cvv2:             form.value.cvv,
-  }, async (response) => {
-    try {
-      const token_id = response.data.id
-      await api.post('/checkout', {
-        token_id,
-        deviceSessionId,
-        idEvento:   parseInt(route.params.idEvento),
-        cantidad:   form.value.cantidad,
-        montoTotal: parseFloat(total.value),
-        nombre:     comprador.value.nombre,
-        correo:     comprador.value.correo,
-      })
-      if (haySesion) {
-        mensaje.value = '¡Pago exitoso! Tus boletos han sido reservados.'
-        setTimeout(() => router.push({ name: 'mis-boletos' }), 2500)
-      } else {
-        mensaje.value = '¡Pago exitoso! Crea una cuenta con este mismo correo para consultar tus boletos cuando quieras.'
-        setTimeout(() => router.push({ name: 'crear-cuenta' }), 3500)
-      }
-    } catch (err) {
-      error.value = err.response?.data?.error || 'Error al procesar el pago'
-    } finally {
-      loading.value = false
+  try {
+    await pagarConTarjeta({
+      tarjeta: {
+        numero: form.value.numero,
+        nombre: form.value.nombre,
+        mes:    form.value.mes,
+        anio:   form.value.anio,
+        cvv:    form.value.cvv,
+      },
+      idEvento:   parseInt(route.params.idEvento),
+      cantidad:   form.value.cantidad,
+      montoTotal: parseFloat(total.value),
+      nombre:     comprador.value.nombre,
+      correo:     comprador.value.correo,
+    })
+    if (haySesion) {
+      mensaje.value = '¡Pago exitoso! Tus boletos han sido reservados.'
+      setTimeout(() => router.push({ name: 'mis-boletos' }), 2500)
+    } else {
+      mensaje.value = '¡Pago exitoso! Crea una cuenta con este mismo correo para consultar tus boletos cuando quieras.'
+      setTimeout(() => router.push({ name: 'crear-cuenta' }), 3500)
     }
-  }, (err) => {
-    error.value = err.data?.description || 'Error al tokenizar la tarjeta'
+  } catch (err) {
+    error.value = err.message
+  } finally {
     loading.value = false
-  })
+  }
 }
 
 onMounted(cargarEvento)
