@@ -18,7 +18,10 @@ export function pagarConTarjeta({ tarjeta, idEvento, cantidad, montoTotal, nombr
 
     OpenPay.setId(import.meta.env.VITE_OPENPAY_MERCHANT_ID)
     OpenPay.setApiKey(import.meta.env.VITE_OPENPAY_PUBLIC_KEY)
-    OpenPay.setSandboxMode(true)
+    // Modo prueba por defecto. Para cobros reales define VITE_OPENPAY_SANDBOX=false
+    // en el entorno (Vercel). Si la variable falta, se mantiene en sandbox por
+    // seguridad, para no cobrar tarjetas reales por accidente.
+    OpenPay.setSandboxMode(import.meta.env.VITE_OPENPAY_SANDBOX !== 'false')
 
     const deviceSessionId = OpenPay.deviceData.setup()
 
