@@ -7,7 +7,7 @@
     <div class="art-hero">
       <div class="pill"><div class="pill-d"></div><span class="pill-t">Repositorio científico</span></div>
       <h1 class="art-title"><strong>Artículos</strong> <em>recientes</em></h1>
-      <p class="art-sub">48 publicaciones con revisión por pares. Sin vínculos comerciales ni sesgos institucionales.</p>
+      <p class="art-sub">{{ articulos.length }} {{ articulos.length === 1 ? 'publicación' : 'publicaciones' }} con revisión por pares. Sin vínculos comerciales ni sesgos institucionales.</p>
     </div>
 
     <!-- FILTROS -->
@@ -25,19 +25,22 @@
       </div>
 
       <!-- LISTA -->
-      <div class="art-list">
+      <div v-if="articulosFiltrados.length === 0" class="art-empty">
+        {{ articulos.length === 0 ? 'Aún no hay artículos publicados en el repositorio.' : 'No hay artículos disponibles en esta categoría.' }}
+      </div>
+      <div v-else class="art-list">
         <div
           v-for="(art, i) in articulosFiltrados"
-          :key="i"
+          :key="art.idArticulo"
           class="art-item"
         >
           <div class="art-item-l">
             <div class="art-num-cat">
-              <span class="art-num">0{{ i + 1 }}</span>
-              <span class="art-cat" :style="{ color: art.color }">{{ art.categoria }}</span>
+              <span class="art-num">{{ String(i + 1).padStart(2, '0') }}</span>
+              <span class="art-cat" :style="{ color: colorDe(art.categoria) }">{{ art.categoria }}</span>
             </div>
             <div class="art-nm">{{ art.titulo }}</div>
-            <div class="art-by">{{ art.autor }}</div>
+            <div class="art-by">{{ art.autor }} · {{ formatFecha(art.fechaPublicacion) }}</div>
           </div>
           <div class="art-badge">Revisado</div>
         </div>
@@ -54,28 +57,48 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import api from '../services/api'
 import AppNav from '../components/AppNav.vue'
 import AppFooter from '../components/AppFooter.vue'
 
 const categoriaActiva = ref('Todos')
-const categorias = ['Todos', 'Arquitectura', 'Seguridad', 'Metodologías', 'IA', 'Base de Datos']
+const articulos = ref([])
 
-const articulos = [
-  { categoria: 'Arquitectura',        color: '#2DD4B4', titulo: 'Patrones de microservicios en entornos cloud-native: análisis 2025',               autor: 'Dr. Ramírez · UTM · Jun 2025' },
-  { categoria: 'Seguridad',           color: '#F59E0B', titulo: 'JWT stateless en APIs REST: vulnerabilidades comunes y mitigaciones eficaces',      autor: 'Ing. Flores · UNAM · May 2025' },
-  { categoria: 'Metodologías',        color: '#818CF8', titulo: 'Scrum escalado en equipos distribuidos: lecciones de proyectos nacionales',         autor: 'Mtra. López · TEC · Abr 2025' },
-  { categoria: 'IA',                  color: '#34D399', titulo: 'Modelos de lenguaje en la generación asistida de código: evaluación comparativa',   autor: 'Dr. Santos · IPN · Mar 2025' },
-  { categoria: 'Base de Datos',       color: '#60A5FA', titulo: 'Optimización de consultas en MySQL para aplicaciones de alta concurrencia',         autor: 'Ing. Torres · UAG · Feb 2025' },
-  { categoria: 'Arquitectura',        color: '#2DD4B4', titulo: 'Event-driven architecture con Apache Kafka en sistemas financieros',                autor: 'Dr. Méndez · UNAM · Ene 2025' },
-  { categoria: 'Seguridad',           color: '#F59E0B', titulo: 'Zero Trust en infraestructuras cloud: implementación práctica',                     autor: 'Ing. Castro · TEC · Dic 2024' },
-  { categoria: 'IA',                  color: '#34D399', titulo: 'Redes neuronales convolucionales para detección de bugs en código fuente',          autor: 'Dra. Vega · IPN · Nov 2024' },
-]
+// Color de acento por categoría (las categorías vienen de la BD)
+const COLORES = {
+  'Arquitectura': '#2DD4B4',
+  'Seguridad': '#F59E0B',
+  'Metodologías': '#818CF8',
+  'IA': '#34D399',
+  'Base de Datos': '#60A5FA',
+}
+const colorDe = (categoria) => COLORES[categoria] || '#2DD4B4'
+
+// Chips de filtro generados a partir de las categorías reales registradas
+const categorias = computed(() => ['Todos', ...new Set(articulos.value.map(a => a.categoria))])
 
 const articulosFiltrados = computed(() => {
-  if (categoriaActiva.value === 'Todos') return articulos
-  return articulos.filter(a => a.categoria === categoriaActiva.value)
+  if (categoriaActiva.value === 'Todos') return articulos.value
+  return articulos.value.filter(a => a.categoria === categoriaActiva.value)
 })
+
+const formatFecha = (fecha) => {
+  if (!fecha) return ''
+  const f = new Date(fecha).toLocaleDateString('es-MX', { month: 'short', year: 'numeric', timeZone: 'UTC' })
+  return f.charAt(0).toUpperCase() + f.slice(1)
+}
+
+const cargarArticulos = async () => {
+  try {
+    const res = await api.get('/articulos')
+    articulos.value = res.data
+  } catch {
+    articulos.value = []
+  }
+}
+
+onMounted(cargarArticulos)
 </script>
 
 <style scoped>
@@ -100,6 +123,7 @@ const articulosFiltrados = computed(() => {
 .art-filter.active { background:var(--teal-g);border-color:var(--teal-b);color:var(--teal); }
 
 /* LISTA */
+.art-empty { text-align:center;color:var(--w4);padding:48px 0;font-size:13px; }
 .art-list { border:1px solid var(--line3);border-radius:14px;overflow:hidden; }
 .art-item { display:flex;justify-content:space-between;align-items:center;padding:24px 28px;border-bottom:1px solid var(--line3);cursor:pointer;transition:background .15s;gap:20px; }
 .art-item:last-child { border-bottom:none; }
