@@ -20,7 +20,14 @@
           <router-link to="/articulos">Artículos científicos</router-link>
           <router-link to="/cursos">Cursos en línea</router-link>
           <router-link to="/galeria">Galería</router-link>
-          <router-link to="/registro">Ser ponente</router-link>
+          <router-link :to="{ name: 'nosotros', query: { asunto: 'Propuesta de ponencia' }, hash: '#contacto' }">Ser ponente</router-link>
+        </div>
+      </div>
+      <div class="ft-col">
+        <div class="ft-lbl">Federación</div>
+        <div class="ft-lnks">
+          <router-link to="/nosotros">Quiénes somos</router-link>
+          <router-link :to="{ name: 'nosotros', hash: '#contacto' }">Contacto</router-link>
         </div>
       </div>
       <div class="ft-col">
@@ -64,7 +71,7 @@
 
 <style scoped>
 .footer { background:var(--bg2);border-top:1px solid var(--line3); }
-.ft-main { display:grid;grid-template-columns:200px 1fr 1fr 1fr 1.2fr;gap:40px;padding:52px 44px 40px;border-bottom:1px solid var(--line3); }
+.ft-main { display:grid;grid-template-columns:180px repeat(4, 1fr) 1.3fr;gap:32px;padding:52px 44px 40px;border-bottom:1px solid var(--line3); }
 .ft-brand { display:flex;flex-direction:column; }
 .ft-tag { font-size:12px;color:var(--w4);font-weight:300;line-height:1.8;max-width:180px; }
 .ft-col { display:flex;flex-direction:column;gap:16px; }

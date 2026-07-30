@@ -48,7 +48,7 @@
 
       <!-- CTA -->
       <div class="art-cta">
-        <router-link to="/registro" class="art-btn">Publicar artículo ⟶</router-link>
+        <router-link :to="{ name: 'nosotros', query: { asunto: 'Publicar artículo' }, hash: '#contacto' }" class="art-btn">Publicar artículo ⟶</router-link>
       </div>
     </div>
 

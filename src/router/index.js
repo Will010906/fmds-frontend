@@ -70,6 +70,11 @@ const router = createRouter({
   component: () => import('../views/GaleriaView.vue'),
 },
 {
+  path: '/nosotros',
+  name: 'nosotros',
+  component: () => import('../views/NosotrosView.vue'),
+},
+{
   path: '/mis-boletos',
   name: 'mis-boletos',
   component: () => import('../views/MisBoletosView.vue'),
@@ -80,7 +85,14 @@ const router = createRouter({
   name: 'not-found',
   component: () => import('../views/NotFoundView.vue'),
 },
-  ]
+  ],
+  // Al navegar con ancla (#contacto) se baja a esa sección; en el resto de
+  // los casos la página nueva empieza desde arriba.
+  scrollBehavior(to, from, savedPosition) {
+    if (to.hash) return { el: to.hash, behavior: 'smooth', top: 70 }
+    if (savedPosition) return savedPosition
+    return { top: 0 }
+  },
 })
 
 

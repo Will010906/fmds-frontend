@@ -65,15 +65,15 @@
             <div class="da-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
             <div><div class="da-t">Nuestros speakers</div><div class="da-s">Conoce a los ponentes</div></div>
           </router-link>
-          <router-link to="/registro" class="da">
+          <router-link :to="{ name: 'nosotros', query: { asunto: 'Propuesta de ponencia' }, hash: '#contacto' }" class="da">
             <div class="da-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
             <div><div class="da-t">Ser ponente</div><div class="da-s">Envía tu propuesta</div></div>
           </router-link>
           <div class="dsep"></div>
-          <div class="da noop">
+          <router-link to="/nosotros" class="da">
             <div class="da-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z"/></svg></div>
             <div><div class="da-t">Red nacional</div><div class="da-s">Comunidad abierta a todo México</div></div>
-          </div>
+          </router-link>
         </div>
       </div>
 
@@ -83,18 +83,18 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div class="dd">
-          <div class="da noop">
+          <router-link to="/nosotros" class="da">
             <div class="da-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
             <div><div class="da-t">Misión y valores</div><div class="da-s">Por qué existe FMDS</div></div>
-          </div>
-          <div class="da noop">
+          </router-link>
+          <router-link :to="{ name: 'nosotros', query: { asunto: 'Alianzas y patrocinios' }, hash: '#contacto' }" class="da">
             <div class="da-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-            <div><div class="da-t">Instituciones aliadas</div><div class="da-s">UTM, UNAM, TEC y más</div></div>
-          </div>
-          <div class="da noop">
+            <div><div class="da-t">Alianzas</div><div class="da-s">Colabora con la federación</div></div>
+          </router-link>
+          <router-link :to="{ name: 'nosotros', hash: '#contacto' }" class="da">
             <div class="da-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
             <div><div class="da-t">Contacto</div><div class="da-s">contacto@fmds.mx</div></div>
-          </div>
+          </router-link>
         </div>
       </div>
 
@@ -126,6 +126,7 @@
     <router-link to="/articulos" class="nbn" @click="mobileOpen = false">Artículos</router-link>
     <router-link to="/cursos" class="nbn" @click="mobileOpen = false">Cursos</router-link>
     <router-link to="/galeria" class="nbn" @click="mobileOpen = false">Galería</router-link>
+    <router-link to="/nosotros" class="nbn" @click="mobileOpen = false">Nosotros</router-link>
     <router-link to="/registro" class="nbn" @click="mobileOpen = false">Registro & Pago</router-link>
     <template v-if="!token">
       <router-link to="/login" class="ng" @click="mobileOpen = false">Iniciar sesión</router-link>

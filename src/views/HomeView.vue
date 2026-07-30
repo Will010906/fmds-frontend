@@ -156,7 +156,7 @@
         <div class="bc-prize">Abierta</div>
         <div class="bc-prize-sub">Bases por publicar</div>
       </div>
-      <router-link to="/registro" class="bc-btn" style="margin-top:16px">Inscribir equipo</router-link>
+      <router-link :to="{ name: 'nosotros', query: { asunto: 'Hackathon' }, hash: '#contacto' }" class="bc-btn" style="margin-top:16px">Quiero participar</router-link>
     </div>
 
     <!-- Resto de eventos reales -->

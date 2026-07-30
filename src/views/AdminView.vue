@@ -21,6 +21,9 @@
         <button class="admin-tab" :class="{ active: tab === 'ventas' }" @click="cambiarTab('ventas')">Ventas</button>
         <button class="admin-tab" :class="{ active: tab === 'usuarios' }" @click="cambiarTab('usuarios')">Usuarios</button>
         <button class="admin-tab" :class="{ active: tab === 'boletin' }" @click="cambiarTab('boletin')">Boletín</button>
+        <button class="admin-tab" :class="{ active: tab === 'mensajes' }" @click="cambiarTab('mensajes')">
+          Mensajes<span v-if="mensajes.length" class="tab-count">{{ mensajes.length }}</span>
+        </button>
       </div>
 
       <!-- ═══ EVENTOS ═══ -->
@@ -410,6 +413,32 @@
         </div>
       </template>
 
+      <!-- ═══ MENSAJES ═══ -->
+      <template v-if="tab === 'mensajes'">
+        <div class="admin-header">
+          <div>
+            <h1 class="admin-title">Mensajes recibidos</h1>
+            <p class="admin-sub">{{ mensajes.length }} mensaje{{ mensajes.length !== 1 ? 's' : '' }} del formulario de contacto</p>
+          </div>
+        </div>
+
+        <div v-if="mensajes.length === 0" class="table-card">
+          <table class="table"><tbody><tr><td class="empty">Aún no has recibido mensajes</td></tr></tbody></table>
+        </div>
+
+        <div v-else class="msg-list">
+          <div class="msg" v-for="m in mensajes" :key="m.idMensaje">
+            <div class="msg-top">
+              <span class="msg-asunto">{{ m.asunto }}</span>
+              <span class="msg-fecha">{{ formatFecha(m.creadoEn) }}</span>
+              <button @click="eliminarMensaje(m.idMensaje)" class="btn-danger">Eliminar</button>
+            </div>
+            <div class="msg-de">{{ m.nombre }} · <a :href="'mailto:' + m.correo" class="msg-mail">{{ m.correo }}</a></div>
+            <p class="msg-cuerpo">{{ m.mensaje }}</p>
+          </div>
+        </div>
+      </template>
+
       <!-- ═══ VENTAS ═══ -->
       <template v-if="tab === 'ventas'">
         <div class="admin-header">
@@ -496,6 +525,7 @@ const cursos = ref([])
 const ventas = ref([])
 const usuarios = ref([])
 const suscriptores = ref([])
+const mensajes = ref([])
 
 const totalVentas = computed(() =>
   ventas.value.reduce((suma, v) => suma + Number(v.montoTotal), 0).toLocaleString('en-US')
@@ -722,6 +752,21 @@ const cargarSuscriptores = async () => {
   }
 }
 
+// ── MENSAJES DE CONTACTO ──
+const cargarMensajes = async () => {
+  try {
+    const res = await api.get('/mensajes')
+    mensajes.value = res.data
+  } catch (err) {
+    mensajes.value = []
+  }
+}
+const eliminarMensaje = async (id) => {
+  if (!confirm('¿Eliminar este mensaje?')) return
+  await api.delete(`/mensajes/${id}`)
+  cargarMensajes()
+}
+
 // ── VENTAS ──
 const cargarVentas = async () => {
   try {
@@ -774,6 +819,7 @@ onMounted(() => {
   cargarVentas()
   cargarUsuarios()
   cargarSuscriptores()
+  cargarMensajes()
 })
 </script>
 
@@ -960,6 +1006,19 @@ onMounted(() => {
 .rol-select:focus { border-color: var(--teal-b); }
 
 .empty { text-align: center; color: var(--w4); padding: 48px; }
+
+/* MENSAJES DE CONTACTO */
+.tab-count { display:inline-flex;align-items:center;justify-content:center;min-width:17px;height:17px;padding:0 5px;margin-left:7px;border-radius:100px;background:var(--teal);color:var(--bg);font-size:9px;font-weight:800; }
+.msg-list { display:flex;flex-direction:column;gap:12px; }
+.msg { background:var(--card);border:1px solid var(--line3);border-radius:14px;padding:20px 22px;transition:border-color .15s; }
+.msg:hover { border-color:var(--teal-b); }
+.msg-top { display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap; }
+.msg-asunto { font-family:var(--fm);font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);background:var(--teal-g);border:1px solid var(--teal-b);border-radius:100px;padding:4px 11px; }
+.msg-fecha { font-size:11px;color:var(--w4);margin-right:auto; }
+.msg-de { font-size:12px;color:var(--w2);margin-bottom:10px; }
+.msg-mail { color:var(--teal);text-decoration:none; }
+.msg-mail:hover { text-decoration:underline; }
+.msg-cuerpo { font-size:13px;color:var(--w3);font-weight:300;line-height:1.75;white-space:pre-line; }
 
 /* BUTTONS */
 .btn-primary {
