@@ -32,16 +32,12 @@
             <span class="event-stock">{{ evento.stockBoletos }} boletos</span>
           </div>
           <h3 class="event-title">{{ evento.titulo }}</h3>
+          <div class="event-lugar" v-if="evento.sede || evento.ciudad">
+            {{ [evento.sede, evento.ciudad].filter(Boolean).join(' · ') }}
+          </div>
           <div class="event-card-bottom">
             <span class="event-price">${{ evento.precio }} <small>MXN</small></span>
-            <button
-              @click="comprar(evento)"
-              :disabled="evento.stockBoletos === 0"
-              class="btn-primary-sm"
-              :class="{ 'btn-disabled': evento.stockBoletos === 0 }"
-            >
-              {{ evento.stockBoletos === 0 ? 'Agotado' : 'Comprar' }}
-            </button>
+            <button @click="verEvento(evento)" class="btn-primary-sm">Ver evento</button>
           </div>
         </div>
       </div>
@@ -72,8 +68,8 @@ const formatFecha = (fecha) => {
   })
 }
 
-const comprar = (evento) => {
-  router.push({ name: 'checkout', params: { idEvento: evento.idEvento } })
+const verEvento = (evento) => {
+  router.push({ name: 'evento', params: { id: evento.idEvento } })
 }
 
 onMounted(cargarEventos)
@@ -183,6 +179,7 @@ onMounted(cargarEventos)
   letter-spacing: .05em;
 }
 .event-stock { font-size: 11px; color: var(--w4); }
+.event-lugar { font-size: 11px; color: var(--w4); font-weight: 300; margin-top: -8px; }
 .event-title {
   font-size: 17px;
   font-weight: 700;

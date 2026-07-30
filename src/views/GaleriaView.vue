@@ -5,57 +5,37 @@
 
     <!-- HERO -->
     <div class="ph">
-      <div class="pill"><div class="pill-d"></div><span class="pill-t">Historia FMDS</span></div>
-      <h1 class="ph-ttl">Ediciones <em>anteriores</em></h1>
-      <p class="ph-sub">Años de conocimiento compartido, conexiones y crecimiento para la comunidad tecnológica de México.</p>
+      <div class="pill"><div class="pill-d"></div><span class="pill-t">Memoria del congreso</span></div>
+      <h1 class="ph-ttl">Galería <em>FMDS</em></h1>
+      <p class="ph-sub">Aquí publicaremos las fotografías, ponencias y memorias de cada edición del congreso.</p>
     </div>
 
     <div class="sec">
-      <!-- GALERÍA -->
-      <div class="gal-f">
-        <div class="gc t">
-          <div class="gc-bg" style="background:linear-gradient(135deg,#0C1830,#1B4060,#0E9A80 110%)">
-            <div class="gc-medal">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            </div>
-            <div class="gc-num">1,200<small>+</small></div>
-            <div class="gc-lbl">Asistentes 2025</div>
-          </div>
-          <div class="gc-bd">CIIS 2025</div>
-          <div class="gc-ov"><div class="gc-yr">Edición 2025</div><div class="gc-d">Primer Congreso Internacional FMDS · CDMX</div></div>
+      <!-- ESTADO: aún sin ediciones celebradas -->
+      <div class="gal-soon">
+        <div class="gs-ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         </div>
-        <div class="gc">
-          <div class="gc-bg" style="background:linear-gradient(135deg,#0C1420,#0D1F30)">
-            <div class="gc-num sm">48</div>
-            <div class="gc-lbl">Ponencias</div>
-          </div>
-          <div class="gc-bd">Workshops</div>
-          <div class="gc-ov"><div class="gc-yr">Workshops 2025</div><div class="gc-d">Talleres con expertos</div></div>
-        </div>
-        <div class="gc">
-          <div class="gc-bg" style="background:linear-gradient(135deg,#0A1320,#1B3558)">
-            <div class="gc-num sm teal">$50K</div>
-            <div class="gc-lbl">En premios</div>
-          </div>
-          <div class="gc-bd">Hackathon</div>
-          <div class="gc-ov"><div class="gc-yr">Hackathon 2025</div><div class="gc-d">32 equipos · 3 ganadores</div></div>
-        </div>
-        <div class="gc">
-          <div class="gc-bg" style="background:linear-gradient(135deg,#0D1E30,#0C1420)">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <div class="gc-lbl" style="margin-top:7px">Mejor ponencia</div>
-          </div>
-          <div class="gc-bd">Premios</div>
-          <div class="gc-ov"><div class="gc-yr">Premios 2025</div><div class="gc-d">Reconocimiento a la investigación</div></div>
-        </div>
-      </div>
+        <div class="gs-ttl">La primera edición está por venir</div>
+        <p class="gs-txt">
+          La Federación Mexicana de Desarrolladores de Software es una organización de reciente creación.
+          En cuanto se celebre nuestro primer congreso, esta sección reunirá la galería fotográfica, las
+          memorias de las ponencias y los resultados del hackathon.
+        </p>
 
-      <!-- STATS -->
-      <div class="gal-stats">
-        <div class="gs"><div class="gs-n">1,200+</div><div class="gs-l">Asistentes 2025</div></div>
-        <div class="gs"><div class="gs-n">48</div><div class="gs-l">Ponencias presentadas</div></div>
-        <div class="gs"><div class="gs-n">32</div><div class="gs-l">Equipos hackathon</div></div>
-        <div class="gs"><div class="gs-n">$50K</div><div class="gs-l">MXN en premios</div></div>
+        <!-- Próximo evento real -->
+        <div class="gs-ev" v-if="proximoEvento">
+          <div class="gs-ev-l">
+            <div class="gs-ev-tag">Próximo evento</div>
+            <div class="gs-ev-nm">{{ proximoEvento.titulo }}</div>
+            <div class="gs-ev-dt">{{ formatFecha(proximoEvento.fecha) }}</div>
+          </div>
+          <router-link :to="{ name: 'evento', params: { id: proximoEvento.idEvento } }" class="gs-btn">
+            Ver el evento ⟶
+          </router-link>
+        </div>
+
+        <p class="gs-nota">¿Quieres estar cuando ocurra? Sé parte de la primera edición.</p>
       </div>
     </div>
 
@@ -64,8 +44,30 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
+import api from '../services/api'
 import AppNav from '../components/AppNav.vue'
 import AppFooter from '../components/AppFooter.vue'
+
+const proximoEvento = ref(null)
+
+const formatFecha = (fecha) => {
+  if (!fecha) return ''
+  return new Date(fecha).toLocaleDateString('es-MX', {
+    day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC',
+  })
+}
+
+onMounted(async () => {
+  try {
+    const res = await api.get('/eventos')
+    const ahora = Date.now()
+    const futuros = res.data.filter(e => new Date(e.fecha).getTime() >= ahora)
+    proximoEvento.value = futuros[0] || res.data[0] || null
+  } catch {
+    proximoEvento.value = null
+  }
+})
 </script>
 
 <style scoped>
@@ -73,51 +75,39 @@ import AppFooter from '../components/AppFooter.vue'
 
 /* PAGE HEADER */
 .ph { background:var(--bg2);border-bottom:1px solid var(--line3);padding:72px 40px 60px;position:relative;overflow:hidden; }
-.ph::before { content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(45,212,180,.04) 0%,transparent 70%);top:-200px;right:-80px;pointer-events:none; }
-.pill { display:inline-flex;align-items:center;gap:7px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:100px;padding:4px 12px;margin-bottom:16px; }
-.pill-d { width:5px;height:5px;border-radius:50%;background:var(--teal); }
+.pill { display:inline-flex;align-items:center;gap:7px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:100px;padding:4px 12px;margin-bottom:20px; }
+.pill-d { width:5px;height:5px;border-radius:50%;background:var(--teal);animation:pulse 2.5s infinite; }
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(45,212,180,.4)}50%{box-shadow:0 0 0 6px rgba(45,212,180,0)} }
 .pill-t { font-family:var(--fm);font-size:8px;font-weight:500;color:var(--teal);letter-spacing:.1em;text-transform:uppercase; }
-.ph-ttl { font-family:var(--f);font-size:44px;font-weight:800;color:var(--white);letter-spacing:-.05em;line-height:.93;margin-bottom:16px;margin-top:14px; }
+.ph-ttl { font-size:52px;font-weight:800;letter-spacing:-.05em;line-height:1;margin-bottom:16px;color:var(--white); }
 .ph-ttl em { font-family:var(--fs);font-style:italic;font-weight:400;color:var(--teal); }
-.ph-sub { font-size:14px;font-weight:300;color:var(--w3);line-height:1.82;max-width:520px; }
+.ph-sub { font-size:14px;color:var(--w3);font-weight:300;max-width:560px;line-height:1.7; }
 
-.sec { padding:56px 40px 80px; }
+.sec { padding:64px 40px 88px; }
 
-/* GALERÍA */
-.gal-f { display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:200px 200px;gap:12px;border-radius:14px;overflow:hidden;margin-bottom:36px; }
-.gc { position:relative;overflow:hidden;cursor:pointer;border-radius:12px; }
-.gc.t { grid-row:span 2; }
-.gc-bg { width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;transition:transform .4s; }
-.gc:hover .gc-bg { transform:scale(1.04); }
-.gc-medal { width:62px;height:62px;border-radius:50%;background:var(--teal-g);border:1px solid var(--teal-b);display:flex;align-items:center;justify-content:center; }
-.gc-num { font-family:var(--f);font-size:22px;font-weight:800;color:var(--teal);letter-spacing:-.04em; }
-.gc-num.sm { font-size:20px;color:var(--w2); }
-.gc-num.teal { color:var(--teal); }
-.gc-lbl { font-size:10px;color:var(--w3);letter-spacing:.06em;text-transform:uppercase; }
-.gc-ov { position:absolute;inset:0;background:linear-gradient(to top,rgba(6,9,15,.92) 0%,transparent 55%);opacity:0;transition:opacity .25s;display:flex;flex-direction:column;justify-content:flex-end;padding:16px; }
-.gc:hover .gc-ov { opacity:1; }
-.gc-yr { font-family:var(--fm);font-size:8px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:4px; }
-.gc-d { font-size:12px;font-weight:700;color:var(--white); }
-.gc-bd { position:absolute;top:10px;left:10px;background:rgba(6,9,15,.8);backdrop-filter:blur(10px);border:1px solid var(--line2);border-radius:7px;padding:4px 10px;font-family:var(--fm);font-size:9px;font-weight:500;color:var(--teal); }
+/* ESTADO PRÓXIMAMENTE */
+.gal-soon { max-width:640px;margin:0 auto;text-align:center;background:var(--card);border:1px solid var(--line3);border-radius:18px;padding:52px 44px; }
+.gs-ic { width:56px;height:56px;margin:0 auto 22px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:14px;display:flex;align-items:center;justify-content:center; }
+.gs-ic svg { width:26px;height:26px; }
+.gs-ttl { font-size:22px;font-weight:800;color:var(--white);letter-spacing:-.03em;margin-bottom:14px; }
+.gs-txt { font-size:13px;color:var(--w3);font-weight:300;line-height:1.85; }
 
-/* STATS */
-.gal-stats { display:grid;grid-template-columns:repeat(4,1fr);gap:12px; }
-.gs { background:var(--card);border:1px solid var(--line3);border-radius:12px;padding:22px;text-align:center;transition:border-color .15s; }
-.gs:hover { border-color:var(--teal-b); }
-.gs-n { font-family:var(--f);font-size:26px;font-weight:800;color:var(--teal);letter-spacing:-.05em; }
-.gs-l { font-family:var(--fm);font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--w4);margin-top:7px; }
+.gs-ev { display:flex;align-items:center;justify-content:space-between;gap:20px;text-align:left;background:var(--bg3);border:1px solid var(--line2);border-radius:14px;padding:20px 24px;margin-top:32px; }
+.gs-ev-tag { font-family:var(--fm);font-size:8px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--w4);margin-bottom:6px; }
+.gs-ev-nm { font-size:15px;font-weight:700;color:var(--white);letter-spacing:-.02em; }
+.gs-ev-dt { font-size:12px;color:var(--teal);font-weight:300;margin-top:3px; }
+.gs-btn { background:var(--teal);color:var(--bg);border:none;border-radius:10px;padding:12px 24px;font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;transition:background .15s;text-decoration:none;white-space:nowrap;flex-shrink:0; }
+.gs-btn:hover { background:var(--teal2); }
 
-/* RESPONSIVE */
-@media (max-width: 968px) {
-  .ph { padding:44px 20px 36px; }
-  .ph-ttl { font-size:32px; }
-  .sec { padding:36px 20px 56px; }
-  .gal-f { grid-template-columns:1fr 1fr;grid-template-rows:160px 160px 160px; }
-  .gc.t { grid-row:span 1;grid-column:span 2; }
-  .gal-stats { grid-template-columns:repeat(2,1fr); }
-}
-@media (max-width: 480px) {
-  .gal-f { grid-template-columns:1fr;grid-template-rows:repeat(4,160px); }
-  .gc.t { grid-column:span 1; }
+.gs-nota { font-size:12px;color:var(--w4);font-weight:300;margin-top:22px; }
+
+@media (max-width: 700px) {
+  .ph { padding:52px 20px 44px; }
+  .ph-ttl { font-size:36px; }
+  .sec { padding:44px 18px 64px; }
+  .gal-soon { padding:36px 24px; }
+  .gs-ttl { font-size:19px; }
+  .gs-ev { flex-direction:column;align-items:stretch;text-align:center;gap:16px; }
+  .gs-btn { text-align:center; }
 }
 </style>

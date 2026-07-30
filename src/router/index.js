@@ -30,6 +30,11 @@ const router = createRouter({
       meta: { requiresAuth: true, role: 'Administrador' },
     },
     {
+      path: '/evento/:id',
+      name: 'evento',
+      component: () => import('../views/EventoDetalleView.vue'),
+    },
+    {
       path: '/checkout/:idEvento',
       name: 'checkout',
       component: () => import('../views/CheckoutView.vue'),

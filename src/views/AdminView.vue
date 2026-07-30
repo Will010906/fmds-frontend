@@ -54,6 +54,30 @@
               <label class="field-label">Stock de Boletos</label>
               <input v-model="formEvento.stockBoletos" type="number" placeholder="200" class="field-input" />
             </div>
+            <div class="field">
+              <label class="field-label">Hora de inicio</label>
+              <input v-model="formEvento.hora" type="time" class="field-input" />
+            </div>
+            <div class="field">
+              <label class="field-label">Modalidad</label>
+              <select v-model="formEvento.modalidad" class="field-input">
+                <option value="Presencial">Presencial</option>
+                <option value="Virtual">Virtual</option>
+                <option value="Híbrido">Híbrido</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="field-label">Sede</label>
+              <input v-model="formEvento.sede" type="text" placeholder="Centro de Convenciones" class="field-input" />
+            </div>
+            <div class="field">
+              <label class="field-label">Ciudad</label>
+              <input v-model="formEvento.ciudad" type="text" placeholder="Morelia, Michoacán" class="field-input" />
+            </div>
+            <div class="field full">
+              <label class="field-label">Descripción</label>
+              <textarea v-model="formEvento.descripcion" rows="4" placeholder="De qué trata el evento, a quién está dirigido y qué incluye el acceso." class="field-input"></textarea>
+            </div>
           </div>
           <button @click="guardarEvento" class="btn-primary">{{ editandoId ? 'Guardar cambios' : 'Guardar Evento' }}</button>
         </div>
@@ -483,7 +507,7 @@ const iniciales = (nombreCompleto) => {
   return partes.slice(0, 2).map(p => p[0]).join('').toUpperCase()
 }
 
-const formEvento = ref({ titulo: '', fecha: '', precio: '', stockBoletos: '' })
+const formEvento = ref({ titulo: '', fecha: '', precio: '', stockBoletos: '', hora: '', modalidad: 'Presencial', sede: '', ciudad: '', descripcion: '' })
 const formArticulo = ref({ titulo: '', cuerpo: '', autor: '', categoria: '', fechaPublicacion: '' })
 const formSpeaker = ref({ nombre: '', rol: '', area: '', tema: '', frase: '', featured: false, fotoUrl: '' })
 const formSesion = ref({ dia: 1, hora: '', duracion: '', tipo: '', nombre: '', ponente: '', badge: 'Keynote' })
@@ -502,7 +526,7 @@ const toggleFormulario = () => {
 }
 
 const resetFormularioActivo = () => {
-  formEvento.value = { titulo: '', fecha: '', precio: '', stockBoletos: '' }
+  formEvento.value = { titulo: '', fecha: '', precio: '', stockBoletos: '', hora: '', modalidad: 'Presencial', sede: '', ciudad: '', descripcion: '' }
   formArticulo.value = { titulo: '', cuerpo: '', autor: '', categoria: '', fechaPublicacion: '' }
   formSpeaker.value = { nombre: '', rol: '', area: '', tema: '', frase: '', featured: false, fotoUrl: '' }
   formSesion.value = { dia: 1, hora: '', duracion: '', tipo: '', nombre: '', ponente: '', badge: 'Keynote' }
@@ -524,7 +548,7 @@ const guardarEvento = async () => {
   } else {
     await api.post('/eventos', formEvento.value)
   }
-  formEvento.value = { titulo: '', fecha: '', precio: '', stockBoletos: '' }
+  formEvento.value = { titulo: '', fecha: '', precio: '', stockBoletos: '', hora: '', modalidad: 'Presencial', sede: '', ciudad: '', descripcion: '' }
   mostrarFormulario.value = false
   editandoId.value = null
   cargarEventos()
@@ -536,6 +560,12 @@ const editarEvento = (evento) => {
     fecha: new Date(evento.fecha).toISOString().slice(0, 10),
     precio: evento.precio,
     stockBoletos: evento.stockBoletos,
+    // La hora llega como "HH:MM:SS"; el input type=time espera "HH:MM"
+    hora: evento.hora ? String(evento.hora).slice(0, 5) : '',
+    modalidad: evento.modalidad || 'Presencial',
+    sede: evento.sede || '',
+    ciudad: evento.ciudad || '',
+    descripcion: evento.descripcion || '',
   }
   mostrarFormulario.value = true
 }

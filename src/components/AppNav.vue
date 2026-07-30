@@ -18,7 +18,7 @@
           </router-link>
           <router-link to="/eventos" class="da">
             <div class="da-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
-            <div><div class="da-t">Hackathon FMDS 2026</div><div class="da-s">$25,000 MXN en premios</div></div>
+            <div><div class="da-t">Hackathon FMDS</div><div class="da-s">Reto de desarrollo del congreso</div></div>
           </router-link>
           <div class="dsep"></div>
           <div class="dl">Programa</div>
@@ -41,16 +41,16 @@
         <div class="dd">
           <router-link to="/articulos" class="da">
             <div class="da-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
-            <div><div class="da-t">Artículos científicos</div><div class="da-s">48 publicaciones revisadas</div></div>
+            <div><div class="da-t">Artículos científicos</div><div class="da-s">Publicaciones con revisión por pares</div></div>
           </router-link>
           <router-link to="/cursos" class="da">
             <div class="da-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
-            <div><div class="da-t">Cursos de actualización</div><div class="da-s">12 cursos técnicos en línea</div></div>
+            <div><div class="da-t">Cursos de actualización</div><div class="da-s">Formación técnica en línea</div></div>
           </router-link>
           <div class="dsep"></div>
           <router-link to="/galeria" class="da">
             <div class="da-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-            <div><div class="da-t">Ediciones anteriores</div><div class="da-s">Galería y memorias</div></div>
+            <div><div class="da-t">Galería</div><div class="da-s">Memorias del congreso</div></div>
           </router-link>
         </div>
       </div>
@@ -72,7 +72,7 @@
           <div class="dsep"></div>
           <div class="da noop">
             <div class="da-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z"/></svg></div>
-            <div><div class="da-t">Red nacional</div><div class="da-s">12 estados representados</div></div>
+            <div><div class="da-t">Red nacional</div><div class="da-s">Comunidad abierta a todo México</div></div>
           </div>
         </div>
       </div>

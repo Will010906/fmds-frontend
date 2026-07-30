@@ -24,10 +24,10 @@
       <router-link to="/articulos" class="btn-s">Explorar artículos</router-link>
     </div>
     <div class="h-nums">
-      <div class="hn"><div class="hn-v"><AnimatedNumber :value="3200" /><sup>+</sup></div><div class="hn-l">Miembros</div></div>
-      <div class="hn"><div class="hn-v"><AnimatedNumber :value="12" /></div><div class="hn-l">Estados</div></div>
-      <div class="hn"><div class="hn-v"><AnimatedNumber :value="48" /></div><div class="hn-l">Artículos</div></div>
-      <div class="hn"><div class="hn-v"><AnimatedNumber :value="3" /></div><div class="hn-l">Congresos</div></div>
+      <div class="hn"><div class="hn-v"><AnimatedNumber :value="eventos.length" /></div><div class="hn-l">Eventos</div></div>
+      <div class="hn"><div class="hn-v"><AnimatedNumber :value="speakers.length" /></div><div class="hn-l">Ponentes</div></div>
+      <div class="hn"><div class="hn-v"><AnimatedNumber :value="totalSesiones" /></div><div class="hn-l">Sesiones</div></div>
+      <div class="hn"><div class="hn-v"><AnimatedNumber :value="totalArticulos" /></div><div class="hn-l">Artículos</div></div>
     </div>
   </div>
 
@@ -74,16 +74,13 @@
     <!-- TICKER -->
     <div class="ticker" aria-hidden="true">
       <div class="ti">
-        <span>Congreso Internacional 2026</span><span>·</span>
-        <span>Hackathon FMDS</span><span>·</span>
-        <span>48 Artículos publicados</span><span>·</span>
-        <span>12 Estados representados</span><span>·</span>
-        <span>3,200 Miembros</span><span>·</span>
-        <span>Congreso Internacional 2026</span><span>·</span>
-        <span>Hackathon FMDS</span><span>·</span>
-        <span>48 Artículos publicados</span><span>·</span>
-        <span>12 Estados representados</span><span>·</span>
-        <span>3,200 Miembros</span><span>·</span>
+        <template v-for="n in 2" :key="n">
+          <span>Divulgación científica neutral</span><span>·</span>
+          <span>Congresos internacionales</span><span>·</span>
+          <span>Cursos de actualización</span><span>·</span>
+          <span>Revisión por pares</span><span>·</span>
+          <span>Comunidad tecnológica de México</span><span>·</span>
+        </template>
       </div>
     </div>
 
@@ -111,7 +108,7 @@
   </div>
   <div class="fsc" @click="$router.push('/galeria')">
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-    <div class="fsc-n">Ediciones</div><div class="fsc-s">Galería 2024</div>
+    <div class="fsc-n">Galería</div><div class="fsc-s">Memorias</div>
   </div>
   <div class="fsc" @click="$router.push('/eventos')">
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
@@ -142,7 +139,7 @@
       </div>
       <div class="bc-ft">
         <div class="bc-pr">${{ eventos[0].precio }} <small>MXN</small></div>
-        <button class="bc-btn" @click="$router.push({name:'checkout', params:{idEvento: eventos[0].idEvento}})">Inscribirse</button>
+        <router-link :to="{ name: 'evento', params: { id: eventos[0].idEvento } }" class="bc-btn">Ver evento</router-link>
       </div>
     </div>
 
@@ -155,9 +152,9 @@
         </div>
         <div class="bc-hack-title">FMDS Hackathon</div>
         <div class="bc-hack-sub">48 hrs · Equipos de 3–5 personas · Mentoría experta</div>
-        <div class="bc-prize-lbl">Premio mayor</div>
-        <div class="bc-prize">$25K</div>
-        <div class="bc-prize-sub">MXN + incubación</div>
+        <div class="bc-prize-lbl">Convocatoria</div>
+        <div class="bc-prize">Abierta</div>
+        <div class="bc-prize-sub">Bases por publicar</div>
       </div>
       <router-link to="/registro" class="bc-btn" style="margin-top:16px">Inscribir equipo</router-link>
     </div>
@@ -173,7 +170,7 @@
       </div>
       <div class="bc-ft">
         <div class="bc-pr">${{ evento.precio }} <small>MXN</small></div>
-        <button class="bc-btn" @click="$router.push({name:'checkout', params:{idEvento: evento.idEvento}})">Comprar</button>
+        <router-link :to="{ name: 'evento', params: { id: evento.idEvento } }" class="bc-btn">Ver evento</router-link>
       </div>
     </div>
 
@@ -183,11 +180,11 @@
 
     <!-- STATS -->
     <div v-reveal class="stats-h">
-      <div class="sh"><div class="sh-n"><AnimatedNumber :value="3200" suffix="+" /></div><div class="sh-l">Miembros activos</div></div>
-      <div class="sh"><div class="sh-n"><AnimatedNumber :value="100" suffix="%" /></div><div class="sh-l">Divulgación neutral</div></div>
-      <div class="sh"><div class="sh-n"><AnimatedNumber :value="48" /></div><div class="sh-l">Artículos publicados</div></div>
-      <div class="sh"><div class="sh-n"><AnimatedNumber :value="12" /></div><div class="sh-l">Estados cubiertos</div></div>
-      <div class="sh"><div class="sh-n"><AnimatedNumber :value="50" prefix="$" suffix="K" /></div><div class="sh-l">En premios 2025</div></div>
+      <div class="sh"><div class="sh-n"><AnimatedNumber :value="eventos.length" /></div><div class="sh-l">Eventos programados</div></div>
+      <div class="sh"><div class="sh-n"><AnimatedNumber :value="speakers.length" /></div><div class="sh-l">Ponentes</div></div>
+      <div class="sh"><div class="sh-n"><AnimatedNumber :value="totalSesiones" /></div><div class="sh-l">Sesiones en agenda</div></div>
+      <div class="sh"><div class="sh-n"><AnimatedNumber :value="totalArticulos" /></div><div class="sh-l">Artículos publicados</div></div>
+      <div class="sh"><div class="sh-n"><AnimatedNumber :value="totalCursos" /></div><div class="sh-l">Cursos en línea</div></div>
     </div>
 
     <!-- POR QUÉ ASISTIR -->
@@ -217,7 +214,7 @@
         <div class="pq-c">
           <div class="pq-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
           <div class="pq-t">Vive la experiencia</div>
-          <p class="pq-s">Hackathon con $25K en premios, feria de proyectos estudiantiles y actividades de comunidad los 3 días.</p>
+          <p class="pq-s">Hackathon de desarrollo, feria de proyectos estudiantiles y actividades de comunidad durante todo el congreso.</p>
         </div>
       </div>
       <div class="pq-quien">
@@ -328,131 +325,6 @@
         <div class="ae-by">{{ art.autor }} · {{ formatFecha(art.fechaPublicacion) }}</div>
       </div>
       <div class="ae-badge">Revisado</div>
-    </div>
-  </div>
-</div>
-
-<!-- EDICIONES / GALERÍA -->
-<div v-reveal class="sec" style="background:var(--bg);border-top:1px solid var(--line3)">
-  <div class="s-hd">
-    <div>
-      <div class="pill"><div class="pill-d"></div><span class="pill-t">Ediciones anteriores</span></div>
-      <div class="s-ttl"><strong>Momentos que</strong> <em>inspiran</em></div>
-    </div>
-    <router-link to="/galeria" class="s-all">Ver galería →</router-link>
-  </div>
-  <div class="gal-g">
-
-    <!-- Card principal grande -->
-    <div class="gp t">
-      <div class="gp-bg" style="background:linear-gradient(135deg,#0C1830,#1B4060,#0E9A80 110%);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;">
-        <div style="width:72px;height:72px;border-radius:50%;background:var(--teal-g);border:2px solid var(--teal-b);display:flex;align-items:center;justify-content:center;">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </div>
-        <div style="font-family:var(--f);font-size:28px;font-weight:800;color:var(--teal);letter-spacing:-.04em;">1,200+</div>
-        <div style="font-size:12px;color:var(--w3);letter-spacing:.06em;text-transform:uppercase;">Asistentes 2025</div>
-      </div>
-      <div class="gp-bd">CIIS 2025</div>
-      <div class="gp-ov"><div class="gp-yr">Edición 2025</div><div class="gp-d">Primer Congreso Internacional FMDS</div></div>
-    </div>
-
-    <!-- Card 48 ponencias -->
-    <div class="gp">
-      <div class="gp-bg" style="background:linear-gradient(135deg,#0C1420,#0D1F30);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
-        <div style="font-family:var(--f);font-size:36px;font-weight:800;color:var(--w2);letter-spacing:-.04em;">48</div>
-        <div style="font-size:10px;color:var(--w4);text-transform:uppercase;letter-spacing:.1em;">Ponencias</div>
-      </div>
-      <div class="gp-bd">Workshops</div>
-      <div class="gp-ov"><div class="gp-yr">Workshops 2025</div><div class="gp-d">Talleres técnicos con expertos</div></div>
-    </div>
-
-    <!-- Card $50k premios -->
- <div class="gp" style="background:linear-gradient(135deg,#0C1420,#0D1F30);">
-  <div class="gp-bg" style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-    <div style="font-family:var(--f);font-size:20px;font-weight:800;color:var(--white);letter-spacing:-.04em;">32</div>
-    <div style="font-size:10px;color:var(--w4);text-transform:uppercase;letter-spacing:.06em;">Equipos hackathon</div>
-  </div>
-  <div class="gp-bd">Hackathon</div>
-  <div class="gp-ov"><div class="gp-yr">Hackathon 2025</div><div class="gp-d">32 equipos participantes</div></div>
-</div>
-
-    <!-- Card mejor ponencia -->
-    <div class="gp">
-      <div class="gp-bg" style="background:linear-gradient(135deg,#0D1E30,#0C1420);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        <div style="font-size:10px;color:var(--w3);text-transform:uppercase;letter-spacing:.06em;margin-top:4px;">Mejor ponencia</div>
-      </div>
-      <div class="gp-bd">Premios</div>
-      <div class="gp-ov"><div class="gp-yr">Premios 2025</div><div class="gp-d">Reconocimiento a la investigación</div></div>
-    </div>
-
-  </div>
-</div>
-
-   <!-- COMUNIDAD -->
-<div v-reveal class="sec" style="background:var(--bg2);border-top:1px solid var(--line3)">
-  <div class="s-hd" style="margin-bottom:40px">
-    <div>
-      <div class="pill"><div class="pill-d"></div><span class="pill-t">Comunidad</span></div>
-      <div class="s-ttl"><strong>Lo que dice la</strong> <em>comunidad</em></div>
-    </div>
-  </div>
-  <div class="test-g">
-    <div class="tc">
-      <div class="tc-stars">★★★★★</div>
-      <div class="tc-q">El congreso superó todas mis expectativas. La calidad de los ponentes fue impecable. Regreso el próximo año sin duda.</div>
-      <div class="tc-auth">
-        <div class="tc-av">MR</div>
-        <div><div class="tc-nm">Mtro. Miguel Reyes</div><div class="tc-rl">Docente · UTM, Morelia</div></div>
-      </div>
-    </div>
-    <div class="tc">
-      <div class="tc-stars">★★★★★</div>
-      <div class="tc-q">Presenté mi primer artículo aquí y el proceso fue serio y formativo. FMDS tiene el nivel que México merecía.</div>
-      <div class="tc-auth">
-        <div class="tc-av">SC</div>
-        <div><div class="tc-nm">Sofía Castro</div><div class="tc-rl">Investigadora · UNAM</div></div>
-      </div>
-    </div>
-    <div class="tc">
-      <div class="tc-stars">★★★★★</div>
-      <div class="tc-q">El precio para estudiantes es accesible de verdad. Vine desde Monterrey y cada peso valió. Increíble experiencia.</div>
-      <div class="tc-auth">
-        <div class="tc-av">AL</div>
-        <div><div class="tc-nm">Andrés López</div><div class="tc-rl">Estudiante TSU · TEC Monterrey</div></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- INSTITUCIONES ALIADAS -->
-<div v-reveal class="inst-sec">
-  <p class="inst-lbl">Instituciones aliadas</p>
-  <div class="inst">
-    <div class="ic">
-      <div class="ic-i"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-      <div class="ic-n">UTM</div><div class="ic-l">Morelia</div>
-    </div>
-    <div class="ic">
-      <div class="ic-i"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-      <div class="ic-n">UNAM</div><div class="ic-l">CDMX</div>
-    </div>
-    <div class="ic">
-      <div class="ic-i"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-      <div class="ic-n">Tec Monterrey</div><div class="ic-l">Nacional</div>
-    </div>
-    <div class="ic">
-      <div class="ic-i"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-      <div class="ic-n">IPN</div><div class="ic-l">CDMX</div>
-    </div>
-    <div class="ic">
-      <div class="ic-i"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-      <div class="ic-n">UANL</div><div class="ic-l">Monterrey</div>
-    </div>
-    <div class="ic">
-      <div class="ic-i"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-      <div class="ic-n">UAG</div><div class="ic-l">Guadalajara</div>
     </div>
   </div>
 </div>
@@ -879,40 +751,6 @@ const scrollBoletin = () => {
 .ae-badge { font-size:9px;font-weight:600;padding:3px 10px;border-radius:100px;background:var(--teal-g);color:var(--teal);border:1px solid var(--teal-b);white-space:nowrap;align-self:center; }
 
 /* GALERÍA */
-.gal-g { display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:240px 240px;gap:12px; }.gp { position:relative;overflow:hidden;cursor:pointer;border-radius:12px; }
-.gp.t { grid-row:span 2; }
-.gp-bg { width:100%;height:100%;transition:transform .4s; }
-.gp:hover .gp-bg { transform:scale(1.04); }
-.gp-ov { position:absolute;inset:0;background:linear-gradient(to top,rgba(6,9,15,.92) 0%,transparent 55%);opacity:0;transition:opacity .25s;display:flex;flex-direction:column;justify-content:flex-end;padding:16px; }
-.gp:hover .gp-ov { opacity:1; }
-.gp-yr { font-family:var(--fm);font-size:8px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:4px; }
-.gp-d { font-size:12px;font-weight:700;color:var(--white); }
-.gp-bd { position:absolute;top:12px;left:12px;background:rgba(6,9,15,.8);backdrop-filter:blur(10px);border:1px solid var(--line2);border-radius:7px;padding:4px 10px;font-family:var(--fm);font-size:9px;font-weight:500;color:var(--teal); }
-
-/* TESTIMONIOS */
-.test-g { display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px; }
-.tc { background:var(--card);border:1px solid var(--line3);border-radius:14px;padding:28px 26px;display:flex;flex-direction:column;gap:14px;transition:border-color .15s; }
-.tc:hover { border-color:var(--teal-b); }
-.tc-stars { color:#2DD4B4;font-size:14px;letter-spacing:2px; }
-.tc-q { font-family:var(--fs);font-style:italic;font-size:14px;color:var(--w2);line-height:1.7;flex:1;position:relative; }
-.tc-q::before { content:'\201C';color:rgba(45,212,180,.2);font-size:32px;font-family:var(--fs);line-height:.4;display:block;margin-bottom:10px; }
-.tc-auth { display:flex;align-items:center;gap:10px;padding-top:14px;border-top:1px solid var(--line3); }
-.tc-av { width:34px;height:34px;border-radius:50%;background:var(--teal-g);border:1px solid var(--teal-b);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--teal);flex-shrink:0; }
-.tc-nm { font-size:12px;font-weight:700;color:var(--white); }
-.tc-rl { font-size:11px;color:var(--w4);font-weight:300;margin-top:1px; }
-
-/* INSTITUCIONES */
-.inst-sec { background:var(--bg3);border-top:1px solid var(--line3);padding:40px 44px; }
-.inst-lbl { font-family:var(--fm);font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--w4);text-align:center;margin-bottom:28px; }
-.inst { display:flex;border:1px solid var(--line3);border-radius:14px;overflow:hidden; }
-.ic { flex:1;padding:24px 16px;border-right:1px solid var(--line3);display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;transition:background .15s; }
-.ic:last-child { border-right:none; }
-.ic:hover { background:var(--card); }
-.ic-i { width:44px;height:44px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:10px;display:flex;align-items:center;justify-content:center; }
-.ic-i svg { width:20px;height:20px; }
-.ic-n { font-size:13px;font-weight:700;color:var(--white); }
-.ic-l { font-size:11px;color:var(--w4); }
-
 /* FAQ */
 .faq-g { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
 .faq-i { background:var(--card);border:1px solid var(--line3);border-radius:14px;padding:22px 24px;display:flex;flex-direction:column;gap:0;transition:border-color .15s;cursor:pointer; }
@@ -1005,13 +843,8 @@ const scrollBoletin = () => {
   .spk-mag { grid-template-columns:1fr; }
   .sm-feat { grid-column:span 1; }
 
-  .gal-g { grid-template-columns:1fr 1fr;grid-template-rows:200px 200px 200px; }
-  .gp.t { grid-row:span 1;grid-column:span 2; }
 
-  .test-g { grid-template-columns:1fr; }
 
-  .inst { flex-wrap:wrap; }
-  .ic { flex:1 1 33%;border-bottom:1px solid var(--line3); }
 
   .faq-g { grid-template-columns:1fr; }
 
@@ -1049,19 +882,8 @@ const scrollBoletin = () => {
   .sm { flex:0 0 80%;scroll-snap-align:start;padding:20px 18px; }
   .sm-feat { flex:0 0 88%;scroll-snap-align:start;order:-1;grid-template-columns:1fr;gap:14px;padding:22px 20px; }
 
-  /* Galería compacta en 2 columnas */
-  .gal-g { grid-template-columns:1fr 1fr;grid-template-rows:150px 150px 150px; }
-  .gp.t { grid-column:span 2;grid-row:span 1; }
 
-  /* Testimonios: carrusel horizontal */
-  .test-g { display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;scrollbar-width:none;gap:12px;padding-bottom:6px; }
-  .test-g::-webkit-scrollbar { display:none; }
-  .tc { flex:0 0 82%;scroll-snap-align:start;padding:22px 20px; }
 
-  /* Instituciones: cuadrícula 2x3 compacta */
-  .inst { display:grid;grid-template-columns:1fr 1fr; }
-  .ic { border-right:1px solid var(--line3);padding:18px 12px; }
-  .ic:nth-child(2n) { border-right:none; }
 
   /* Por qué asistir: 2x2 compacta */
   .pq-g { grid-template-columns:1fr 1fr;gap:10px; }

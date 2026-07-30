@@ -19,7 +19,7 @@
         <div class="ft-lnks">
           <router-link to="/articulos">Artículos científicos</router-link>
           <router-link to="/cursos">Cursos en línea</router-link>
-          <router-link to="/galeria">Ediciones anteriores</router-link>
+          <router-link to="/galeria">Galería</router-link>
           <router-link to="/registro">Ser ponente</router-link>
         </div>
       </div>
@@ -50,22 +50,6 @@
       </div>
     </div>
 
-    <div class="ft-mid">
-      <div class="ft-stats">
-        <div class="ft-s"><div class="ft-sn">3,200+</div><div class="ft-sl">Miembros</div></div>
-        <div class="ft-s"><div class="ft-sn">12</div><div class="ft-sl">Estados</div></div>
-        <div class="ft-s"><div class="ft-sn">48</div><div class="ft-sl">Artículos</div></div>
-        <div class="ft-s"><div class="ft-sn">3</div><div class="ft-sl">Congresos</div></div>
-      </div>
-      <div class="ft-award">
-        <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-        <div>
-          <div class="ft-at">Plataforma verificada</div>
-          <div class="ft-as">Comunidad académica de México</div>
-        </div>
-      </div>
-    </div>
-
     <div class="ft-bot">
       <span class="ft-copy">© 2026 FMDS · Federación Mexicana de Desarrolladores de Software · Todos los derechos reservados</span>
       <div class="ft-legal">
@@ -92,16 +76,6 @@
 .ft-ct { display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--w3);font-weight:300;line-height:1.55; }
 .ft-ct svg { width:13px;height:13px;fill:none;stroke:var(--teal);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;margin-top:2px; }
 
-.ft-mid { display:flex;justify-content:space-between;align-items:center;padding:28px 44px;border-bottom:1px solid var(--line3); }
-.ft-stats { display:flex;gap:40px; }
-.ft-s { display:flex;flex-direction:column;gap:4px; }
-.ft-sn { font-family:var(--f);font-size:22px;font-weight:800;color:var(--teal);letter-spacing:-.04em; }
-.ft-sl { font-family:var(--fm);font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--w4); }
-.ft-award { display:flex;align-items:center;gap:12px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:10px;padding:14px 20px; }
-.ft-award svg { width:20px;height:20px;flex-shrink:0; }
-.ft-at { font-size:13px;font-weight:700;color:var(--teal); }
-.ft-as { font-size:11px;color:var(--w4);margin-top:2px; }
-
 .ft-bot { display:flex;justify-content:space-between;align-items:center;padding:18px 44px; }
 .ft-copy { font-size:11px;color:var(--w4); }
 .ft-legal { display:flex;gap:18px; }
@@ -113,8 +87,6 @@
 
 @media (max-width: 968px) {
   .ft-main { grid-template-columns:1fr 1fr;gap:32px;padding:40px 24px 32px; }
-  .ft-mid { flex-direction:column;gap:20px;padding:24px; }
-  .ft-stats { flex-wrap:wrap;gap:24px;justify-content:center; }
   .ft-bot { flex-direction:column;gap:14px;padding:18px 24px;text-align:center; }
 }
 @media (max-width: 520px) {
@@ -126,10 +98,6 @@
   .ft-col { gap:10px; }
   .ft-lnks { gap:7px; }
   .ft-lnks a { font-size:12px; }
-  .ft-mid { padding:18px;gap:14px; }
-  .ft-stats { gap:18px; }
-  .ft-sn { font-size:18px; }
-  .ft-award { padding:10px 16px; }
   .ft-bot { padding:14px 18px;gap:10px; }
 }
 </style>
