@@ -117,7 +117,7 @@
 </div>
 
    <!-- EVENTOS BENTO -->
-<div v-reveal class="sec" style="background:var(--bg);border-top:1px solid var(--line3)">
+<div v-reveal class="sec sup-glow sup-edge" style="background:var(--bg)">
   <div class="s-hd">
     <div>
       <div class="pill"><div class="pill-d"></div><span class="pill-t">Agenda académica</span></div>
@@ -188,7 +188,7 @@
     </div>
 
     <!-- POR QUÉ ASISTIR -->
-    <div v-reveal class="sec pq">
+    <div v-reveal class="sec pq sup-grid sup-edge">
       <div class="s-hd">
         <div>
           <div class="pill"><div class="pill-d"></div><span class="pill-t">La experiencia</span></div>
@@ -264,7 +264,7 @@
     </div>
 
 <!-- SPEAKERS -->
-<div v-reveal class="sec" style="background:var(--bg);border-top:1px solid var(--line3)">
+<div v-reveal class="sec sup-glow sup-glow-r sup-edge" style="background:var(--bg)">
   <div class="s-hd">
     <div>
       <div class="pill"><div class="pill-d"></div><span class="pill-t">Ponentes 2026</span></div>
@@ -276,7 +276,7 @@
   <div v-else class="spk-mag">
     <div class="sm" v-for="(s, i) in otrosSpeakers.slice(0,2)" :key="s.idSpeaker" @click="$router.push('/speakers')">
       <img v-if="s.fotoUrl" :src="s.fotoUrl" :alt="s.nombre" class="sm-foto" />
-      <div v-else class="sm-av" :class="i % 2 === 0 ? 'a' : 'b'">{{ iniciales(s.nombre) }}</div>
+      <div v-else class="sm-av" :style="estiloAvatar(s.nombre)">{{ iniciales(s.nombre) }}</div>
       <div>
         <div class="sm-tag">{{ s.area }}</div>
         <div class="sm-nm">{{ s.nombre }}</div>
@@ -286,7 +286,7 @@
     </div>
     <div class="sm-feat" v-if="speakerFeatured" @click="$router.push('/speakers')">
       <img v-if="speakerFeatured.fotoUrl" :src="speakerFeatured.fotoUrl" :alt="speakerFeatured.nombre" class="sm-fav-foto" />
-      <div v-else class="sm-fav">{{ iniciales(speakerFeatured.nombre) }}</div>
+      <div v-else class="sm-fav" :style="estiloAvatar(speakerFeatured.nombre)">{{ iniciales(speakerFeatured.nombre) }}</div>
       <div>
         <div class="sm-ftag">Keynote principal · CIIS 2026</div>
         <div class="sm-fnm">{{ speakerFeatured.nombre }}</div>
@@ -296,7 +296,7 @@
     </div>
     <div class="sm" v-for="(s, i) in otrosSpeakers.slice(2,4)" :key="s.idSpeaker" @click="$router.push('/speakers')">
       <img v-if="s.fotoUrl" :src="s.fotoUrl" :alt="s.nombre" class="sm-foto" />
-      <div v-else class="sm-av" :class="i % 2 === 0 ? 'a' : 'b'">{{ iniciales(s.nombre) }}</div>
+      <div v-else class="sm-av" :style="estiloAvatar(s.nombre)">{{ iniciales(s.nombre) }}</div>
       <div>
         <div class="sm-tag">{{ s.area }}</div>
         <div class="sm-nm">{{ s.nombre }}</div>
@@ -308,7 +308,7 @@
 </div>
 
 <!-- ARTÍCULOS -->
-<div v-reveal class="sec" style="background:var(--bg2);border-top:1px solid var(--line3)">
+<div v-reveal class="sec sup-grid sup-edge" style="background:var(--bg2)">
   <div class="s-hd">
     <div>
       <div class="pill"><div class="pill-d"></div><span class="pill-t">Repositorio científico</span></div>
@@ -330,7 +330,7 @@
 </div>
 
 <!-- FAQ -->
-<div v-reveal class="sec" style="background:var(--bg);border-top:1px solid var(--line3)">
+<div v-reveal class="sec sup-glow sup-edge" style="background:var(--bg)">
   <div class="s-hd" style="margin-bottom:40px">
     <div>
       <div class="pill"><div class="pill-d"></div><span class="pill-t">FAQ</span></div>
@@ -409,6 +409,7 @@ import api from '../services/api'
 import AppNav from '../components/AppNav.vue'
 import AppFooter from '../components/AppFooter.vue'
 import AnimatedNumber from '../components/AnimatedNumber.vue'
+import { inicialesDe as iniciales, estiloAvatar } from '../utils/avatar'
 
 const eventos = ref([])
 const proximoEvento = ref(null)
@@ -456,11 +457,6 @@ onUnmounted(() => {
   if (countdownTimer) clearInterval(countdownTimer)
 })
 
-const TITULOS = ['dr.', 'dra.', 'mtro.', 'mtra.', 'ing.', 'lic.']
-const iniciales = (nombre) => {
-  const partes = nombre.split(' ').filter(p => !TITULOS.includes(p.toLowerCase()))
-  return partes.slice(0, 2).map(p => p[0]).join('').toUpperCase()
-}
 const speakerFeatured = computed(() => speakers.value.find(s => s.featured))
 const otrosSpeakers = computed(() => speakers.value.filter(s => !s.featured))
 
@@ -574,7 +570,24 @@ const scrollBoletin = () => {
 
 /* HERO */
 .hero { display:grid;grid-template-columns:1fr 380px;min-height:calc(100vh - 60px);background:var(--bg);border-bottom:1px solid var(--line3);position:relative;overflow:hidden; }
-.hero::before { content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 55% at 68% -5%,rgba(45,212,180,.05) 0%,transparent 65%);pointer-events:none; }
+/* Retícula técnica de fondo: da textura a la primera pantalla, que antes era
+   un plano de color liso. Se desvanece hacia abajo y a los lados. */
+.hero::after {
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size:72px 72px;
+  mask-image:radial-gradient(ellipse 75% 65% at 30% 20%, #000 10%, transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse 75% 65% at 30% 20%, #000 10%, transparent 75%);
+}
+/* Dos focos de luz que dan profundidad y guían la mirada hacia el titular */
+.hero::before {
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:
+    radial-gradient(ellipse 55% 60% at 70% -8%, rgba(45,212,180,.10) 0%, transparent 62%),
+    radial-gradient(ellipse 45% 50% at 8% 88%, rgba(45,212,180,.055) 0%, transparent 60%);
+}
 
 .h-l { padding:60px 48px 52px;display:flex;flex-direction:column;justify-content:center;gap:28px;z-index:2; }
 
@@ -584,11 +597,14 @@ const scrollBoletin = () => {
 .h-tag-t { font-family:var(--fm);font-size:9px;font-weight:500;color:var(--teal);letter-spacing:.1em;text-transform:uppercase; }
 
 .h-titles { display:flex;flex-direction:column; }
-.hh1 { font-family:var(--f);font-size:62px;font-weight:800;color:var(--white);line-height:.92;letter-spacing:-.05em; }
-.hh2 { font-family:var(--fs);font-style:italic;font-size:56px;color:var(--teal);line-height:1.05; }
-.hh3 { font-family:var(--f);font-size:62px;font-weight:800;color:var(--white);line-height:.92;letter-spacing:-.05em; }
+/* El titular gana peso y la línea en cursiva recibe un leve resplandor para
+   que sea el punto focal de la primera pantalla. */
+.hh1 { font-family:var(--f);font-size:66px;font-weight:800;color:var(--white);line-height:.9;letter-spacing:-.055em; }
+.hh2 { font-family:var(--fs);font-style:italic;font-size:60px;color:var(--teal);line-height:1.02;text-shadow:0 0 42px rgba(45,212,180,.28); }
+.hh3 { font-family:var(--f);font-size:66px;font-weight:800;color:var(--white);line-height:.9;letter-spacing:-.055em; }
 
-.h-desc { font-size:14px;font-weight:300;color:var(--w3);line-height:1.9;max-width:480px; }
+/* Descripción con mejor contraste y una guía vertical que la ancla al titular */
+.h-desc { font-size:14.5px;font-weight:300;color:var(--w2);line-height:1.85;max-width:470px;padding-left:16px;border-left:2px solid var(--teal-b); }
 .h-desc b { font-weight:700;color:var(--white); }
 
 .h-ctas { display:flex;gap:10px; }
@@ -600,7 +616,7 @@ const scrollBoletin = () => {
 .h-nums { display:flex;gap:0;border-top:1px solid var(--line3);padding-top:28px; }
 .hn { flex:1;padding-right:22px;margin-right:22px;border-right:1px solid var(--line3); }
 .hn:last-child { border:none;margin:0;padding:0; }
-.hn-v { font-family:var(--f);font-size:28px;font-weight:800;color:var(--white);letter-spacing:-.04em;line-height:1; }
+.hn-v { font-family:var(--f);font-size:30px;font-weight:800;color:var(--teal);letter-spacing:-.04em;line-height:1; }
 .hn-v sup { font-size:12px;color:var(--teal); }
 .hn-l { font-size:11px;color:var(--w4);margin-top:5px; }
 
@@ -725,9 +741,8 @@ const scrollBoletin = () => {
 .spk-mag { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
 .sm { background:var(--card);border:1px solid var(--line3);border-radius:14px;padding:28px 24px;display:flex;gap:18px;align-items:flex-start;cursor:pointer;transition:all .18s; }
 .sm:hover { border-color:var(--teal-b);transform:translateY(-2px); }
-.sm-av { width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--f);font-size:14px;font-weight:800;flex-shrink:0; }
-.sm-av.a { background:var(--teal-g);border:1px solid var(--teal-b);color:var(--teal); }
-.sm-av.b { background:rgba(234,179,8,.06);border:1px solid rgba(234,179,8,.18);color:#EAB308; }
+/* El color de cada avatar se calcula a partir del nombre (ver utils/avatar.js) */
+.sm-av { width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--f);font-size:14px;font-weight:800;flex-shrink:0;letter-spacing:.02em; }
 .sm-tag { font-family:var(--fm);font-size:8px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);margin-bottom:6px; }
 .sm-nm { font-size:15px;font-weight:700;color:var(--white);letter-spacing:-.02em;margin-bottom:4px; }
 .sm-rl { font-size:12px;color:var(--w3);font-weight:300;margin-bottom:10px; }

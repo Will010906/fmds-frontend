@@ -3,12 +3,15 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
+  /* Escalón de superficies. Los tonos intermedios se separaron del fondo base
+     para que al hacer scroll se distinga dónde empieza y termina cada sección;
+     antes eran casi idénticos y todo se leía como un solo bloque. */
   --bg:    #06090F;
-  --bg2:   #090E17;
-  --bg3:   #0C1320;
-  --bg4:   #101828;
-  --card:  #0E1520;
-  --card2: #121C2C;
+  --bg2:   #0A1119;
+  --bg3:   #0E1826;
+  --bg4:   #131F30;
+  --card:  #101823;
+  --card2: #141F30;
 
   --teal:  #2DD4B4;
   --teal2: #25B99B;
@@ -60,6 +63,58 @@ html { scroll-behavior: smooth; }
 /* Aparición de secciones al hacer scroll (directiva v-reveal) */
 .reveal { opacity: 0; transform: translateY(26px); transition: opacity .65s cubic-bezier(.22,.61,.36,1), transform .65s cubic-bezier(.22,.61,.36,1); }
 .reveal-visible { opacity: 1; transform: none; }
+
+/* ===========================================================================
+   Tratamientos de superficie
+   ---------------------------------------------------------------------------
+   Utilidades globales para dar profundidad y ritmo a las secciones. Se aplican
+   junto a la clase de la sección, por ejemplo: class="sec sup-glow".
+   Al ser globales (no scoped) funcionan en cualquier vista.
+   =========================================================================== */
+
+/* Luz ambiental teal: sugiere una fuente de luz fuera de cuadro. */
+.sup-glow { position: relative; isolation: isolate; }
+.sup-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse 70% 60% at 15% 0%, rgba(45,212,180,.07) 0%, transparent 60%);
+}
+/* Variante con la luz del lado opuesto, para alternar entre secciones. */
+.sup-glow-r::before {
+  background: radial-gradient(ellipse 70% 60% at 85% 100%, rgba(45,212,180,.06) 0%, transparent 60%);
+}
+
+/* Retícula técnica: textura muy tenue que evita los fondos planos. */
+.sup-grid { position: relative; isolation: isolate; }
+.sup-grid::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);
+  background-size: 64px 64px;
+  /* Se desvanece hacia los bordes para que no se note el corte de la retícula */
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, #000 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, #000 30%, transparent 100%);
+}
+
+/* Filo luminoso superior: marca el inicio de una sección con una línea que se
+   desvanece a los lados, en vez de un borde plano de lado a lado. */
+.sup-edge { position: relative; }
+.sup-edge::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(45,212,180,.35), transparent);
+}
 
 /* Microinteracciones: glow en botones primarios (el prefijo #app gana a los estilos scoped) */
 #app .btn-p, #app .tp-buy, #app .bol-btn, #app .sum-btn,

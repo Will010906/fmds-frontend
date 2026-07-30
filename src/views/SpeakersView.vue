@@ -19,7 +19,7 @@
         <div class="spk-feat" v-if="featured">
           <div class="spk-feat-l">
             <img v-if="featured.fotoUrl" :src="featured.fotoUrl" :alt="featured.nombre" class="spk-foto lg" />
-            <div v-else class="spk-av lg">{{ iniciales(featured.nombre) }}</div>
+            <div v-else class="spk-av lg" :style="estiloAvatar(featured.nombre)">{{ iniciales(featured.nombre) }}</div>
           </div>
           <div class="spk-feat-r">
             <div class="spk-feat-tag">Keynote principal · CIIS 2026</div>
@@ -34,7 +34,7 @@
           <div class="spk-card-bg">
             <div class="spk-area-tag">{{ s.area }}</div>
             <img v-if="s.fotoUrl" :src="s.fotoUrl" :alt="s.nombre" class="spk-foto md" />
-            <div v-else class="spk-av md">{{ iniciales(s.nombre) }}</div>
+            <div v-else class="spk-av md" :style="estiloAvatar(s.nombre)">{{ iniciales(s.nombre) }}</div>
           </div>
           <div class="spk-card-info">
             <div class="spk-nm">{{ s.nombre }}</div>
@@ -60,14 +60,9 @@ import { ref, computed, onMounted } from 'vue'
 import api from '../services/api'
 import AppNav from '../components/AppNav.vue'
 import AppFooter from '../components/AppFooter.vue'
+import { inicialesDe as iniciales, estiloAvatar } from '../utils/avatar'
 
 const speakers = ref([])
-const TITULOS = ['dr.', 'dra.', 'mtro.', 'mtra.', 'ing.', 'lic.']
-
-const iniciales = (nombre) => {
-  const partes = nombre.split(' ').filter(p => !TITULOS.includes(p.toLowerCase()))
-  return partes.slice(0, 2).map(p => p[0]).join('').toUpperCase()
-}
 
 const featured = computed(() => speakers.value.find(s => s.featured))
 const otros = computed(() => speakers.value.filter(s => !s.featured))

@@ -85,7 +85,7 @@
             <div class="ev-spk">
               <div class="ev-sp" v-for="s in speakers.slice(0, 6)" :key="s.idSpeaker">
                 <img v-if="s.fotoUrl" :src="s.fotoUrl" :alt="s.nombre" class="ev-sp-foto" />
-                <div v-else class="ev-sp-ini">{{ iniciales(s.nombre) }}</div>
+                <div v-else class="ev-sp-ini" :style="estiloAvatar(s.nombre)">{{ iniciales(s.nombre) }}</div>
                 <div>
                   <div class="ev-sp-n">{{ s.nombre }}</div>
                   <div class="ev-sp-r">{{ s.rol }}</div>
@@ -140,6 +140,7 @@ import { useRoute } from 'vue-router'
 import api from '../services/api'
 import AppNav from '../components/AppNav.vue'
 import AppFooter from '../components/AppFooter.vue'
+import { inicialesDe as iniciales, estiloAvatar } from '../utils/avatar'
 
 const route = useRoute()
 const evento = ref(null)
@@ -165,10 +166,6 @@ const formatHora = (hora) => {
   const [h, m] = String(hora).split(':')
   return `${parseInt(h)}:${m}`
 }
-const TITULOS = ['dr.', 'dra.', 'mtro.', 'mtra.', 'ing.', 'lic.']
-const iniciales = (nombre) => nombre.split(' ')
-  .filter(p => !TITULOS.includes(p.toLowerCase()))
-  .slice(0, 2).map(p => p[0]).join('').toUpperCase()
 
 // Cuenta regresiva hasta la fecha del evento
 const countdown = ref({ dias: 0, horas: 0, mins: 0, terminado: false })
