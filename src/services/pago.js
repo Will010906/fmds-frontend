@@ -5,10 +5,14 @@ import api from './api'
 // pública) y ejecuta el cargo en el backend. El número de tarjeta nunca pasa
 // por nuestro servidor: solo viaja el token de un solo uso.
 //
+// Se manda qué se compra, no cuánto cuesta: con idPaquete, o bien idEvento más
+// cantidad. El servidor consulta el precio en la base de datos y cobra ese, así
+// que manipular la petición desde el navegador no cambia el importe.
+//
 // tarjeta: { numero, nombre, mes, anio, cvv }
 // Devuelve una promesa que resuelve con la respuesta del checkout,
 // o rechaza con un Error cuyo mensaje ya está listo para mostrarse al usuario.
-export function pagarConTarjeta({ tarjeta, idEvento, cantidad, montoTotal, nombre, correo }) {
+export function pagarConTarjeta({ tarjeta, idEvento, cantidad, idPaquete, nombre, correo }) {
   return new Promise((resolve, reject) => {
     const OpenPay = window.OpenPay
     if (!OpenPay) {
@@ -40,7 +44,7 @@ export function pagarConTarjeta({ tarjeta, idEvento, cantidad, montoTotal, nombr
             deviceSessionId,
             idEvento,
             cantidad,
-            montoTotal,
+            idPaquete,
             nombre,
             correo,
           })

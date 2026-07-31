@@ -120,11 +120,10 @@ const pagar = async () => {
         anio:   form.value.anio,
         cvv:    form.value.cvv,
       },
-      idEvento:   parseInt(route.params.idEvento),
-      cantidad:   form.value.cantidad,
-      montoTotal: parseFloat(total.value),
-      nombre:     comprador.value.nombre,
-      correo:     comprador.value.correo,
+      idEvento: parseInt(route.params.idEvento),
+      cantidad: Number(form.value.cantidad),
+      nombre:   comprador.value.nombre,
+      correo:   comprador.value.correo,
     })
     if (haySesion) {
       mensaje.value = '¡Pago exitoso! Tus boletos han sido reservados.'

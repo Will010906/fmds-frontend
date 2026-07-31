@@ -13,11 +13,11 @@
     <!-- PLANES -->
     <div class="rg-planes">
       <div
-        v-for="(plan, i) in planes"
-        :key="i"
+        v-for="plan in planesIndividuales"
+        :key="plan.i"
         class="plan-card"
-        :class="{ selected: planActivo === i, featured: plan.featured }"
-        @click="planActivo = i"
+        :class="{ selected: planActivo === plan.i, featured: plan.featured }"
+        @click="planActivo = plan.i"
       >
         <div class="plan-badge" v-if="plan.badge" :class="plan.badgeColor">{{ plan.badge }}</div>
         <div class="plan-lbl">{{ plan.label }}</div>
@@ -41,6 +41,48 @@
       </div>
     </div>
 
+    <!-- PAQUETES (solo si la federación cargó alguno para este evento) -->
+    <div class="rg-paq" v-if="planesPaquete.length">
+      <div class="paq-hd">
+        <div class="cmp-title"><strong>¿Vienen</strong> <em>en equipo?</em></div>
+        <p class="paq-sub">Los paquetes incluyen varios accesos en una sola compra y cuestan menos que comprarlos por separado.</p>
+      </div>
+      <div class="paq-grid">
+        <div
+          v-for="(plan, k) in planesPaquete"
+          :key="plan.i"
+          class="paq-card"
+          :class="{ selected: planActivo === plan.i, featured: plan.featured }"
+          @click="planActivo = plan.i"
+        >
+          <div class="paq-badge" v-if="plan.badge">{{ plan.badge }}</div>
+          <div class="paq-lbl">{{ plan.label }}</div>
+          <div class="paq-nm">{{ plan.nombre }}</div>
+
+          <div class="paq-precios">
+            <span class="paq-lista">${{ listaDe(paquetes[k]).toLocaleString('es-MX') }}</span>
+            <span class="paq-ahorro">Ahorras ${{ ahorroDe(paquetes[k]).toLocaleString('es-MX') }}</span>
+          </div>
+          <div class="paq-price">
+            <span class="paq-cur">$</span><span class="paq-num">{{ Number(plan.precio).toLocaleString('es-MX') }}</span>
+            <span class="paq-mxn">MXN</span>
+          </div>
+          <div class="paq-unit">
+            ≈ ${{ porPersonaDe(paquetes[k]).toLocaleString('es-MX') }} por persona · vs {{ paquetes[k].cantidadBoletos }} boletos por separado
+          </div>
+
+          <p class="paq-desc">{{ plan.desc }}</p>
+          <ul class="plan-feats">
+            <li v-for="f in plan.feats" :key="f">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              {{ f }}
+            </li>
+          </ul>
+          <div class="paq-sel">{{ planActivo === plan.i ? '✓ Seleccionado' : 'Elegir este paquete' }}</div>
+        </div>
+      </div>
+    </div>
+
     <!-- TABLA COMPARATIVA -->
     <div class="rg-compara">
       <div class="cmp-title"><strong>Compara los</strong> <em>planes</em></div>
@@ -50,11 +92,11 @@
             <tr>
               <th class="cmp-feat-h">Beneficios</th>
               <th
-                v-for="(plan, i) in planes"
-                :key="i"
+                v-for="plan in planesIndividuales"
+                :key="plan.i"
                 class="cmp-plan-h"
-                :class="{ active: planActivo === i }"
-                @click="planActivo = i"
+                :class="{ active: planActivo === plan.i }"
+                @click="planActivo = plan.i"
               >
                 <div class="cmp-plan">{{ plan.nombre.replace('Acceso ', '') }}</div>
                 <div class="cmp-precio">{{ plan.precio === 'Gratis' ? 'Gratis' : '$' + plan.precio + ' MXN' }}</div>
@@ -193,6 +235,7 @@ import { pagarConTarjeta } from '../services/pago'
 const router = useRouter()
 const planActivo = ref(0)
 const eventoActual = ref(null)
+const paquetes = ref([])
 
 const form = ref({ nombre: '', apellidos: '', correo: '', telefono: '', institucion: '', estado: '' })
 const pago = ref({ numero: '', expiracion: '', cvv: '', nombre: '' })
@@ -213,7 +256,31 @@ const cargarEvento = async () => {
   eventoActual.value = futuros[0] || res.data[0] || null
 }
 
-onMounted(cargarEvento)
+// Paquetes activos del evento. Si la federación no ha cargado ninguno, el
+// arreglo queda vacío y la sección de paquetes simplemente no se muestra.
+const cargarPaquetes = async () => {
+  if (!eventoActual.value) return
+  try {
+    const res = await api.get('/paquetes', { params: { idEvento: eventoActual.value.idEvento } })
+    paquetes.value = res.data
+  } catch {
+    paquetes.value = []
+  }
+}
+
+onMounted(async () => {
+  await cargarEvento()
+  await cargarPaquetes()
+})
+
+// Ahorro de un paquete frente a comprar esos boletos por separado. Los dos
+// números salen de la base de datos, así que no puede quedar desfasado.
+const ahorroDe = (paquete) => {
+  const porSeparado = Number(paquete.precioEvento) * paquete.cantidadBoletos
+  return Math.round(porSeparado - Number(paquete.precio))
+}
+const listaDe = (paquete) => Math.round(Number(paquete.precioEvento) * paquete.cantidadBoletos)
+const porPersonaDe = (paquete) => Math.round(Number(paquete.precio) / paquete.cantidadBoletos)
 
 // El precio sale del evento: es el mismo que se le cobra a la tarjeta.
 const precioEvento = computed(() => {
@@ -244,7 +311,35 @@ const planes = computed(() => [
     feats: ['Acceso completo al evento', 'Espacio de presentación propio', 'Constancia de ponente'],
     featured: false,
   },
+  // Los paquetes cargados por la federación se suman como opciones más. Al
+  // llevar idPaquete, el cobro se resuelve por paquete y no por boleto suelto.
+  ...paquetes.value.map((p) => ({
+    idPaquete: p.idPaquete,
+    label: `${p.cantidadBoletos} entradas`,
+    badge: p.destacado ? 'Más elegido' : null, badgeColor: 'green',
+    precio: String(Math.round(Number(p.precio))),
+    nombre: p.nombre,
+    desc: p.descripcion || `Incluye ${p.cantidadBoletos} accesos al congreso en una sola compra.`,
+    sumDesc: `${p.cantidadBoletos} accesos al congreso`,
+    feats: [
+      `${p.cantidadBoletos} accesos al congreso`,
+      `Ahorras $${ahorroDe(p)} frente a comprarlos por separado`,
+      'Constancia de participación para cada asistente',
+      'Boleto con folio en "Mis boletos"',
+    ],
+    featured: !!p.destacado,
+  })),
 ])
+
+// Las dos formas individuales de entrar y los paquetes se muestran por
+// separado, pero comparten el mismo índice de selección para que el resumen y
+// el cobro funcionen igual con cualquiera.
+const planesIndividuales = computed(() =>
+  planes.value.map((p, i) => ({ ...p, i })).filter((p) => !p.idPaquete)
+)
+const planesPaquete = computed(() =>
+  planes.value.map((p, i) => ({ ...p, i })).filter((p) => p.idPaquete)
+)
 
 // Filas de la tabla comparativa: valores por plan [General, Ponente]
 const comparativa = [
@@ -281,9 +376,9 @@ const confirmar = async () => {
   try {
     await pagarConTarjeta({
       tarjeta: { numero: pago.value.numero, nombre: pago.value.nombre, mes, anio, cvv: pago.value.cvv },
-      idEvento: eventoActual.value.idEvento,
-      cantidad: 1,
-      montoTotal: precioEvento.value,
+      idEvento:  plan.idPaquete ? undefined : eventoActual.value.idEvento,
+      cantidad:  plan.idPaquete ? undefined : 1,
+      idPaquete: plan.idPaquete,
       nombre: `${form.value.nombre} ${form.value.apellidos}`.trim(),
       correo: form.value.correo,
     })
@@ -317,6 +412,30 @@ const confirmar = async () => {
 
 /* PLANES */
 .rg-planes { display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:48px 44px;border-bottom:1px solid var(--line3);max-width:900px;margin:0 auto; }
+
+/* PAQUETES */
+.rg-paq { padding:48px 44px;border-bottom:1px solid var(--line3);background:var(--bg2); }
+.paq-hd { text-align:center;margin-bottom:32px; }
+.paq-sub { font-size:13px;color:var(--w3);font-weight:300;max-width:520px;margin:10px auto 0;line-height:1.7; }
+.paq-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;max-width:900px;margin:0 auto; }
+.paq-card { position:relative;background:var(--card);border:1px solid var(--line3);border-radius:16px;padding:28px 24px;cursor:pointer;transition:all .18s;display:flex;flex-direction:column; }
+.paq-card:hover { border-color:var(--teal-b); }
+.paq-card.featured { border-color:var(--teal-b);background:var(--bg3); }
+.paq-card.selected { border-color:var(--teal);background:var(--bg3); }
+.paq-badge { position:absolute;top:-11px;right:20px;background:var(--teal);color:var(--bg);font-family:var(--fm);font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:100px; }
+.paq-lbl { font-family:var(--fm);font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:8px; }
+.paq-nm { font-size:20px;font-weight:800;color:var(--white);letter-spacing:-.03em;margin-bottom:14px; }
+.paq-precios { display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px; }
+.paq-lista { font-size:13px;color:var(--w4);text-decoration:line-through; }
+.paq-ahorro { background:var(--teal-g);border:1px solid var(--teal-b);color:var(--teal);font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px; }
+.paq-price { display:flex;align-items:baseline;gap:3px;margin-bottom:6px; }
+.paq-cur { font-size:20px;font-weight:700;color:var(--white); }
+.paq-num { font-size:40px;font-weight:800;color:var(--white);letter-spacing:-.05em;line-height:1; }
+.paq-mxn { font-size:12px;color:var(--w4);margin-left:4px; }
+.paq-unit { font-size:11px;color:var(--w4);margin-bottom:16px;line-height:1.5; }
+.paq-desc { font-size:12px;color:var(--w3);font-weight:300;line-height:1.7;margin-bottom:14px; }
+.paq-sel { margin-top:auto;text-align:center;font-size:12px;font-weight:600;padding:11px;border-radius:9px;border:1px solid var(--teal-b);background:var(--teal-g);color:var(--teal); }
+.paq-card.selected .paq-sel { background:var(--teal);color:var(--bg);border-color:var(--teal); }
 .plan-card { background:var(--card);border:1px solid var(--line3);border-radius:16px;padding:28px 24px;cursor:pointer;transition:all .18s;position:relative;display:flex;flex-direction:column;gap:10px; }
 .plan-card:hover { border-color:var(--teal-b); }
 .plan-card.selected { border-color:var(--teal);background:var(--bg3); }
@@ -409,6 +528,9 @@ const confirmar = async () => {
   .rg-title { font-size:36px; }
 
   .rg-planes { grid-template-columns:1fr;padding:32px 20px;gap:14px; }
+  .rg-paq { padding:32px 20px; }
+  .paq-grid { grid-template-columns:1fr;gap:20px; }
+  .paq-num { font-size:34px; }
   .rg-body { grid-template-columns:1fr;padding:32px 20px 56px; }
   .rg-summary { position:static; }
   .rg-compara { padding:32px 20px; }

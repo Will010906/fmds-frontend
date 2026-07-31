@@ -18,6 +18,7 @@
         <button class="admin-tab" :class="{ active: tab === 'speakers' }" @click="cambiarTab('speakers')">Speakers</button>
         <button class="admin-tab" :class="{ active: tab === 'agenda' }" @click="cambiarTab('agenda')">Agenda</button>
         <button class="admin-tab" :class="{ active: tab === 'cursos' }" @click="cambiarTab('cursos')">Cursos</button>
+        <button class="admin-tab" :class="{ active: tab === 'paquetes' }" @click="cambiarTab('paquetes')">Paquetes</button>
         <button class="admin-tab" :class="{ active: tab === 'ventas' }" @click="cambiarTab('ventas')">Ventas</button>
         <button class="admin-tab" :class="{ active: tab === 'usuarios' }" @click="cambiarTab('usuarios')">Usuarios</button>
         <button class="admin-tab" :class="{ active: tab === 'boletin' }" @click="cambiarTab('boletin')">Boletín</button>
@@ -388,6 +389,97 @@
         </div>
       </template>
 
+      <!-- ═══ PAQUETES ═══ -->
+      <template v-if="tab === 'paquetes'">
+        <div class="admin-header">
+          <div>
+            <h1 class="admin-title">Gestión de Paquetes</h1>
+            <p class="admin-sub">{{ paquetes.length }} paquete{{ paquetes.length !== 1 ? 's' : '' }} · el ahorro se calcula solo contra el precio del evento</p>
+          </div>
+          <button @click="toggleFormulario" class="btn-primary">
+            {{ mostrarFormulario ? '✕ Cancelar' : '+ Nuevo Paquete' }}
+          </button>
+        </div>
+
+        <div v-if="mostrarFormulario" class="form-card">
+          <h3 class="form-title">{{ editandoId ? 'Editar Paquete' : 'Nuevo Paquete' }}</h3>
+          <div class="form-grid">
+            <div class="field full">
+              <label class="field-label">Evento</label>
+              <select v-model="formPaquete.idEvento" class="field-input">
+                <option value="">Selecciona un evento</option>
+                <option v-for="e in eventos" :key="e.idEvento" :value="e.idEvento">
+                  {{ e.titulo }} — ${{ Math.round(e.precio) }} por boleto
+                </option>
+              </select>
+            </div>
+            <div class="field full">
+              <label class="field-label">Nombre del paquete</label>
+              <input v-model="formPaquete.nombre" type="text" placeholder="Paquete Dúo" class="field-input" />
+            </div>
+            <div class="field full">
+              <label class="field-label">Descripción (opcional)</label>
+              <textarea v-model="formPaquete.descripcion" rows="2" placeholder="Ideal para venir acompañado" class="field-input"></textarea>
+            </div>
+            <div class="field">
+              <label class="field-label">Boletos incluidos</label>
+              <input v-model="formPaquete.cantidadBoletos" type="number" min="2" placeholder="2" class="field-input" />
+            </div>
+            <div class="field">
+              <label class="field-label">Precio total del paquete (MXN)</label>
+              <input v-model="formPaquete.precio" type="number" min="1" placeholder="600" class="field-input" />
+            </div>
+            <div class="field">
+              <label class="field-label">Destacado</label>
+              <select v-model="formPaquete.destacado" class="field-input">
+                <option :value="false">No</option>
+                <option :value="true">Sí — mostrar "Más elegido"</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="field-label">Visible en la página</label>
+              <select v-model="formPaquete.activo" class="field-input">
+                <option :value="true">Sí</option>
+                <option :value="false">No — ocultar sin borrar</option>
+              </select>
+            </div>
+          </div>
+          <p v-if="vistaPreviaPaquete" class="admin-sub" style="margin-bottom:14px">
+            {{ vistaPreviaPaquete }}
+          </p>
+          <p v-if="errorPaquete" class="admin-sub" style="color:#F87171;margin-bottom:14px">{{ errorPaquete }}</p>
+          <button @click="guardarPaquete" class="btn-primary">{{ editandoId ? 'Guardar cambios' : 'Guardar Paquete' }}</button>
+        </div>
+
+        <div class="table-card">
+          <table class="table" style="min-width:760px">
+            <thead>
+              <tr><th>Paquete</th><th>Evento</th><th>Boletos</th><th>Por separado</th><th>Precio</th><th>Ahorro</th><th>Estado</th><th>Acciones</th></tr>
+            </thead>
+            <tbody>
+              <tr v-if="paquetes.length === 0"><td colspan="8" class="empty">No hay paquetes registrados</td></tr>
+              <tr v-for="p in paquetes" :key="p.idPaquete">
+                <td class="td-title">{{ p.nombre }}</td>
+                <td class="td-muted">{{ p.tituloEvento }}</td>
+                <td class="td-muted">{{ p.cantidadBoletos }}</td>
+                <td class="td-muted">${{ listaPaquete(p) }}</td>
+                <td class="td-teal">${{ Math.round(p.precio) }}</td>
+                <td class="td-teal">${{ ahorroPaquete(p) }}</td>
+                <td>
+                  <span v-if="!p.activo" class="stock-badge">Oculto</span>
+                  <span v-else-if="p.destacado" class="stock-badge featured">Destacado</span>
+                  <span v-else class="td-muted">Visible</span>
+                </td>
+                <td class="td-actions">
+                  <button @click="editarPaquete(p)" class="btn-edit">Editar</button>
+                  <button @click="eliminarPaquete(p.idPaquete)" class="btn-danger">Eliminar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </template>
+
       <!-- ═══ BOLETÍN ═══ -->
       <template v-if="tab === 'boletin'">
         <div class="admin-header">
@@ -526,6 +618,7 @@ const ventas = ref([])
 const usuarios = ref([])
 const suscriptores = ref([])
 const mensajes = ref([])
+const paquetes = ref([])
 
 const totalVentas = computed(() =>
   ventas.value.reduce((suma, v) => suma + Number(v.montoTotal), 0).toLocaleString('en-US')
@@ -542,8 +635,11 @@ const formArticulo = ref({ titulo: '', cuerpo: '', autor: '', categoria: '', fec
 const formSpeaker = ref({ nombre: '', rol: '', area: '', tema: '', frase: '', featured: false, fotoUrl: '' })
 const formSesion = ref({ dia: 1, hora: '', duracion: '', tipo: '', nombre: '', ponente: '', badge: 'Keynote' })
 const formCurso = ref({ nombre: '', descripcion: '', horas: '', nivel: '', precio: '', badge: '' })
+const formPaquete = ref({ idEvento: '', nombre: '', descripcion: '', cantidadBoletos: '', precio: '', destacado: false, activo: true })
+const errorPaquete = ref('')
 
 const cambiarTab = (nuevoTab) => {
+  errorPaquete.value = ''
   tab.value = nuevoTab
   mostrarFormulario.value = false
   editandoId.value = null
@@ -561,6 +657,8 @@ const resetFormularioActivo = () => {
   formSpeaker.value = { nombre: '', rol: '', area: '', tema: '', frase: '', featured: false, fotoUrl: '' }
   formSesion.value = { dia: 1, hora: '', duracion: '', tipo: '', nombre: '', ponente: '', badge: 'Keynote' }
   formCurso.value = { nombre: '', descripcion: '', horas: '', nivel: '', precio: '', badge: '' }
+  formPaquete.value = { idEvento: '', nombre: '', descripcion: '', cantidadBoletos: '', precio: '', destacado: false, activo: true }
+  errorPaquete.value = ''
 }
 
 // timeZone:'UTC' evita que la fecha del evento se muestre un día antes en México
@@ -743,6 +841,73 @@ const eliminarCurso = async (id) => {
   cargarCursos()
 }
 
+// ── PAQUETES ──
+// El ahorro y el precio de lista se calculan a partir del precio del evento
+// que devuelve la API; no se guardan en la tabla para que no queden desfasados.
+const listaPaquete = (p) => Math.round(Number(p.precioEvento) * p.cantidadBoletos)
+const ahorroPaquete = (p) => Math.round(listaPaquete(p) - Number(p.precio))
+
+// Vista previa mientras se llena el formulario, para que quien administre vea
+// el ahorro antes de guardar y note si puso un precio sin descuento.
+const vistaPreviaPaquete = computed(() => {
+  const evento = eventos.value.find((e) => e.idEvento === Number(formPaquete.value.idEvento))
+  const cantidad = Number(formPaquete.value.cantidadBoletos)
+  const precio = Number(formPaquete.value.precio)
+  if (!evento || !cantidad || !precio) return ''
+
+  const lista = Math.round(Number(evento.precio) * cantidad)
+  const ahorro = lista - Math.round(precio)
+  if (ahorro <= 0) {
+    return `Por separado esos ${cantidad} boletos cuestan $${lista}. Con este precio el paquete no ofrece ahorro.`
+  }
+  return `Por separado: $${lista} · Con el paquete: $${Math.round(precio)} · Ahorro: $${ahorro} (≈ $${Math.round(precio / cantidad)} por persona)`
+})
+
+const cargarPaquetes = async () => {
+  try {
+    const res = await api.get('/paquetes')
+    paquetes.value = res.data
+  } catch (err) {
+    paquetes.value = []
+  }
+}
+const guardarPaquete = async () => {
+  errorPaquete.value = ''
+  try {
+    if (editandoId.value) {
+      await api.put(`/paquetes/${editandoId.value}`, formPaquete.value)
+    } else {
+      await api.post('/paquetes', formPaquete.value)
+    }
+    mostrarFormulario.value = false
+    editandoId.value = null
+    resetFormularioActivo()
+    cargarPaquetes()
+  } catch (err) {
+    // El servidor valida que el paquete cueste menos que comprar por separado
+    errorPaquete.value = err.response?.data?.error || 'No se pudo guardar el paquete'
+  }
+}
+const editarPaquete = (p) => {
+  editandoId.value = p.idPaquete
+  formPaquete.value = {
+    idEvento: p.idEvento,
+    nombre: p.nombre,
+    descripcion: p.descripcion || '',
+    cantidadBoletos: p.cantidadBoletos,
+    precio: Math.round(Number(p.precio)),
+    destacado: !!p.destacado,
+    activo: !!p.activo,
+  }
+  errorPaquete.value = ''
+  mostrarFormulario.value = true
+}
+const eliminarPaquete = async (id) => {
+  if (!confirm('¿Eliminar este paquete?')) return
+  await api.delete(`/paquetes/${id}`)
+  cargarPaquetes()
+}
+
 // ── BOLETÍN ──
 const cargarSuscriptores = async () => {
   try {
@@ -821,6 +986,7 @@ onMounted(() => {
   cargarUsuarios()
   cargarSuscriptores()
   cargarMensajes()
+  cargarPaquetes()
 })
 </script>
 
