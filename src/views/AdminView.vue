@@ -563,8 +563,9 @@ const resetFormularioActivo = () => {
   formCurso.value = { nombre: '', descripcion: '', horas: '', nivel: '', precio: '', badge: '' }
 }
 
+// timeZone:'UTC' evita que la fecha del evento se muestre un día antes en México
 const formatFecha = (fecha) => {
-  return new Date(fecha).toLocaleDateString('es-MX', { year: 'numeric', month: 'short', day: 'numeric' })
+  return new Date(fecha).toLocaleDateString('es-MX', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })
 }
 
 // ── EVENTOS ──

@@ -26,8 +26,8 @@
           <span class="plan-num" :class="{ teal: plan.precio === 'Gratis' }">{{ plan.precio }}</span>
           <span class="plan-per" v-if="plan.precio !== 'Gratis'">MXN</span>
         </div>
-        <div class="plan-save" v-if="plan.precio !== 'Gratis'">
-          Hoy pagas <strong>${{ parseInt(plan.precio) - 100 }}</strong> con descuento anticipado · ≈ ${{ Math.round((parseInt(plan.precio) - 100) / 3) }} por día
+        <div class="plan-save" v-if="plan.precio !== 'Gratis' && eventoActual">
+          Boleto para <strong>{{ eventoActual.titulo }}</strong> · {{ formatFecha(eventoActual.fecha) }}
         </div>
         <div class="plan-name">{{ plan.nombre }}</div>
         <div class="plan-desc">{{ plan.desc }}</div>
@@ -161,11 +161,12 @@
         </div>
         <div class="sum-lines">
           <div class="sum-line"><span>Subtotal</span><span>{{ planes[planActivo].precio === 'Gratis' ? 'Gratis' : '$' + planes[planActivo].precio + ' MXN' }}</span></div>
-          <div class="sum-line teal"><span>Descuento anticipado</span><span>-$100 MXN</span></div>
           <div class="sum-line"><span>Cargo por servicio</span><span>$0 MXN</span></div>
-          <div class="sum-line total"><span>Total</span><span :class="{ teal: planes[planActivo].precio === 'Gratis' }">{{ planes[planActivo].precio === 'Gratis' ? 'Gratis' : '$' + (parseInt(planes[planActivo].precio) - 100) + ' MXN' }}</span></div>
+          <div class="sum-line total"><span>Total</span><span :class="{ teal: planes[planActivo].precio === 'Gratis' }">{{ planes[planActivo].precio === 'Gratis' ? 'Gratis' : '$' + planes[planActivo].precio + ' MXN' }}</span></div>
         </div>
-        <button class="sum-btn" @click="confirmar" :disabled="!eventoActual">Confirmar y pagar →</button>
+        <button class="sum-btn" @click="confirmar" :disabled="!eventoActual">
+          {{ planes[planActivo].precio === 'Gratis' ? 'Enviar mi propuesta →' : 'Confirmar y pagar →' }}
+        </button>
         <p class="sum-secure">🔒 Pago 100% seguro · con Openpay</p>
         <div class="sum-incl">
           <div class="sum-incl-t">Incluye en tu plan</div>
@@ -183,87 +184,88 @@
 
 <script setup>
 import api from '../services/api'
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import AppNav from '../components/AppNav.vue'
 import AppFooter from '../components/AppFooter.vue'
 import { pagarConTarjeta } from '../services/pago'
 
 const router = useRouter()
-const planActivo = ref(2)
+const planActivo = ref(0)
 const eventoActual = ref(null)
 
 const form = ref({ nombre: '', apellidos: '', correo: '', telefono: '', institucion: '', estado: '' })
 const pago = ref({ numero: '', expiracion: '', cvv: '', nombre: '' })
 
+// timeZone:'UTC' evita que la fecha del evento se muestre un día antes en México
 const formatFecha = (fecha) => {
   return new Date(fecha).toLocaleDateString('es-MX', {
-    year: 'numeric', month: 'long', day: 'numeric'
+    year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'
   })
 }
 
+// Se registra al evento más próximo que todavía no ocurre. Si ya pasaron todos,
+// se toma el primero de la lista para no dejar la página sin contexto.
 const cargarEvento = async () => {
   const res = await api.get('/eventos')
-  eventoActual.value = res.data[0] || null
+  const ahora = Date.now()
+  const futuros = res.data.filter((e) => new Date(e.fecha).getTime() >= ahora)
+  eventoActual.value = futuros[0] || res.data[0] || null
 }
 
 onMounted(cargarEvento)
 
-const planes = [
+// El precio sale del evento: es el mismo que se le cobra a la tarjeta.
+const precioEvento = computed(() => {
+  if (!eventoActual.value) return null
+  return Math.round(Number(eventoActual.value.precio))
+})
+
+// Solo hay dos formas reales de entrar: comprando el boleto o presentando una
+// ponencia aprobada. El acceso de ponente no se cobra aquí, se solicita.
+const planes = computed(() => [
   {
-    label: 'Precio anticipado',
-    badge: 'Más elegido', badgeColor: 'green',
-    precio: '500',
-    nombre: 'Acceso Estudiante',
-    desc: 'Para estudiantes con credencial vigente de cualquier institución educativa.',
-    sumDesc: 'Acceso completo + grabaciones',
-    feats: ['Todas las sesiones plenarias', 'Grabaciones por 30 días', 'Certificado digital FMDS', 'Acceso a comunidad', 'Workshops premium'],
-    featured: false,
-  },
-  {
-    label: 'Precio general',
-    badge: 'Completo', badgeColor: 'orange',
-    precio: '1200',
+    label: 'Acceso al congreso',
+    badge: 'Disponible', badgeColor: 'green',
+    precio: precioEvento.value === null ? '—' : String(precioEvento.value),
     nombre: 'Acceso General',
-    desc: 'Para profesionales, docentes e investigadores que quieren el acceso completo.',
-    sumDesc: 'Acceso completo + slot + publicación',
-    feats: ['Todas las sesiones plenarias', 'Grabaciones por 30 días', 'Certificado digital FMDS', 'Acceso a comunidad', 'Workshops premium'],
-    featured: false,
+    desc: 'Para estudiantes, profesionales, docentes e investigadores. Es el boleto que se compra en línea.',
+    sumDesc: 'Acceso completo a las sesiones',
+    feats: ['Todas las sesiones del programa', 'Talleres del congreso', 'Constancia de participación', 'Boleto con folio en "Mis boletos"'],
+    featured: true,
   },
   {
     label: 'Requiere aprobación',
     badge: null,
     precio: 'Gratis',
     nombre: 'Acceso Ponente',
-    desc: 'Para investigadores con propuesta de ponencia aprobada por el comité académico.',
-    sumDesc: 'Acceso completo + slot + publicación',
-    feats: ['Acceso completo al evento', 'Slot de presentación propio', 'Certificado de ponente', 'Publicación en repositorio', 'Workshops premium'],
-    featured: true,
+    desc: 'Para quienes presenten una ponencia aprobada por el comité académico.',
+    sumDesc: 'Acceso completo y espacio de presentación',
+    feats: ['Acceso completo al evento', 'Espacio de presentación propio', 'Constancia de ponente'],
+    featured: false,
   },
-]
+])
 
-// Filas de la tabla comparativa: valores por plan [Estudiante, General, Ponente]
+// Filas de la tabla comparativa: valores por plan [General, Ponente]
 const comparativa = [
-  { nombre: 'Sesiones plenarias los 3 días', valores: [true, true, true] },
-  { nombre: 'Talleres y workshops premium', valores: [true, true, true] },
-  { nombre: 'Cursos en línea de la edición', valores: [true, true, true] },
-  { nombre: 'Grabaciones por 30 días', valores: [true, true, true] },
-  { nombre: 'Certificado digital', valores: ['FMDS', 'FMDS', 'De ponente'] },
-  { nombre: 'Acceso a comunidad FMDS', valores: [true, true, true] },
-  { nombre: 'Slot de presentación propio', valores: [false, false, true] },
-  { nombre: 'Publicación en repositorio', valores: [false, false, true] },
+  { nombre: 'Todas las sesiones del programa', valores: [true, true] },
+  { nombre: 'Talleres del congreso', valores: [true, true] },
+  { nombre: 'Constancia', valores: ['De asistente', 'De ponente'] },
+  { nombre: 'Espacio de presentación propio', valores: [false, true] },
+  { nombre: 'Se compra en línea', valores: [true, false] },
 ]
 
 const confirmar = async () => {
-  const plan = planes[planActivo.value]
+  const plan = planes.value[planActivo.value]
 
   if (!eventoActual.value) {
     alert('No hay ningún evento disponible para registrarte en este momento.')
     return
   }
 
+  // El acceso de ponente no se cobra: se solicita por el formulario de contacto.
   if (plan.precio === 'Gratis') {
-    alert('Solicitud de ponente enviada. Te contactaremos pronto.')
+    router.push({ name: 'nosotros', query: { asunto: 'Propuesta de ponencia' }, hash: '#contacto' })
     return
   }
 
@@ -281,7 +283,7 @@ const confirmar = async () => {
       tarjeta: { numero: pago.value.numero, nombre: pago.value.nombre, mes, anio, cvv: pago.value.cvv },
       idEvento: eventoActual.value.idEvento,
       cantidad: 1,
-      montoTotal: parseInt(plan.precio) - 100, // descuento anticipado
+      montoTotal: precioEvento.value,
       nombre: `${form.value.nombre} ${form.value.apellidos}`.trim(),
       correo: form.value.correo,
     })
@@ -314,7 +316,7 @@ const confirmar = async () => {
 .rg-sub { font-size:14px;color:var(--w3);font-weight:300;max-width:480px;line-height:1.7; }
 
 /* PLANES */
-.rg-planes { display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;padding:48px 44px;border-bottom:1px solid var(--line3); }
+.rg-planes { display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:48px 44px;border-bottom:1px solid var(--line3);max-width:900px;margin:0 auto; }
 .plan-card { background:var(--card);border:1px solid var(--line3);border-radius:16px;padding:28px 24px;cursor:pointer;transition:all .18s;position:relative;display:flex;flex-direction:column;gap:10px; }
 .plan-card:hover { border-color:var(--teal-b); }
 .plan-card.selected { border-color:var(--teal);background:var(--bg3); }

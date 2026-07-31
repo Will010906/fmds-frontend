@@ -19,8 +19,8 @@
         <div class="gs-ttl">La primera edición está por venir</div>
         <p class="gs-txt">
           La Federación Mexicana de Desarrolladores de Software es una organización de reciente creación.
-          En cuanto se celebre nuestro primer congreso, esta sección reunirá la galería fotográfica, las
-          memorias de las ponencias y los resultados del hackathon.
+          En cuanto se celebre nuestro primer congreso, esta sección reunirá la galería fotográfica
+          y las memorias de las ponencias.
         </p>
 
         <!-- Próximo evento real -->

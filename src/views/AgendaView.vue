@@ -5,9 +5,9 @@
 
     <!-- HERO -->
     <div class="ag-hero">
-      <div class="pill"><div class="pill-d"></div><span class="pill-t">CIIS 2026 · Programa oficial</span></div>
+      <div class="pill"><div class="pill-d"></div><span class="pill-t">Programa oficial</span></div>
       <h1 class="ag-title"><strong>Agenda</strong> <em>del congreso</em></h1>
-      <p class="ag-sub">3 días · 24 sesiones · 8 talleres técnicos · Networking y feria de proyectos estudiantiles.</p>
+      <p class="ag-sub">{{ resumen }}</p>
     </div>
 
     <!-- TABS -->
@@ -86,6 +86,21 @@ const diasDisponibles = computed(() =>
 const sesionesDelDia = computed(() =>
   sesiones.value.filter(s => s.dia === diaActivo.value)
 )
+
+// Resumen del encabezado calculado desde la agenda real, para que nunca
+// prometa más sesiones o talleres de los que están efectivamente cargados.
+const resumen = computed(() => {
+  if (sesiones.value.length === 0) return 'El programa se publicará conforme se confirmen las sesiones.'
+  const dias = diasDisponibles.value.length
+  const total = sesiones.value.length
+  const talleres = sesiones.value.filter(s => /workshop|taller/i.test(s.tipo || '')).length
+  const partes = [
+    `${dias} ${dias === 1 ? 'día' : 'días'}`,
+    `${total} ${total === 1 ? 'sesión' : 'sesiones'}`,
+  ]
+  if (talleres > 0) partes.push(`${talleres} ${talleres === 1 ? 'taller práctico' : 'talleres prácticos'}`)
+  return partes.join(' · ')
+})
 
 const cargarSesiones = async () => {
   const res = await api.get('/sesiones')

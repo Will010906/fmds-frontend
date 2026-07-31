@@ -23,8 +23,8 @@
           <p class="ns-p">
             La FMDS nace para llenar el vacío de una comunidad académica neutral en México: sin
             patrocinios que comprometan la objetividad, sin barreras de acceso y con estándares de
-            rigor internacional. Organizamos congresos, publicamos artículos con revisión por pares
-            y ofrecemos cursos de actualización abiertos a todo el país.
+            rigor internacional. Organizamos congresos y publicamos artículos con revisión por
+            pares, abiertos a la comunidad de todo el país.
           </p>
         </div>
         <div class="ns-vals">
@@ -42,7 +42,7 @@
     <!-- QUÉ HACEMOS -->
     <section class="ns-sec alt">
       <div class="ns-lbl">Qué hacemos</div>
-      <h2 class="ns-h2 c">Tres frentes de trabajo</h2>
+      <h2 class="ns-h2 c">Nuestros frentes de trabajo</h2>
       <div class="ns-cards">
         <router-link to="/eventos" class="ns-card">
           <div class="ns-card-t">Congresos</div>
@@ -54,10 +54,10 @@
           <p class="ns-card-d">Repositorio abierto de artículos con revisión por pares, sin vínculos comerciales ni sesgos institucionales.</p>
           <span class="ns-card-l">Leer artículos →</span>
         </router-link>
-        <router-link to="/cursos" class="ns-card">
-          <div class="ns-card-t">Formación continua</div>
-          <p class="ns-card-d">Cursos técnicos en línea para que profesionales y estudiantes mantengan sus habilidades al día.</p>
-          <span class="ns-card-l">Ver cursos →</span>
+        <router-link to="/speakers" class="ns-card">
+          <div class="ns-card-t">Red de ponentes</div>
+          <p class="ns-card-d">Investigadores y profesionales que comparten su trabajo con la comunidad en cada edición del congreso.</p>
+          <span class="ns-card-l">Ver ponentes →</span>
         </router-link>
       </div>
     </section>
@@ -69,8 +69,8 @@
           <div class="ns-lbl">Contacto</div>
           <h2 class="ns-h2">Escríbenos</h2>
           <p class="ns-p">
-            ¿Quieres presentar una ponencia, publicar un artículo, participar en el hackathon o
-            proponer una alianza? Cuéntanos y te respondemos al correo que nos dejes.
+            ¿Quieres presentar una ponencia, publicar un artículo o proponer una alianza?
+            Cuéntanos y te respondemos al correo que nos dejes.
           </p>
           <div class="ns-datos">
             <div class="ns-dato">
@@ -150,7 +150,6 @@ const asuntos = [
   'Consulta general',
   'Propuesta de ponencia',
   'Publicar artículo',
-  'Hackathon',
   'Alianzas y patrocinios',
 ]
 
@@ -159,7 +158,7 @@ const enviando = ref(false)
 const enviado = ref(false)
 const error = ref('')
 
-// Los botones del sitio (ser ponente, publicar artículo, hackathon) llegan aquí
+// Los botones del sitio (ser ponente, publicar artículo, alianzas) llegan aquí
 // con el asunto ya elegido mediante ?asunto=
 onMounted(() => {
   const a = route.query.asunto

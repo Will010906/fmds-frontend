@@ -16,10 +16,6 @@
             <div class="da-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
             <div><div class="da-t">Todos los eventos</div><div class="da-s">Congresos, simposios y summits</div></div>
           </router-link>
-          <router-link to="/eventos" class="da">
-            <div class="da-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
-            <div><div class="da-t">Hackathon FMDS</div><div class="da-s">Reto de desarrollo del congreso</div></div>
-          </router-link>
           <div class="dsep"></div>
           <div class="dl">Programa</div>
           <router-link to="/agenda" class="da">
@@ -34,7 +30,7 @@
       </div>
 
       <div class="ni">
-        <button class="nbn" :class="{ active: ['articulos','cursos','galeria'].includes(route.name) }">
+        <button class="nbn" :class="{ active: ['articulos','galeria'].includes(route.name) }">
           Conocimiento
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
@@ -42,10 +38,6 @@
           <router-link to="/articulos" class="da">
             <div class="da-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
             <div><div class="da-t">Artículos científicos</div><div class="da-s">Publicaciones con revisión por pares</div></div>
-          </router-link>
-          <router-link to="/cursos" class="da">
-            <div class="da-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
-            <div><div class="da-t">Cursos de actualización</div><div class="da-s">Formación técnica en línea</div></div>
           </router-link>
           <div class="dsep"></div>
           <router-link to="/galeria" class="da">
@@ -124,7 +116,6 @@
     <router-link to="/agenda" class="nbn" @click="mobileOpen = false">Agenda</router-link>
     <router-link to="/speakers" class="nbn" @click="mobileOpen = false">Speakers</router-link>
     <router-link to="/articulos" class="nbn" @click="mobileOpen = false">Artículos</router-link>
-    <router-link to="/cursos" class="nbn" @click="mobileOpen = false">Cursos</router-link>
     <router-link to="/galeria" class="nbn" @click="mobileOpen = false">Galería</router-link>
     <router-link to="/nosotros" class="nbn" @click="mobileOpen = false">Nosotros</router-link>
     <router-link to="/registro" class="nbn" @click="mobileOpen = false">Registro & Pago</router-link>

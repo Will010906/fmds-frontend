@@ -11,14 +11,12 @@
           <router-link to="/eventos">Congresos 2026</router-link>
           <router-link to="/agenda">Agenda completa</router-link>
           <router-link to="/speakers">Speakers</router-link>
-          <router-link to="/registro">Hackathon FMDS</router-link>
         </div>
       </div>
       <div class="ft-col">
         <div class="ft-lbl">Conocimiento</div>
         <div class="ft-lnks">
           <router-link to="/articulos">Artículos científicos</router-link>
-          <router-link to="/cursos">Cursos en línea</router-link>
           <router-link to="/galeria">Galería</router-link>
           <router-link :to="{ name: 'nosotros', query: { asunto: 'Propuesta de ponencia' }, hash: '#contacto' }">Ser ponente</router-link>
         </div>

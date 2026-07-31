@@ -22,7 +22,7 @@
             <div v-else class="spk-av lg" :style="estiloAvatar(featured.nombre)">{{ iniciales(featured.nombre) }}</div>
           </div>
           <div class="spk-feat-r">
-            <div class="spk-feat-tag">Keynote principal · CIIS 2026</div>
+            <div class="spk-feat-tag">Keynote principal</div>
             <div class="spk-feat-nm">{{ featured.nombre }}</div>
             <div class="spk-feat-rl">{{ featured.rol }}</div>
             <div class="spk-feat-q" v-if="featured.frase">"{{ featured.frase }}"</div>

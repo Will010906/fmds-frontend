@@ -121,7 +121,6 @@
             <div class="ev-incl">
               <div class="ev-in"><span>✓</span> Acceso a todas las sesiones</div>
               <div class="ev-in"><span>✓</span> Constancia de participación</div>
-              <div class="ev-in"><span>✓</span> Cursos en línea de la edición</div>
             </div>
 
             <p class="ev-seg">Pago seguro con Openpay. Puedes comprar sin crear una cuenta.</p>
