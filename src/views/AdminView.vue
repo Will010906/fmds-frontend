@@ -409,7 +409,7 @@
               <select v-model="formPaquete.idEvento" class="field-input">
                 <option value="">Selecciona un evento</option>
                 <option v-for="e in eventos" :key="e.idEvento" :value="e.idEvento">
-                  {{ e.titulo }} — ${{ Math.round(e.precio) }} por boleto
+                  {{ e.titulo }} — ${{ Math.round(e.precio) }} por boleto{{ eventoYaPaso(e) ? ' (ya se celebró)' : '' }}
                 </option>
               </select>
             </div>
@@ -447,6 +447,9 @@
           <p v-if="vistaPreviaPaquete" class="admin-sub" style="margin-bottom:14px">
             {{ vistaPreviaPaquete }}
           </p>
+          <p v-if="avisoEventoPasado" class="admin-sub" style="color:#F59E0B;margin-bottom:14px">
+            ⚠ {{ avisoEventoPasado }}
+          </p>
           <p v-if="errorPaquete" class="admin-sub" style="color:#F87171;margin-bottom:14px">{{ errorPaquete }}</p>
           <button @click="guardarPaquete" class="btn-primary">{{ editandoId ? 'Guardar cambios' : 'Guardar Paquete' }}</button>
         </div>
@@ -467,6 +470,7 @@
                 <td class="td-teal">${{ ahorroPaquete(p) }}</td>
                 <td>
                   <span v-if="!p.activo" class="stock-badge">Oculto</span>
+                  <span v-else-if="paqueteDeEventoPasado(p)" class="stock-badge" title="Su evento ya se celebró, así que no se muestra en la página de registro">No se muestra</span>
                   <span v-else-if="p.destacado" class="stock-badge featured">Destacado</span>
                   <span v-else class="td-muted">Visible</span>
                 </td>
@@ -846,6 +850,21 @@ const eliminarCurso = async (id) => {
 // que devuelve la API; no se guardan en la tabla para que no queden desfasados.
 const listaPaquete = (p) => Math.round(Number(p.precioEvento) * p.cantidadBoletos)
 const ahorroPaquete = (p) => Math.round(listaPaquete(p) - Number(p.precio))
+
+// La página de registro solo muestra los paquetes del próximo evento pendiente.
+// Un paquete colgado de un evento ya celebrado nunca se ve, así que conviene
+// avisarlo aquí en vez de dejar que desaparezca en silencio.
+const eventoYaPaso = (evento) => new Date(evento.fecha).getTime() < Date.now()
+const paqueteDeEventoPasado = (p) => {
+  const evento = eventos.value.find((e) => e.idEvento === p.idEvento)
+  return evento ? eventoYaPaso(evento) : false
+}
+
+const avisoEventoPasado = computed(() => {
+  const evento = eventos.value.find((e) => e.idEvento === Number(formPaquete.value.idEvento))
+  if (!evento || !eventoYaPaso(evento)) return ''
+  return `"${evento.titulo}" ya se celebró, así que este paquete no aparecerá en la página de registro.`
+})
 
 // Vista previa mientras se llena el formulario, para que quien administre vea
 // el ahorro antes de guardar y note si puso un precio sin descuento.

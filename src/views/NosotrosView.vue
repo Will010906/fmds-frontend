@@ -23,8 +23,8 @@
           <p class="ns-p">
             La FMDS nace para llenar el vacío de una comunidad académica neutral en México: sin
             patrocinios que comprometan la objetividad, sin barreras de acceso y con estándares de
-            rigor internacional. Organizamos congresos y publicamos artículos con revisión por
-            pares, abiertos a la comunidad de todo el país.
+            rigor internacional. Organizamos congresos, publicamos artículos con revisión por pares
+            y ofrecemos cursos de actualización abiertos a todo el país.
           </p>
         </div>
         <div class="ns-vals">
@@ -42,7 +42,7 @@
     <!-- QUÉ HACEMOS -->
     <section class="ns-sec alt">
       <div class="ns-lbl">Qué hacemos</div>
-      <h2 class="ns-h2 c">Nuestros frentes de trabajo</h2>
+      <h2 class="ns-h2 c">Tres frentes de trabajo</h2>
       <div class="ns-cards">
         <router-link to="/eventos" class="ns-card">
           <div class="ns-card-t">Congresos</div>
@@ -54,10 +54,10 @@
           <p class="ns-card-d">Repositorio abierto de artículos con revisión por pares, sin vínculos comerciales ni sesgos institucionales.</p>
           <span class="ns-card-l">Leer artículos →</span>
         </router-link>
-        <router-link to="/speakers" class="ns-card">
-          <div class="ns-card-t">Red de ponentes</div>
-          <p class="ns-card-d">Investigadores y profesionales que comparten su trabajo con la comunidad en cada edición del congreso.</p>
-          <span class="ns-card-l">Ver ponentes →</span>
+        <router-link to="/cursos" class="ns-card">
+          <div class="ns-card-t">Formación continua</div>
+          <p class="ns-card-d">Cursos técnicos en línea para que profesionales y estudiantes mantengan sus habilidades al día.</p>
+          <span class="ns-card-l">Ver cursos →</span>
         </router-link>
       </div>
     </section>

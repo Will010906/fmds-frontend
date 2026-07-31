@@ -15,7 +15,7 @@
       <span class="hh2">científico del software</span>
       <span class="hh3">en México</span>
     </div>
-    <p class="h-desc">Divulgación académica <b>neutral y sin conflictos</b> y congresos internacionales para la comunidad tecnológica de todo el país.</p>
+    <p class="h-desc">Divulgación académica <b>neutral y sin conflictos,</b> congresos internacionales y cursos de actualización para la comunidad tecnológica de todo el país.</p>
     <div class="h-ctas">
       <router-link to="/eventos" class="btn-p">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#06090F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -77,6 +77,7 @@
         <template v-for="n in 2" :key="n">
           <span>Divulgación científica neutral</span><span>·</span>
           <span>Congresos internacionales</span><span>·</span>
+          <span>Cursos de actualización</span><span>·</span>
           <span>Revisión por pares</span><span>·</span>
           <span>Comunidad tecnológica de México</span><span>·</span>
         </template>
@@ -100,6 +101,10 @@
   <div class="fsc" @click="$router.push('/articulos')">
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
     <div class="fsc-n">Artículos</div><div class="fsc-s">{{ totalArticulos }} {{ totalArticulos === 1 ? 'publicación' : 'publicaciones' }}</div>
+  </div>
+  <div class="fsc" @click="$router.push('/cursos')">
+    <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+    <div class="fsc-n">Cursos</div><div class="fsc-s">{{ totalCursos }} en línea</div>
   </div>
   <div class="fsc" @click="$router.push('/galeria')">
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
@@ -163,6 +168,7 @@
       <div class="sh"><div class="sh-n"><AnimatedNumber :value="speakers.length" /></div><div class="sh-l">Ponentes</div></div>
       <div class="sh"><div class="sh-n"><AnimatedNumber :value="totalSesiones" /></div><div class="sh-l">Sesiones en agenda</div></div>
       <div class="sh"><div class="sh-n"><AnimatedNumber :value="totalArticulos" /></div><div class="sh-l">Artículos publicados</div></div>
+      <div class="sh"><div class="sh-n"><AnimatedNumber :value="totalCursos" /></div><div class="sh-l">Cursos en línea</div></div>
     </div>
 
     <!-- POR QUÉ ASISTIR -->
@@ -397,6 +403,7 @@ const speakers = ref([])
 // Conteos reales para la tira de accesos rápidos
 const totalArticulos = ref(0)
 const totalSesiones = ref(0)
+const totalCursos = ref(0)
 
 const countdown = ref({ dias: 0, horas: 0, mins: 0, segs: 0, terminado: false })
 const pad = (n) => String(n).padStart(2, '0')
@@ -462,13 +469,14 @@ const cargarSpeakers = async () => {
   speakers.value = res.data
 }
 
-// Total de sesiones para la tira de accesos (no necesitamos el detalle, solo el conteo)
+// Conteos de agenda y cursos para la tira (no necesitamos el detalle, solo el total)
 const cargarConteos = async () => {
   try {
-    const ses = await api.get('/sesiones')
+    const [ses, cur] = await Promise.all([api.get('/sesiones'), api.get('/cursos')])
     totalSesiones.value = ses.data.length
+    totalCursos.value = cur.data.length
   } catch {
-    // si algo falla, el contador queda en 0 y el texto lo refleja sin romper la página
+    // si algo falla, los contadores quedan en 0 y el texto lo refleja sin romper la página
   }
 }
 
@@ -674,7 +682,7 @@ const scrollBoletin = () => {
 .bc-btn:hover { background:var(--teal-s); }
 
 /* STATS */
-.stats-h { background:var(--bg3);border-top:1px solid var(--line3);border-bottom:1px solid var(--line3);display:grid;grid-template-columns:repeat(4,1fr); }
+.stats-h { background:var(--bg3);border-top:1px solid var(--line3);border-bottom:1px solid var(--line3);display:grid;grid-template-columns:repeat(5,1fr); }
 .sh { padding:32px 26px;border-right:1px solid var(--line3);position:relative;overflow:hidden; }
 .sh:last-child { border-right:none; }
 .sh::before { content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:var(--teal);opacity:0;transition:opacity .15s; }
