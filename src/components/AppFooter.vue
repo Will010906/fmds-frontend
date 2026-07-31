@@ -70,40 +70,40 @@
 
 <style scoped>
 .footer { background:var(--bg2);border-top:1px solid var(--line3); }
-.ft-main { display:grid;grid-template-columns:180px repeat(4, 1fr) 1.3fr;gap:32px;padding:52px 44px 40px;border-bottom:1px solid var(--line3); }
+.ft-main { display:grid;grid-template-columns:180px repeat(4, 1fr) 1.3fr;gap:32px;padding:48px 48px 32px;border-bottom:1px solid var(--line3); }
 .ft-brand { display:flex;flex-direction:column; }
-.ft-tag { font-size:12px;color:var(--w4);font-weight:300;line-height:1.8;max-width:180px; }
+.ft-tag { font-size:var(--t-sm);color:var(--w4);font-weight:300;line-height:1.8;max-width:180px; }
 .ft-col { display:flex;flex-direction:column;gap:16px; }
-.ft-lbl { font-family:var(--fm);font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--w4); }
-.ft-lnks { display:flex;flex-direction:column;gap:10px; }
-.ft-lnks a { font-size:13px;color:var(--w3);text-decoration:none;font-weight:300;transition:color .15s;cursor:pointer; }
+.ft-lbl { font-family:var(--fm);font-size:var(--t-2xs);font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--w4); }
+.ft-lnks { display:flex;flex-direction:column;gap:8px; }
+.ft-lnks a { font-size:var(--t-sm);color:var(--w3);text-decoration:none;font-weight:300;transition:color .15s;cursor:pointer; }
 .ft-lnks a:hover { color:var(--teal); }
 .ft-ct-col { display:flex;flex-direction:column;gap:12px; }
-.ft-ct { display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--w3);font-weight:300;line-height:1.55; }
+.ft-ct { display:flex;align-items:flex-start;gap:8px;font-size:var(--t-sm);color:var(--w3);font-weight:300;line-height:1.55; }
 .ft-ct svg { width:13px;height:13px;fill:none;stroke:var(--teal);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;margin-top:2px; }
 
-.ft-bot { display:flex;justify-content:space-between;align-items:center;padding:18px 44px; }
-.ft-copy { font-size:11px;color:var(--w4); }
-.ft-legal { display:flex;gap:18px; }
-.ft-legal a { font-size:11px;color:var(--w4);text-decoration:none;cursor:pointer;transition:color .15s; }
+.ft-bot { display:flex;justify-content:space-between;align-items:center;padding:16px 48px; }
+.ft-copy { font-size:var(--t-xs);color:var(--w4); }
+.ft-legal { display:flex;gap:16px; }
+.ft-legal a { font-size:var(--t-xs);color:var(--w4);text-decoration:none;cursor:pointer;transition:color .15s; }
 .ft-legal a:hover { color:var(--teal); }
-.ft-badge { display:flex;align-items:center;gap:6px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:100px;padding:5px 12px; }
+.ft-badge { display:flex;align-items:center;gap:4px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:100px;padding:4px 12px; }
 .ft-bd { width:5px;height:5px;border-radius:50%;background:var(--teal); }
-.ft-bs { font-family:var(--fm);font-size:9px;color:var(--teal);letter-spacing:.06em; }
+.ft-bs { font-family:var(--fm);font-size:var(--t-2xs);color:var(--teal);letter-spacing:.06em; }
 
 @media (max-width: 968px) {
-  .ft-main { grid-template-columns:1fr 1fr;gap:32px;padding:40px 24px 32px; }
-  .ft-bot { flex-direction:column;gap:14px;padding:18px 24px;text-align:center; }
+  .ft-main { grid-template-columns:1fr 1fr;gap:32px;padding:32px 24px 32px; }
+  .ft-bot { flex-direction:column;gap:12px;padding:16px 24px;text-align:center; }
 }
 @media (max-width: 520px) {
   /* Compacto: la marca ocupa el ancho y las columnas quedan en 2x2 */
-  .ft-main { gap:24px 20px;padding:32px 18px 24px; }
-  .ft-brand { grid-column:1 / -1;flex-direction:row;align-items:center;gap:14px; }
+  .ft-main { gap:24px 16px;padding:32px 16px 24px; }
+  .ft-brand { grid-column:1 / -1;flex-direction:row;align-items:center;gap:12px; }
   .ft-brand img { margin-bottom:0 !important;height:36px !important; }
   .ft-tag { max-width:none; }
-  .ft-col { gap:10px; }
-  .ft-lnks { gap:7px; }
-  .ft-lnks a { font-size:12px; }
-  .ft-bot { padding:14px 18px;gap:10px; }
+  .ft-col { gap:8px; }
+  .ft-lnks { gap:8px; }
+  .ft-lnks a { font-size:var(--t-sm); }
+  .ft-bot { padding:12px 16px;gap:8px; }
 }
 </style>

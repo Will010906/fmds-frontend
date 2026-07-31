@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="page">
 
     <AppNav />
@@ -12,7 +12,7 @@
 
     <!-- TABS -->
     <div class="ag-wrap">
-      <div v-if="sesiones.length === 0" class="ag-empty">Aún no hay sesiones registradas en la agenda.</div>
+      <div v-if="sesiones.length === 0" class="ag-empty">AÃºn no hay sesiones registradas en la agenda.</div>
       <template v-else>
         <div class="ag-tabs">
           <button
@@ -22,7 +22,7 @@
             :class="{ active: diaActivo === dia }"
             @click="diaActivo = dia"
           >
-            Día {{ dia }}
+            DÃ­a {{ dia }}
           </button>
         </div>
 
@@ -55,7 +55,7 @@
 
       <!-- CTA -->
       <div class="ag-cta">
-        <router-link to="/eventos" class="ag-btn">Reservar mi lugar ⟶</router-link>
+        <router-link to="/eventos" class="ag-btn">Reservar mi lugar âŸ¶</router-link>
       </div>
     </div>
 
@@ -88,18 +88,18 @@ const sesionesDelDia = computed(() =>
 )
 
 // Resumen del encabezado calculado desde la agenda real, para que nunca
-// prometa más sesiones o talleres de los que están efectivamente cargados.
+// prometa mÃ¡s sesiones o talleres de los que estÃ¡n efectivamente cargados.
 const resumen = computed(() => {
-  if (sesiones.value.length === 0) return 'El programa se publicará conforme se confirmen las sesiones.'
+  if (sesiones.value.length === 0) return 'El programa se publicarÃ¡ conforme se confirmen las sesiones.'
   const dias = diasDisponibles.value.length
   const total = sesiones.value.length
   const talleres = sesiones.value.filter(s => /workshop|taller/i.test(s.tipo || '')).length
   const partes = [
-    `${dias} ${dias === 1 ? 'día' : 'días'}`,
-    `${total} ${total === 1 ? 'sesión' : 'sesiones'}`,
+    `${dias} ${dias === 1 ? 'dÃ­a' : 'dÃ­as'}`,
+    `${total} ${total === 1 ? 'sesiÃ³n' : 'sesiones'}`,
   ]
-  if (talleres > 0) partes.push(`${talleres} ${talleres === 1 ? 'taller práctico' : 'talleres prácticos'}`)
-  return partes.join(' · ')
+  if (talleres > 0) partes.push(`${talleres} ${talleres === 1 ? 'taller prÃ¡ctico' : 'talleres prÃ¡cticos'}`)
+  return partes.join(' Â· ')
 })
 
 const cargarSesiones = async () => {
@@ -114,56 +114,56 @@ onMounted(cargarSesiones)
 <style scoped>
 .page { min-height:100vh;background:var(--bg);padding-top:60px; }
 
-.ag-hero { background:linear-gradient(160deg,var(--bg),var(--bg3));border-bottom:1px solid var(--line3);padding:52px 44px 48px; }
-.pill { display:inline-flex;align-items:center;gap:7px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:100px;padding:4px 12px;margin-bottom:20px; }
+.ag-hero { background:linear-gradient(160deg,var(--bg),var(--bg3));border-bottom:1px solid var(--line3);padding:var(--sec-y) var(--sec-x); }
+.pill { display:inline-flex;align-items:center;gap:8px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:100px;padding:4px 12px;margin-bottom:20px; }
 .pill-d { width:5px;height:5px;border-radius:50%;background:var(--teal);animation:pulse 2.5s infinite; }
 @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(45,212,180,.4)}50%{box-shadow:0 0 0 6px rgba(45,212,180,0)} }
-.pill-t { font-family:var(--fm);font-size:8px;font-weight:500;color:var(--teal);letter-spacing:.1em;text-transform:uppercase; }
-.ag-title { font-size:52px;font-weight:800;letter-spacing:-.05em;line-height:1;margin-bottom:16px; }
+.pill-t { font-family:var(--fm);font-size:var(--t-2xs);font-weight:500;color:var(--teal);letter-spacing:.1em;text-transform:uppercase; }
+.ag-title { font-size:var(--t-4xl);font-weight:800;letter-spacing:-.05em;line-height:1;margin-bottom:16px; }
 .ag-title strong { color:var(--white); }
 .ag-title em { font-family:var(--fs);font-style:italic;font-weight:400;color:var(--teal); }
-.ag-sub { font-size:14px;color:var(--w3);font-weight:300; }
+.ag-sub { font-size:var(--t-md);color:var(--w3);font-weight:300; }
 
-.ag-wrap { max-width:900px;margin:0 auto;padding:48px 44px 80px; }
+.ag-wrap { max-width:900px;margin:0 auto;padding:var(--sec-y) var(--sec-x); }
 .ag-empty { text-align:center;color:var(--w4);padding:48px 0; }
 
 .ag-tabs { display:flex;gap:0;border-bottom:1px solid var(--line3);margin-bottom:36px; }
-.ag-tab { background:none;border:none;border-bottom:2px solid transparent;padding:12px 20px;font-family:var(--f);font-size:13px;font-weight:500;color:var(--w4);cursor:pointer;transition:all .15s;margin-bottom:-1px; }
+.ag-tab { background:none;border:none;border-bottom:2px solid transparent;padding:12px 16px;font-family:var(--f);font-size:var(--t-sm);font-weight:500;color:var(--w4);cursor:pointer;transition:all .15s;margin-bottom:-1px; }
 .ag-tab:hover { color:var(--white); }
 .ag-tab.active { color:var(--teal);border-bottom-color:var(--teal); }
 
 .ag-list { display:flex;flex-direction:column;gap:12px; }
-.ag-item { background:var(--card);border:1px solid var(--line3);border-radius:14px;padding:24px 28px;display:grid;grid-template-columns:80px 1px 1fr auto;gap:24px;align-items:center;transition:border-color .15s; }
+.ag-item { background:var(--card);border:1px solid var(--line3);border-radius:14px;padding:24px 24px;display:grid;grid-template-columns:80px 1px 1fr auto;gap:24px;align-items:center;transition:border-color .15s; }
 .ag-item:hover { border-color:var(--teal-b); }
 
 .ag-time { display:flex;flex-direction:column;gap:4px; }
-.ag-hr { font-family:var(--f);font-size:22px;font-weight:800;color:var(--teal);letter-spacing:-.03em; }
-.ag-dur { font-size:11px;color:var(--w4); }
+.ag-hr { font-family:var(--f);font-size:var(--t-xl);font-weight:800;color:var(--teal);letter-spacing:-.03em; }
+.ag-dur { font-size:var(--t-xs);color:var(--w4); }
 
 .ag-sep { width:1px;height:100%;background:var(--line3);align-self:stretch; }
 
-.ag-info { display:flex;flex-direction:column;gap:6px; }
-.ag-tipo { display:flex;align-items:center;gap:6px;font-family:var(--fm);font-size:8px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--w4); }
+.ag-info { display:flex;flex-direction:column;gap:4px; }
+.ag-tipo { display:flex;align-items:center;gap:4px;font-family:var(--fm);font-size:var(--t-2xs);font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--w4); }
 .ag-dot { width:5px;height:5px;border-radius:50%; }
-.ag-nm { font-size:15px;font-weight:700;color:var(--white);letter-spacing:-.02em; }
-.ag-by { font-size:12px;color:var(--w3);font-weight:300; }
+.ag-nm { font-size:var(--t-md);font-weight:700;color:var(--white);letter-spacing:-.02em; }
+.ag-by { font-size:var(--t-sm);color:var(--w3);font-weight:300; }
 
-.ag-badge { font-size:10px;font-weight:600;padding:5px 12px;border-radius:100px;border:1px solid;background:transparent;white-space:nowrap; }
+.ag-badge { font-size:var(--t-2xs);font-weight:600;padding:4px 12px;border-radius:100px;border:1px solid;background:transparent;white-space:nowrap; }
 
 .ag-cta { text-align:center;margin-top:48px; }
-.ag-btn { background:var(--teal);color:var(--bg);border:none;border-radius:10px;padding:15px 36px;font-family:var(--f);font-size:14px;font-weight:700;cursor:pointer;transition:background .15s;text-decoration:none;display:inline-block; }
+.ag-btn { background:var(--teal);color:var(--bg);border:none;border-radius:10px;padding:16px 32px;font-family:var(--f);font-size:var(--t-md);font-weight:700;cursor:pointer;transition:background .15s;text-decoration:none;display:inline-block; }
 .ag-btn:hover { background:var(--teal2); }
 
 /* RESPONSIVE */
 @media (max-width: 900px) {
-  .ag-hero { padding:44px 20px 36px; }
-  .ag-title { font-size:36px; }
-  .ag-wrap { padding:36px 20px 56px; }
+  .ag-hero { padding:var(--sec-y) var(--sec-x); }
+  .ag-title { font-size:var(--t-4xl); }
+  .ag-wrap { padding:var(--sec-y) var(--sec-x); }
 
   .ag-tabs { overflow-x:auto;-webkit-overflow-scrolling:touch; }
-  .ag-tab { white-space:nowrap;padding:12px 14px; }
+  .ag-tab { white-space:nowrap;padding:12px 12px; }
 
-  .ag-item { grid-template-columns:1fr auto;grid-template-rows:auto auto;gap:10px 16px;padding:20px; }
+  .ag-item { grid-template-columns:1fr auto;grid-template-rows:auto auto;gap:8px 16px;padding:16px; }
   .ag-time { flex-direction:row;align-items:baseline;gap:8px;grid-column:1; }
   .ag-sep { display:none; }
   .ag-info { grid-column:1 / -1; }

@@ -99,30 +99,30 @@ const handleRegistro = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding:24px;
 }
 
 .auth-card {
   background: var(--card);
   border: 1px solid var(--line2);
   border-radius: 20px;
-  padding: 48px 40px;
+  padding:48px 32px;
   width: 100%;
   max-width: 420px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap:24px;
 }
 
 .auth-brand {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap:4px;
 }
 
 .auth-logo {
   font-family: var(--f);
-  font-size: 28px;
+  font-size:var(--t-2xl);
   font-weight: 800;
   color: var(--white);
   letter-spacing: -.04em;
@@ -130,7 +130,7 @@ const handleRegistro = async () => {
 
 .auth-tag {
   font-family: var(--fm);
-  font-size: 11px;
+  font-size:var(--t-xs);
   color: var(--teal);
   letter-spacing: .1em;
   text-transform: uppercase;
@@ -140,21 +140,21 @@ const handleRegistro = async () => {
   background: rgba(239,68,68,.1);
   border: 1px solid rgba(239,68,68,.3);
   color: #f87171;
-  padding: 12px 16px;
+  padding:12px 16px;
   border-radius: 10px;
-  font-size: 13px;
+  font-size:var(--t-sm);
 }
 
 .auth-fields {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap:16px;
 }
 
-.field { display: flex; flex-direction: column; gap: 6px; }
+.field { display: flex; flex-direction: column; gap:4px; }
 
 .field-label {
-  font-size: 12px;
+  font-size:var(--t-sm);
   font-weight: 500;
   color: var(--w3);
   letter-spacing: .02em;
@@ -164,9 +164,9 @@ const handleRegistro = async () => {
   background: var(--bg3);
   border: 1px solid var(--line2);
   border-radius: 10px;
-  padding: 12px 16px;
+  padding:12px 16px;
   font-family: var(--f);
-  font-size: 14px;
+  font-size:var(--t-md);
   color: var(--white);
   outline: none;
   transition: border-color .15s;
@@ -181,9 +181,9 @@ const handleRegistro = async () => {
   color: var(--bg);
   border: none;
   border-radius: 10px;
-  padding: 13px;
+  padding:12px;
   font-family: var(--f);
-  font-size: 14px;
+  font-size:var(--t-md);
   font-weight: 700;
   cursor: pointer;
   transition: background .15s;
@@ -195,7 +195,7 @@ const handleRegistro = async () => {
 
 .auth-footer {
   text-align: center;
-  font-size: 13px;
+  font-size:var(--t-sm);
   color: var(--w3);
 }
 
@@ -208,7 +208,7 @@ const handleRegistro = async () => {
 .auth-link:hover { text-decoration: underline; }
 
 @media (max-width: 480px) {
-  .auth-card { padding: 32px 24px; border-radius: 16px; }
-  .auth-logo { font-size: 24px; }
+  .auth-card { padding:32px 24px; border-radius: 16px; }
+  .auth-logo { font-size:var(--t-2xl); }
 }
 </style>

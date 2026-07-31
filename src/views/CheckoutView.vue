@@ -153,13 +153,13 @@ onMounted(cargarEvento)
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 36px;
+  padding:0 32px;
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 100;
 }
 .nav-logo {
-  font-size: 16px;
+  font-size:var(--t-lg);
   font-weight: 800;
   color: var(--white);
   letter-spacing: -.03em;
@@ -170,40 +170,40 @@ onMounted(cargarEvento)
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 80px 24px 40px;
+  padding:80px 24px 32px;
 }
 
 .checkout-card {
   background: var(--card);
   border: 1px solid var(--line2);
   border-radius: 20px;
-  padding: 40px;
+  padding:32px;
   width: 100%;
   max-width: 480px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap:16px;
 }
 
-.checkout-header { display: flex; flex-direction: column; gap: 6px; }
+.checkout-header { display: flex; flex-direction: column; gap:4px; }
 
 .checkout-tag {
   font-family: var(--fm);
-  font-size: 9px;
+  font-size:var(--t-2xs);
   color: var(--teal);
   letter-spacing: .12em;
   text-transform: uppercase;
 }
 
 .checkout-title {
-  font-size: 22px;
+  font-size:var(--t-xl);
   font-weight: 700;
   color: var(--white);
   letter-spacing: -.03em;
 }
 
 .checkout-price {
-  font-size: 13px;
+  font-size:var(--t-sm);
   color: var(--w3);
 }
 .checkout-price span { color: var(--w4); }
@@ -212,9 +212,9 @@ onMounted(cargarEvento)
   background: var(--teal-g);
   border: 1px solid var(--teal-b);
   color: var(--teal);
-  padding: 12px 16px;
+  padding:12px 16px;
   border-radius: 10px;
-  font-size: 13px;
+  font-size:var(--t-sm);
 }
 .alert-link {
   display: block;
@@ -227,21 +227,21 @@ onMounted(cargarEvento)
   background: rgba(239,68,68,.1);
   border: 1px solid rgba(239,68,68,.3);
   color: #f87171;
-  padding: 12px 16px;
+  padding:12px 16px;
   border-radius: 10px;
-  font-size: 13px;
+  font-size:var(--t-sm);
 }
 
 .fields {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap:12px;
 }
-.field { display: flex; flex-direction: column; gap: 6px; }
+.field { display: flex; flex-direction: column; gap:4px; }
 .field.full { grid-column: span 2; }
 
 .field-label {
-  font-size: 11px;
+  font-size:var(--t-xs);
   font-weight: 500;
   color: var(--w3);
   letter-spacing: .03em;
@@ -250,9 +250,9 @@ onMounted(cargarEvento)
   background: var(--bg3);
   border: 1px solid var(--line2);
   border-radius: 10px;
-  padding: 11px 14px;
+  padding:12px 12px;
   font-family: var(--f);
-  font-size: 13px;
+  font-size:var(--t-sm);
   color: var(--white);
   outline: none;
   transition: border-color .15s;
@@ -267,19 +267,19 @@ onMounted(cargarEvento)
   background: var(--bg3);
   border: 1px solid var(--line2);
   border-radius: 10px;
-  padding: 14px 16px;
+  padding:12px 16px;
 }
-.total-label { font-size: 12px; color: var(--w3); }
-.total-amount { font-size: 20px; font-weight: 800; color: var(--white); letter-spacing: -.03em; }
+.total-label { font-size:var(--t-sm); color: var(--w3); }
+.total-amount { font-size:var(--t-xl); font-weight: 800; color: var(--white); letter-spacing: -.03em; }
 
 .btn-primary {
   background: var(--teal);
   color: var(--bg);
   border: none;
   border-radius: 10px;
-  padding: 14px;
+  padding:12px;
   font-family: var(--f);
-  font-size: 14px;
+  font-size:var(--t-md);
   font-weight: 700;
   cursor: pointer;
   transition: background .15s;
@@ -293,9 +293,9 @@ onMounted(cargarEvento)
   color: var(--w3);
   border: 1px solid var(--line2);
   border-radius: 8px;
-  padding: 8px 16px;
+  padding:8px 16px;
   font-family: var(--f);
-  font-size: 12px;
+  font-size:var(--t-sm);
   cursor: pointer;
   text-decoration: none;
   transition: all .15s;
@@ -304,14 +304,14 @@ onMounted(cargarEvento)
 
 .secure-note {
   text-align: center;
-  font-size: 11px;
+  font-size:var(--t-xs);
   color: var(--w4);
 }
 
 @media (max-width: 480px) {
-  .nav { padding: 0 16px; }
-  .checkout-card { padding: 28px 20px; border-radius: 16px; }
-  .checkout-title { font-size: 19px; }
+  .nav { padding:0 16px; }
+  .checkout-card { padding:24px 16px; border-radius: 16px; }
+  .checkout-title { font-size:var(--t-xl); }
   .fields { grid-template-columns: 1fr; }
   .field.full { grid-column: span 1; }
 }

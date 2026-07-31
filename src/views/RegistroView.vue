@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="page">
 
     <AppNav />
@@ -7,7 +7,7 @@
     <div class="rg-hero">
       <div class="pill"><div class="pill-d"></div><span class="pill-t">Registro & Pago Seguro</span></div>
       <h1 class="rg-title"><strong>Elige tu</strong> <em>plan</em></h1>
-      <p class="rg-sub">Selecciona el acceso que mejor se adapte a tu perfil. Proceso 100% seguro con confirmación inmediata.</p>
+      <p class="rg-sub">Selecciona el acceso que mejor se adapte a tu perfil. Proceso 100% seguro con confirmaciÃ³n inmediata.</p>
     </div>
 
     <!-- PLANES -->
@@ -27,7 +27,7 @@
           <span class="plan-per" v-if="plan.precio !== 'Gratis'">MXN</span>
         </div>
         <div class="plan-save" v-if="plan.precio !== 'Gratis' && eventoActual">
-          Boleto para <strong>{{ eventoActual.titulo }}</strong> · {{ formatFecha(eventoActual.fecha) }}
+          Boleto para <strong>{{ eventoActual.titulo }}</strong> Â· {{ formatFecha(eventoActual.fecha) }}
         </div>
         <div class="plan-name">{{ plan.nombre }}</div>
         <div class="plan-desc">{{ plan.desc }}</div>
@@ -41,10 +41,10 @@
       </div>
     </div>
 
-    <!-- PAQUETES (solo si la federación cargó alguno para este evento) -->
+    <!-- PAQUETES (solo si la federaciÃ³n cargÃ³ alguno para este evento) -->
     <div class="rg-paq" v-if="planesPaquete.length">
       <div class="paq-hd">
-        <div class="cmp-title"><strong>¿Vienen</strong> <em>en equipo?</em></div>
+        <div class="cmp-title"><strong>Â¿Vienen</strong> <em>en equipo?</em></div>
         <p class="paq-sub">Los paquetes incluyen varios accesos en una sola compra y cuestan menos que comprarlos por separado.</p>
       </div>
       <div class="paq-grid">
@@ -68,7 +68,7 @@
             <span class="paq-mxn">MXN</span>
           </div>
           <div class="paq-unit">
-            ≈ ${{ porPersonaDe(paquetes[k]).toLocaleString('es-MX') }} por persona · vs {{ paquetes[k].cantidadBoletos }} boletos por separado
+            â‰ˆ ${{ porPersonaDe(paquetes[k]).toLocaleString('es-MX') }} por persona Â· vs {{ paquetes[k].cantidadBoletos }} boletos por separado
           </div>
 
           <p class="paq-desc">{{ plan.desc }}</p>
@@ -78,7 +78,7 @@
               {{ f }}
             </li>
           </ul>
-          <div class="paq-sel">{{ planActivo === plan.i ? '✓ Seleccionado' : 'Elegir este paquete' }}</div>
+          <div class="paq-sel">{{ planActivo === plan.i ? 'âœ“ Seleccionado' : 'Elegir este paquete' }}</div>
         </div>
       </div>
     </div>
@@ -107,8 +107,8 @@
             <tr v-for="fila in comparativa" :key="fila.nombre">
               <td class="cmp-feat">{{ fila.nombre }}</td>
               <td v-for="(valor, i) in fila.valores" :key="i" class="cmp-v" :class="{ active: planActivo === i }">
-                <span v-if="valor === true" class="cmp-si">✓</span>
-                <span v-else-if="valor === false" class="cmp-no">—</span>
+                <span v-if="valor === true" class="cmp-si">âœ“</span>
+                <span v-else-if="valor === false" class="cmp-no">â€”</span>
                 <span v-else class="cmp-txt">{{ valor }}</span>
               </td>
             </tr>
@@ -131,44 +131,44 @@
           <div class="rg-grid">
             <div class="field">
               <label class="field-label">Nombre(s)</label>
-              <input v-model="form.nombre" type="text" placeholder="Andrés" class="field-input" />
+              <input v-model="form.nombre" type="text" placeholder="AndrÃ©s" class="field-input" />
             </div>
             <div class="field">
               <label class="field-label">Apellidos</label>
-              <input v-model="form.apellidos" type="text" placeholder="López Gaecia" class="field-input" />
+              <input v-model="form.apellidos" type="text" placeholder="LÃ³pez Gaecia" class="field-input" />
             </div>
             <div class="field">
-              <label class="field-label">Correo electrónico</label>
+              <label class="field-label">Correo electrÃ³nico</label>
               <input v-model="form.correo" type="email" placeholder="correo@ejemplo.com" class="field-input" />
             </div>
             <div class="field">
-              <label class="field-label">Teléfono</label>
+              <label class="field-label">TelÃ©fono</label>
               <input v-model="form.telefono" type="tel" placeholder="+52 (443) 000-0000" class="field-input" />
             </div>
             <div class="field">
-              <label class="field-label">Institución</label>
+              <label class="field-label">InstituciÃ³n</label>
               <input v-model="form.institucion" type="text" placeholder="UTM, UNAM, TEC..." class="field-input" />
             </div>
             <div class="field">
               <label class="field-label">Estado</label>
-              <input v-model="form.estado" type="text" placeholder="Michoacán" class="field-input" />
+              <input v-model="form.estado" type="text" placeholder="MichoacÃ¡n" class="field-input" />
             </div>
           </div>
         </div>
 
-        <!-- Método de pago -->
+        <!-- MÃ©todo de pago -->
         <div class="rg-sec" v-if="planes[planActivo].precio !== 'Gratis'">
           <div class="rg-sec-h">
             <div class="rg-sec-ic"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
-            <span>Método de pago</span>
+            <span>MÃ©todo de pago</span>
           </div>
           <div class="rg-grid">
             <div class="field full">
-              <label class="field-label">Número de tarjeta</label>
+              <label class="field-label">NÃºmero de tarjeta</label>
               <input v-model="pago.numero" type="text" placeholder="1234 5678 9012 3456" class="field-input" />
             </div>
             <div class="field">
-              <label class="field-label">Expiración</label>
+              <label class="field-label">ExpiraciÃ³n</label>
               <input v-model="pago.expiracion" type="text" placeholder="MM / AA" class="field-input" />
             </div>
             <div class="field">
@@ -180,7 +180,7 @@
               <input v-model="pago.nombre" type="text" placeholder="Como aparece en la tarjeta" class="field-input" />
             </div>
           </div>
-          <p class="pay-secure">🔒 Pago procesado de forma segura con Openpay. Aceptamos Visa, MasterCard y American Express.</p>
+          <p class="pay-secure">ðŸ”’ Pago procesado de forma segura con Openpay. Aceptamos Visa, MasterCard y American Express.</p>
         </div>
 
       </div>
@@ -207,9 +207,9 @@
           <div class="sum-line total"><span>Total</span><span :class="{ teal: planes[planActivo].precio === 'Gratis' }">{{ planes[planActivo].precio === 'Gratis' ? 'Gratis' : '$' + planes[planActivo].precio + ' MXN' }}</span></div>
         </div>
         <button class="sum-btn" @click="confirmar" :disabled="!eventoActual">
-          {{ planes[planActivo].precio === 'Gratis' ? 'Enviar mi propuesta →' : 'Confirmar y pagar →' }}
+          {{ planes[planActivo].precio === 'Gratis' ? 'Enviar mi propuesta â†’' : 'Confirmar y pagar â†’' }}
         </button>
-        <p class="sum-secure">🔒 Pago 100% seguro · con Openpay</p>
+        <p class="sum-secure">ðŸ”’ Pago 100% seguro Â· con Openpay</p>
         <div class="sum-incl">
           <div class="sum-incl-t">Incluye en tu plan</div>
           <div class="sum-incl-i" v-for="f in planes[planActivo].feats.slice(0,4)" :key="f">
@@ -240,15 +240,15 @@ const paquetes = ref([])
 const form = ref({ nombre: '', apellidos: '', correo: '', telefono: '', institucion: '', estado: '' })
 const pago = ref({ numero: '', expiracion: '', cvv: '', nombre: '' })
 
-// timeZone:'UTC' evita que la fecha del evento se muestre un día antes en México
+// timeZone:'UTC' evita que la fecha del evento se muestre un dÃ­a antes en MÃ©xico
 const formatFecha = (fecha) => {
   return new Date(fecha).toLocaleDateString('es-MX', {
     year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'
   })
 }
 
-// Se registra al evento más próximo que todavía no ocurre. Si ya pasaron todos,
-// se toma el primero de la lista para no dejar la página sin contexto.
+// Se registra al evento mÃ¡s prÃ³ximo que todavÃ­a no ocurre. Si ya pasaron todos,
+// se toma el primero de la lista para no dejar la pÃ¡gina sin contexto.
 const cargarEvento = async () => {
   const res = await api.get('/eventos')
   const ahora = Date.now()
@@ -256,8 +256,8 @@ const cargarEvento = async () => {
   eventoActual.value = futuros[0] || res.data[0] || null
 }
 
-// Paquetes activos del evento. Si la federación no ha cargado ninguno, el
-// arreglo queda vacío y la sección de paquetes simplemente no se muestra.
+// Paquetes activos del evento. Si la federaciÃ³n no ha cargado ninguno, el
+// arreglo queda vacÃ­o y la secciÃ³n de paquetes simplemente no se muestra.
 const cargarPaquetes = async () => {
   if (!eventoActual.value) return
   try {
@@ -274,7 +274,7 @@ onMounted(async () => {
 })
 
 // Ahorro de un paquete frente a comprar esos boletos por separado. Los dos
-// números salen de la base de datos, así que no puede quedar desfasado.
+// nÃºmeros salen de la base de datos, asÃ­ que no puede quedar desfasado.
 const ahorroDe = (paquete) => {
   const porSeparado = Number(paquete.precioEvento) * paquete.cantidadBoletos
   return Math.round(porSeparado - Number(paquete.precio))
@@ -289,34 +289,34 @@ const precioEvento = computed(() => {
 })
 
 // Solo hay dos formas reales de entrar: comprando el boleto o presentando una
-// ponencia aprobada. El acceso de ponente no se cobra aquí, se solicita.
+// ponencia aprobada. El acceso de ponente no se cobra aquÃ­, se solicita.
 const planes = computed(() => [
   {
     label: 'Acceso al congreso',
     badge: 'Disponible', badgeColor: 'green',
-    precio: precioEvento.value === null ? '—' : String(precioEvento.value),
+    precio: precioEvento.value === null ? 'â€”' : String(precioEvento.value),
     nombre: 'Acceso General',
-    desc: 'Para estudiantes, profesionales, docentes e investigadores. Es el boleto que se compra en línea.',
+    desc: 'Para estudiantes, profesionales, docentes e investigadores. Es el boleto que se compra en lÃ­nea.',
     sumDesc: 'Acceso completo a las sesiones',
-    feats: ['Todas las sesiones del programa', 'Talleres del congreso', 'Constancia de participación', 'Boleto con folio en "Mis boletos"'],
+    feats: ['Todas las sesiones del programa', 'Talleres del congreso', 'Constancia de participaciÃ³n', 'Boleto con folio en "Mis boletos"'],
     featured: true,
   },
   {
-    label: 'Requiere aprobación',
+    label: 'Requiere aprobaciÃ³n',
     badge: null,
     precio: 'Gratis',
     nombre: 'Acceso Ponente',
-    desc: 'Para quienes presenten una ponencia aprobada por el comité académico.',
-    sumDesc: 'Acceso completo y espacio de presentación',
-    feats: ['Acceso completo al evento', 'Espacio de presentación propio', 'Constancia de ponente'],
+    desc: 'Para quienes presenten una ponencia aprobada por el comitÃ© acadÃ©mico.',
+    sumDesc: 'Acceso completo y espacio de presentaciÃ³n',
+    feats: ['Acceso completo al evento', 'Espacio de presentaciÃ³n propio', 'Constancia de ponente'],
     featured: false,
   },
-  // Los paquetes cargados por la federación se suman como opciones más. Al
+  // Los paquetes cargados por la federaciÃ³n se suman como opciones mÃ¡s. Al
   // llevar idPaquete, el cobro se resuelve por paquete y no por boleto suelto.
   ...paquetes.value.map((p) => ({
     idPaquete: p.idPaquete,
     label: `${p.cantidadBoletos} entradas`,
-    badge: p.destacado ? 'Más elegido' : null, badgeColor: 'green',
+    badge: p.destacado ? 'MÃ¡s elegido' : null, badgeColor: 'green',
     precio: String(Math.round(Number(p.precio))),
     nombre: p.nombre,
     desc: p.descripcion || `Incluye ${p.cantidadBoletos} accesos al congreso en una sola compra.`,
@@ -324,7 +324,7 @@ const planes = computed(() => [
     feats: [
       `${p.cantidadBoletos} accesos al congreso`,
       `Ahorras $${ahorroDe(p)} frente a comprarlos por separado`,
-      'Constancia de participación para cada asistente',
+      'Constancia de participaciÃ³n para cada asistente',
       'Boleto con folio en "Mis boletos"',
     ],
     featured: !!p.destacado,
@@ -332,7 +332,7 @@ const planes = computed(() => [
 ])
 
 // Las dos formas individuales de entrar y los paquetes se muestran por
-// separado, pero comparten el mismo índice de selección para que el resumen y
+// separado, pero comparten el mismo Ã­ndice de selecciÃ³n para que el resumen y
 // el cobro funcionen igual con cualquiera.
 const planesIndividuales = computed(() =>
   planes.value.map((p, i) => ({ ...p, i })).filter((p) => !p.idPaquete)
@@ -346,15 +346,15 @@ const comparativa = [
   { nombre: 'Todas las sesiones del programa', valores: [true, true] },
   { nombre: 'Talleres del congreso', valores: [true, true] },
   { nombre: 'Constancia', valores: ['De asistente', 'De ponente'] },
-  { nombre: 'Espacio de presentación propio', valores: [false, true] },
-  { nombre: 'Se compra en línea', valores: [true, false] },
+  { nombre: 'Espacio de presentaciÃ³n propio', valores: [false, true] },
+  { nombre: 'Se compra en lÃ­nea', valores: [true, false] },
 ]
 
 const confirmar = async () => {
   const plan = planes.value[planActivo.value]
 
   if (!eventoActual.value) {
-    alert('No hay ningún evento disponible para registrarte en este momento.')
+    alert('No hay ningÃºn evento disponible para registrarte en este momento.')
     return
   }
 
@@ -364,13 +364,13 @@ const confirmar = async () => {
     return
   }
 
-  // Sin sesión iniciada se compra como invitado: nombre y correo obligatorios
+  // Sin sesiÃ³n iniciada se compra como invitado: nombre y correo obligatorios
   if (!localStorage.getItem('token') && (!form.value.nombre || !form.value.correo)) {
-    alert('Completa tu nombre y correo electrónico para continuar.')
+    alert('Completa tu nombre y correo electrÃ³nico para continuar.')
     return
   }
 
-  // La expiración se captura como "MM / AA"; el servicio la espera separada
+  // La expiraciÃ³n se captura como "MM / AA"; el servicio la espera separada
   const [mes, anio] = pago.value.expiracion.split('/').map((p) => p?.trim())
 
   try {
@@ -384,10 +384,10 @@ const confirmar = async () => {
     })
 
     if (localStorage.getItem('token')) {
-      alert('¡Pago exitoso! Tu boleto ya aparece en "Mis boletos".')
+      alert('Â¡Pago exitoso! Tu boleto ya aparece en "Mis boletos".')
       router.push({ name: 'mis-boletos' })
     } else {
-      alert('¡Pago exitoso! Crea una cuenta con este mismo correo para consultar tus boletos cuando quieras.')
+      alert('Â¡Pago exitoso! Crea una cuenta con este mismo correo para consultar tus boletos cuando quieras.')
       router.push({ name: 'crear-cuenta' })
     }
   } catch (err) {
@@ -400,151 +400,151 @@ const confirmar = async () => {
 .page { min-height:100vh;background:var(--bg);padding-top:60px; }
 
 
-.rg-hero { padding:52px 44px 48px;border-bottom:1px solid var(--line3); }
-.pill { display:inline-flex;align-items:center;gap:7px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:100px;padding:4px 12px;margin-bottom:20px; }
+.rg-hero { padding:var(--sec-y) var(--sec-x);border-bottom:1px solid var(--line3); }
+.pill { display:inline-flex;align-items:center;gap:8px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:100px;padding:4px 12px;margin-bottom:20px; }
 .pill-d { width:5px;height:5px;border-radius:50%;background:var(--teal);animation:pulse 2.5s infinite; }
 @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(45,212,180,.4)}50%{box-shadow:0 0 0 6px rgba(45,212,180,0)} }
-.pill-t { font-family:var(--fm);font-size:8px;font-weight:500;color:var(--teal);letter-spacing:.1em;text-transform:uppercase; }
-.rg-title { font-size:52px;font-weight:800;letter-spacing:-.05em;line-height:1;margin-bottom:14px; }
+.pill-t { font-family:var(--fm);font-size:var(--t-2xs);font-weight:500;color:var(--teal);letter-spacing:.1em;text-transform:uppercase; }
+.rg-title { font-size:var(--t-4xl);font-weight:800;letter-spacing:-.05em;line-height:1;margin-bottom:14px; }
 .rg-title strong { color:var(--white); }
 .rg-title em { font-family:var(--fs);font-style:italic;font-weight:400;color:var(--teal); }
-.rg-sub { font-size:14px;color:var(--w3);font-weight:300;max-width:480px;line-height:1.7; }
+.rg-sub { font-size:var(--t-md);color:var(--w3);font-weight:300;max-width:480px;line-height:1.7; }
 
 /* PLANES */
-.rg-planes { display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:48px 44px;border-bottom:1px solid var(--line3);max-width:900px;margin:0 auto; }
+.rg-planes { display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:var(--sec-y) var(--sec-x);border-bottom:1px solid var(--line3);max-width:900px;margin:0 auto; }
 
 /* PAQUETES */
-.rg-paq { padding:48px 44px;border-bottom:1px solid var(--line3);background:var(--bg2); }
+.rg-paq { padding:var(--sec-y) var(--sec-x);border-bottom:1px solid var(--line3);background:var(--bg2); }
 .paq-hd { text-align:center;margin-bottom:32px; }
-.paq-sub { font-size:13px;color:var(--w3);font-weight:300;max-width:520px;margin:10px auto 0;line-height:1.7; }
+.paq-sub { font-size:var(--t-sm);color:var(--w3);font-weight:300;max-width:520px;margin:8px auto 0;line-height:1.7; }
 .paq-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;max-width:900px;margin:0 auto; }
-.paq-card { position:relative;background:var(--card);border:1px solid var(--line3);border-radius:16px;padding:28px 24px;cursor:pointer;transition:all .18s;display:flex;flex-direction:column; }
+.paq-card { position:relative;background:var(--card);border:1px solid var(--line3);border-radius:16px;padding:24px 24px;cursor:pointer;transition:all .18s;display:flex;flex-direction:column; }
 .paq-card:hover { border-color:var(--teal-b); }
 .paq-card.featured { border-color:var(--teal-b);background:var(--bg3); }
 .paq-card.selected { border-color:var(--teal);background:var(--bg3); }
-.paq-badge { position:absolute;top:-11px;right:20px;background:var(--teal);color:var(--bg);font-family:var(--fm);font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:100px; }
-.paq-lbl { font-family:var(--fm);font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:8px; }
-.paq-nm { font-size:20px;font-weight:800;color:var(--white);letter-spacing:-.03em;margin-bottom:14px; }
-.paq-precios { display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px; }
-.paq-lista { font-size:13px;color:var(--w4);text-decoration:line-through; }
-.paq-ahorro { background:var(--teal-g);border:1px solid var(--teal-b);color:var(--teal);font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px; }
-.paq-price { display:flex;align-items:baseline;gap:3px;margin-bottom:6px; }
-.paq-cur { font-size:20px;font-weight:700;color:var(--white); }
-.paq-num { font-size:40px;font-weight:800;color:var(--white);letter-spacing:-.05em;line-height:1; }
-.paq-mxn { font-size:12px;color:var(--w4);margin-left:4px; }
-.paq-unit { font-size:11px;color:var(--w4);margin-bottom:16px;line-height:1.5; }
-.paq-desc { font-size:12px;color:var(--w3);font-weight:300;line-height:1.7;margin-bottom:14px; }
-.paq-sel { margin-top:auto;text-align:center;font-size:12px;font-weight:600;padding:11px;border-radius:9px;border:1px solid var(--teal-b);background:var(--teal-g);color:var(--teal); }
+.paq-badge { position:absolute;top:-11px;right:20px;background:var(--teal);color:var(--bg);font-family:var(--fm);font-size:var(--t-2xs);font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:100px; }
+.paq-lbl { font-family:var(--fm);font-size:var(--t-2xs);font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:8px; }
+.paq-nm { font-size:var(--t-xl);font-weight:800;color:var(--white);letter-spacing:-.03em;margin-bottom:14px; }
+.paq-precios { display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px; }
+.paq-lista { font-size:var(--t-sm);color:var(--w4);text-decoration:line-through; }
+.paq-ahorro { background:var(--teal-g);border:1px solid var(--teal-b);color:var(--teal);font-size:var(--t-xs);font-weight:600;padding:4px 8px;border-radius:100px; }
+.paq-price { display:flex;align-items:baseline;gap:4px;margin-bottom:6px; }
+.paq-cur { font-size:var(--t-xl);font-weight:700;color:var(--white); }
+.paq-num { font-size:var(--t-4xl);font-weight:800;color:var(--white);letter-spacing:-.05em;line-height:1; }
+.paq-mxn { font-size:var(--t-sm);color:var(--w4);margin-left:4px; }
+.paq-unit { font-size:var(--t-xs);color:var(--w4);margin-bottom:16px;line-height:1.5; }
+.paq-desc { font-size:var(--t-sm);color:var(--w3);font-weight:300;line-height:1.7;margin-bottom:14px; }
+.paq-sel { margin-top:auto;text-align:center;font-size:var(--t-sm);font-weight:600;padding:12px;border-radius:9px;border:1px solid var(--teal-b);background:var(--teal-g);color:var(--teal); }
 .paq-card.selected .paq-sel { background:var(--teal);color:var(--bg);border-color:var(--teal); }
-.plan-card { background:var(--card);border:1px solid var(--line3);border-radius:16px;padding:28px 24px;cursor:pointer;transition:all .18s;position:relative;display:flex;flex-direction:column;gap:10px; }
+.plan-card { background:var(--card);border:1px solid var(--line3);border-radius:16px;padding:24px 24px;cursor:pointer;transition:all .18s;position:relative;display:flex;flex-direction:column;gap:8px; }
 .plan-card:hover { border-color:var(--teal-b); }
 .plan-card.selected { border-color:var(--teal);background:var(--bg3); }
 .plan-card.featured { border-color:var(--teal-b);background:var(--bg3); }
-.plan-badge { position:absolute;top:16px;right:16px;font-family:var(--fm);font-size:9px;font-weight:600;padding:3px 10px;border-radius:100px;letter-spacing:.05em; }
+.plan-badge { position:absolute;top:16px;right:16px;font-family:var(--fm);font-size:var(--t-2xs);font-weight:600;padding:4px 8px;border-radius:100px;letter-spacing:.05em; }
 .plan-badge.green { background:rgba(45,212,180,.1);color:var(--teal);border:1px solid var(--teal-b); }
 .plan-badge.orange { background:rgba(245,158,11,.1);color:#F59E0B;border:1px solid rgba(245,158,11,.3); }
-.plan-lbl { font-family:var(--fm);font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--w4); }
-.plan-price { display:flex;align-items:baseline;gap:3px;margin:4px 0; }
-.plan-cur { font-size:16px;font-weight:700;color:var(--white);align-self:flex-start;margin-top:4px; }
-.plan-num { font-size:40px;font-weight:800;color:var(--white);letter-spacing:-.05em;line-height:1; }
+.plan-lbl { font-family:var(--fm);font-size:var(--t-2xs);font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--w4); }
+.plan-price { display:flex;align-items:baseline;gap:4px;margin:4px 0; }
+.plan-cur { font-size:var(--t-lg);font-weight:700;color:var(--white);align-self:flex-start;margin-top:4px; }
+.plan-num { font-size:var(--t-4xl);font-weight:800;color:var(--white);letter-spacing:-.05em;line-height:1; }
 .plan-num.teal { color:var(--teal); }
-.plan-per { font-size:12px;color:var(--w4); }
-.plan-name { font-size:16px;font-weight:700;color:var(--white); }
-.plan-desc { font-size:12px;color:var(--w3);font-weight:300;line-height:1.6; }
+.plan-per { font-size:var(--t-sm);color:var(--w4); }
+.plan-name { font-size:var(--t-lg);font-weight:700;color:var(--white); }
+.plan-desc { font-size:var(--t-sm);color:var(--w3);font-weight:300;line-height:1.6; }
 .plan-feats { list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:6px; }
-.plan-feats li { display:flex;align-items:center;gap:8px;font-size:12px;color:var(--w3); }
+.plan-feats li { display:flex;align-items:center;gap:8px;font-size:var(--t-sm);color:var(--w3); }
 .plan-feats li svg { width:13px;height:13px;fill:none;stroke:var(--teal);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0; }
 .plan-sel-dot { width:10px;height:10px;border-radius:50%;background:var(--teal);position:absolute;top:16px;left:16px; }
-.plan-save { font-size:11px;color:var(--w3);font-weight:300;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:8px;padding:7px 10px;line-height:1.5; }
+.plan-save { font-size:var(--t-xs);color:var(--w3);font-weight:300;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:8px;padding:8px 8px;line-height:1.5; }
 .plan-save strong { color:var(--teal);font-weight:700; }
 
 /* TABLA COMPARATIVA */
-.rg-compara { padding:48px 44px;border-bottom:1px solid var(--line3);background:var(--bg2); }
-.cmp-title { font-size:26px;font-weight:800;letter-spacing:-.04em;margin-bottom:24px; }
+.rg-compara { padding:var(--sec-y) var(--sec-x);border-bottom:1px solid var(--line3);background:var(--bg2); }
+.cmp-title { font-size:var(--t-2xl);font-weight:800;letter-spacing:-.04em;margin-bottom:24px; }
 .cmp-title strong { color:var(--white); }
 .cmp-title em { font-family:var(--fs);font-style:italic;font-weight:400;color:var(--teal); }
 .cmp-scroll { overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line3);border-radius:14px; }
 .cmp-t { width:100%;border-collapse:collapse;min-width:560px;background:var(--card); }
-.cmp-t th, .cmp-t td { padding:13px 18px;text-align:center;border-bottom:1px solid var(--line3); }
+.cmp-t th, .cmp-t td { padding:12px 16px;text-align:center;border-bottom:1px solid var(--line3); }
 .cmp-t tbody tr:last-child td { border-bottom:none; }
-.cmp-feat-h { text-align:left;font-family:var(--fm);font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--w4); }
+.cmp-feat-h { text-align:left;font-family:var(--fm);font-size:var(--t-2xs);font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--w4); }
 .cmp-plan-h { cursor:pointer;transition:background .15s;border-bottom:2px solid var(--line3) !important; }
 .cmp-plan-h:hover { background:var(--teal-g); }
 .cmp-plan-h.active { background:var(--teal-g);border-bottom-color:var(--teal) !important; }
-.cmp-plan { font-size:14px;font-weight:700;color:var(--white); }
-.cmp-precio { font-family:var(--fm);font-size:10px;color:var(--teal);margin-top:3px; }
-.cmp-feat { text-align:left !important;font-size:12px;color:var(--w2);font-weight:300; }
+.cmp-plan { font-size:var(--t-md);font-weight:700;color:var(--white); }
+.cmp-precio { font-family:var(--fm);font-size:var(--t-2xs);color:var(--teal);margin-top:3px; }
+.cmp-feat { text-align:left !important;font-size:var(--t-sm);color:var(--w2);font-weight:300; }
 .cmp-v.active { background:rgba(45,212,180,.04); }
-.cmp-si { color:var(--teal);font-weight:800;font-size:14px; }
+.cmp-si { color:var(--teal);font-weight:800;font-size:var(--t-md); }
 .cmp-no { color:var(--w4); }
-.cmp-txt { font-size:11px;color:var(--w2);font-weight:500; }
-.cmp-nota { font-size:11px;color:var(--w4);margin-top:12px;text-align:center; }
+.cmp-txt { font-size:var(--t-xs);color:var(--w2);font-weight:500; }
+.cmp-nota { font-size:var(--t-xs);color:var(--w4);margin-top:12px;text-align:center; }
 
 /* FORM BODY */
-.rg-body { display:grid;grid-template-columns:1fr 320px;gap:24px;padding:40px 44px 80px;align-items:start; }
-.rg-left { display:flex;flex-direction:column;gap:20px; }
-.rg-sec { background:var(--card);border:1px solid var(--line3);border-radius:16px;padding:28px; }
-.rg-sec-h { display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;color:var(--white);margin-bottom:24px; }
+.rg-body { display:grid;grid-template-columns:1fr 320px;gap:24px;padding:var(--sec-y) var(--sec-x) calc(var(--sec-y) + var(--s5));align-items:start; }
+.rg-left { display:flex;flex-direction:column;gap:16px; }
+.rg-sec { background:var(--card);border:1px solid var(--line3);border-radius:16px;padding:24px; }
+.rg-sec-h { display:flex;align-items:center;gap:8px;font-size:var(--t-md);font-weight:700;color:var(--white);margin-bottom:24px; }
 .rg-sec-ic { width:32px;height:32px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:8px;display:flex;align-items:center;justify-content:center; }
 .rg-sec-ic svg { width:15px;height:15px;fill:none;stroke:var(--teal);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round; }
-.rg-grid { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
-.field { display:flex;flex-direction:column;gap:6px; }
+.rg-grid { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
+.field { display:flex;flex-direction:column;gap:4px; }
 .field.full { grid-column:span 2; }
-.field-label { font-size:11px;font-weight:500;color:var(--w4);letter-spacing:.04em;text-transform:uppercase; }
-.field-input { background:var(--bg3);border:1px solid var(--line2);border-radius:10px;padding:12px 14px;font-family:var(--f);font-size:13px;color:var(--white);outline:none;transition:border-color .15s; }
+.field-label { font-size:var(--t-xs);font-weight:500;color:var(--w4);letter-spacing:.04em;text-transform:uppercase; }
+.field-input { background:var(--bg3);border:1px solid var(--line2);border-radius:10px;padding:12px 12px;font-family:var(--f);font-size:var(--t-sm);color:var(--white);outline:none;transition:border-color .15s; }
 .field-input:focus { border-color:var(--teal-b); }
 .field-input::placeholder { color:var(--w4); }
 
-.pay-secure { font-size:11px;color:var(--w4);margin-top:14px;line-height:1.6; }
+.pay-secure { font-size:var(--t-xs);color:var(--w4);margin-top:14px;line-height:1.6; }
 
 /* RESUMEN */
 .rg-summary { background:var(--card);border:1px solid var(--line3);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:16px;position:sticky;top:80px; }
-.sum-title { font-size:14px;font-weight:700;color:var(--white); }
-.sum-event { background:var(--bg3);border:1px solid var(--line3);border-radius:10px;padding:14px; }
-.sum-ev-tag { font-family:var(--fm);font-size:8px;font-weight:500;color:var(--teal);letter-spacing:.1em;margin-bottom:6px; }
-.sum-ev-nm { font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px; }
-.sum-ev-dt { font-size:11px;color:var(--w4); }
-.sum-plan { background:var(--teal-g);border:1px solid var(--teal-b);border-radius:10px;padding:14px; }
-.sum-plan-tag { font-family:var(--fm);font-size:8px;font-weight:500;color:var(--teal);letter-spacing:.1em;margin-bottom:6px; }
-.sum-plan-nm { font-size:13px;font-weight:700;color:var(--white);margin-bottom:3px; }
-.sum-plan-desc { font-size:11px;color:var(--w3); }
-.sum-lines { display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line3);padding-top:14px; }
-.sum-line { display:flex;justify-content:space-between;font-size:12px;color:var(--w3); }
+.sum-title { font-size:var(--t-md);font-weight:700;color:var(--white); }
+.sum-event { background:var(--bg3);border:1px solid var(--line3);border-radius:10px;padding:12px; }
+.sum-ev-tag { font-family:var(--fm);font-size:var(--t-2xs);font-weight:500;color:var(--teal);letter-spacing:.1em;margin-bottom:6px; }
+.sum-ev-nm { font-size:var(--t-sm);font-weight:700;color:var(--white);margin-bottom:4px; }
+.sum-ev-dt { font-size:var(--t-xs);color:var(--w4); }
+.sum-plan { background:var(--teal-g);border:1px solid var(--teal-b);border-radius:10px;padding:12px; }
+.sum-plan-tag { font-family:var(--fm);font-size:var(--t-2xs);font-weight:500;color:var(--teal);letter-spacing:.1em;margin-bottom:6px; }
+.sum-plan-nm { font-size:var(--t-sm);font-weight:700;color:var(--white);margin-bottom:3px; }
+.sum-plan-desc { font-size:var(--t-xs);color:var(--w3); }
+.sum-lines { display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line3);padding-top:14px; }
+.sum-line { display:flex;justify-content:space-between;font-size:var(--t-sm);color:var(--w3); }
 .sum-line.teal span:last-child { color:var(--teal); }
-.sum-line.total { font-size:14px;font-weight:700;color:var(--white);border-top:1px solid var(--line3);padding-top:10px;margin-top:4px; }
+.sum-line.total { font-size:var(--t-md);font-weight:700;color:var(--white);border-top:1px solid var(--line3);padding-top:10px;margin-top:4px; }
 .sum-line.total .teal { color:var(--teal); }
-.sum-btn { background:var(--teal);color:var(--bg);border:none;border-radius:10px;padding:14px;font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;transition:background .15s;width:100%; }
+.sum-btn { background:var(--teal);color:var(--bg);border:none;border-radius:10px;padding:12px;font-family:var(--f);font-size:var(--t-sm);font-weight:700;cursor:pointer;transition:background .15s;width:100%; }
 .sum-btn:hover { background:var(--teal2); }
 .sum-btn:disabled { opacity:.5;cursor:not-allowed; }
-.sum-secure { text-align:center;font-size:11px;color:var(--w4); }
+.sum-secure { text-align:center;font-size:var(--t-xs);color:var(--w4); }
 .sum-incl { border-top:1px solid var(--line3);padding-top:14px;display:flex;flex-direction:column;gap:8px; }
-.sum-incl-t { font-family:var(--fm);font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--w4);margin-bottom:4px; }
-.sum-incl-i { display:flex;align-items:center;gap:8px;font-size:12px;color:var(--w3); }
+.sum-incl-t { font-family:var(--fm);font-size:var(--t-2xs);font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--w4);margin-bottom:4px; }
+.sum-incl-i { display:flex;align-items:center;gap:8px;font-size:var(--t-sm);color:var(--w3); }
 .sum-incl-i svg { width:12px;height:12px;fill:none;stroke:var(--teal);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0; }
 
 /* RESPONSIVE */
 @media (max-width: 968px) {
-  .rg-hero { padding:44px 20px 36px; }
-  .rg-title { font-size:36px; }
+  .rg-hero { padding:var(--sec-y) var(--sec-x); }
+  .rg-title { font-size:var(--t-4xl); }
 
-  .rg-planes { grid-template-columns:1fr;padding:32px 20px;gap:14px; }
-  .rg-paq { padding:32px 20px; }
-  .paq-grid { grid-template-columns:1fr;gap:20px; }
-  .paq-num { font-size:34px; }
-  .rg-body { grid-template-columns:1fr;padding:32px 20px 56px; }
+  .rg-planes { grid-template-columns:1fr;padding:var(--sec-y) var(--sec-x);gap:12px; }
+  .rg-paq { padding:var(--sec-y) var(--sec-x); }
+  .paq-grid { grid-template-columns:1fr;gap:16px; }
+  .paq-num { font-size:var(--t-3xl); }
+  .rg-body { grid-template-columns:1fr;padding:var(--sec-y) var(--sec-x) calc(var(--sec-y) + var(--s5)); }
   .rg-summary { position:static; }
-  .rg-compara { padding:32px 20px; }
-  .cmp-title { font-size:22px; }
+  .rg-compara { padding:var(--sec-y) var(--sec-x); }
+  .cmp-title { font-size:var(--t-xl); }
 }
 
 @media (max-width: 560px) {
   .rg-grid { grid-template-columns:1fr; }
   .field.full { grid-column:span 1; }
-  .rg-sec { padding:20px; }
+  .rg-sec { padding:16px; }
 
-  /* Tarjetas de plan compactas: el detalle completo está en la tabla comparativa */
-  .plan-card { padding:20px 18px;gap:8px; }
+  /* Tarjetas de plan compactas: el detalle completo estÃ¡ en la tabla comparativa */
+  .plan-card { padding:16px 16px;gap:8px; }
   .plan-feats { display:none; }
-  .plan-num { font-size:32px; }
+  .plan-num { font-size:var(--t-3xl); }
 }
 </style>

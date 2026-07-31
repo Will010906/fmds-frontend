@@ -161,47 +161,51 @@ const logout = () => {
 </script>
 
 <style scoped>
-.nav { height:60px;background:rgba(6,9,15,.96);backdrop-filter:blur(24px);border-bottom:1px solid var(--line3);display:flex;align-items:center;justify-content:space-between;padding:0 36px;position:fixed;top:0;left:0;right:0;z-index:1000;transition:background .25s,box-shadow .25s,border-color .25s; }
+.nav { height:60px;background:rgba(6,9,15,.96);backdrop-filter:blur(24px);border-bottom:1px solid var(--line3);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:fixed;top:0;left:0;right:0;z-index:1000;transition:background .25s,box-shadow .25s,border-color .25s; }
 .nav.scrolled { background:rgba(6,9,15,.99);border-bottom-color:var(--line2);box-shadow:0 10px 36px rgba(0,0,0,.45); }
 .nav-logo { cursor:pointer;display:flex;align-items:center; }
 
-.nav-m { display:flex;gap:2px;align-items:center; }
+.nav-m { display:flex;gap:0px;align-items:center; }
 .ni { position:relative; }
-.nbn { display:flex;align-items:center;gap:4px;font-family:var(--f);font-size:12px;font-weight:400;color:var(--w3);background:none;border:none;cursor:pointer;padding:8px 11px;border-radius:7px;transition:all .15s;text-decoration:none; }
+.nbn { display:flex;align-items:center;gap:4px;font-family:var(--f);font-size:var(--t-sm);font-weight:400;color:var(--w3);background:none;border:none;cursor:pointer;padding:8px 12px;border-radius:7px;transition:all .15s;text-decoration:none; }
 .nbn:hover, .nbn.active { color:var(--teal);background:var(--teal-g); }
 .nbn svg { width:9px;height:9px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s; }
 .ni:hover .nbn svg { transform:rotate(180deg); }
 
-.dd { position:absolute;top:calc(100% + 6px);left:0;background:var(--card2);border:1px solid var(--line2);border-radius:12px;padding:6px;min-width:228px;opacity:0;visibility:hidden;transform:translateY(-8px);transition:all .15s;z-index:200;box-shadow:0 24px 64px rgba(0,0,0,.6); }
+.dd { position:absolute;top:calc(100% + 6px);left:0;background:var(--card2);border:1px solid var(--line2);border-radius:12px;padding:4px;min-width:228px;opacity:0;visibility:hidden;transform:translateY(-8px);transition:all .15s;z-index:200;box-shadow:0 24px 64px rgba(0,0,0,.6); }
 .ni:hover .dd { opacity:1;visibility:visible;transform:translateY(0); }
-.dl { font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--w4);padding:6px 9px 3px;margin-top:4px; }
+.dl { font-size:var(--t-2xs);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--w4);padding:4px 8px 4px;margin-top:4px; }
 .dl:first-child { margin-top:0; }
-.da { display:flex;align-items:center;gap:10px;padding:9px;border-radius:8px;cursor:pointer;transition:background .12s;text-decoration:none; }
+.da { display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;cursor:pointer;transition:background .12s;text-decoration:none; }
 .da:hover { background:var(--teal-g); }
 .da.noop { cursor:default; }
 .da.noop:hover { background:none; }
 .da-ic { width:26px;height:26px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
 .da-ic svg { width:12px;height:12px; }
-.da-t { font-size:12px;font-weight:600;color:var(--white); }
-.da-s { font-size:10px;color:var(--w4);font-weight:300;margin-top:1px; }
-.dsep { height:1px;background:var(--line3);margin:5px 0; }
+.da-t { font-size:var(--t-sm);font-weight:600;color:var(--white); }
+/* Texto corrido: el escalón mínimo se reserva para etiquetas en versales */
+.da-s { font-size:var(--t-xs);color:var(--w3);font-weight:300;margin-top:2px;line-height:1.45; }
+.dsep { height:1px;background:var(--line3);margin:4px 0; }
 
 .nav-e { display:flex;gap:8px;align-items:center; }
-.nav-user { font-size:12px;color:var(--w3); }
-.ng { font-family:var(--f);font-size:12px;font-weight:500;border-radius:7px;padding:7px 14px;cursor:pointer;background:var(--w5);border:1px solid var(--line2);color:var(--w3);transition:all .15s;text-decoration:none; }
+.nav-user { font-size:var(--t-sm);color:var(--w3); }
+.ng { font-family:var(--f);font-size:var(--t-sm);font-weight:500;border-radius:7px;padding:8px 12px;cursor:pointer;background:var(--w5);border:1px solid var(--line2);color:var(--w3);transition:all .15s;text-decoration:none; }
 .ng:hover { border-color:var(--teal-b);color:var(--white); }
-.nf { font-family:var(--f);font-size:12px;font-weight:700;border-radius:7px;padding:7px 16px;cursor:pointer;background:var(--teal);border:none;color:var(--bg);transition:background .15s;text-decoration:none; }
+.nf { font-family:var(--f);font-size:var(--t-sm);font-weight:700;border-radius:7px;padding:8px 16px;cursor:pointer;background:var(--teal);border:none;color:var(--bg);transition:background .15s;text-decoration:none; }
 .nf:hover { background:var(--teal2); }
 
-.nav-burger { display:none;background:none;border:none;color:var(--white);cursor:pointer;padding:6px;align-items:center;justify-content:center; }
+/* 44x44 es el mínimo cómodo para tocar con el pulgar; a 28px el botón de menú
+   se falla seguido, y en móvil es el control más importante de la barra. */
+.nav-burger { display:none;background:none;border:none;color:var(--white);cursor:pointer;width:44px;height:44px;margin-right:-8px;align-items:center;justify-content:center;border-radius:8px; }
+.nav-burger:active { background:var(--w5); }
 .nav-mobile { display:none; }
 
 @media (max-width: 968px) {
-  .nav { padding:0 20px; }
+  .nav { padding:0 16px; }
   .nav-m, .nav-e { display:none; }
   .nav-burger { display:flex; }
-  .nav-mobile { display:flex;flex-direction:column;gap:4px;position:fixed;top:60px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--line3);padding:16px 20px;z-index:999;max-height:calc(100vh - 60px);overflow-y:auto; }
-  .nav-mobile .nbn { text-align:left;padding:10px 11px; }
+  .nav-mobile { display:flex;flex-direction:column;gap:4px;position:fixed;top:60px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--line3);padding:16px 16px;z-index:999;max-height:calc(100vh - 60px);overflow-y:auto; }
+  .nav-mobile .nbn { text-align:left;padding:8px 12px; }
   .nav-mobile .ng, .nav-mobile .nf { text-align:center;margin-top:6px; }
 }
 </style>

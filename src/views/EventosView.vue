@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="page">
 
     <AppNav />
@@ -33,7 +33,7 @@
           </div>
           <h3 class="event-title">{{ evento.titulo }}</h3>
           <div class="event-lugar" v-if="evento.sede || evento.ciudad">
-            {{ [evento.sede, evento.ciudad].filter(Boolean).join(' · ') }}
+            {{ [evento.sede, evento.ciudad].filter(Boolean).join(' Â· ') }}
           </div>
           <div class="event-card-bottom">
             <span class="event-price">${{ evento.precio }} <small>MXN</small></span>
@@ -62,7 +62,7 @@ const cargarEventos = async () => {
   eventos.value = res.data
 }
 
-// timeZone:'UTC' evita que la fecha del evento se muestre un día antes en México
+// timeZone:'UTC' evita que la fecha del evento se muestre un dÃ­a antes en MÃ©xico
 const formatFecha = (fecha) => {
   return new Date(fecha).toLocaleDateString('es-MX', {
     year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC'
@@ -81,18 +81,18 @@ onMounted(cargarEventos)
 
 /* HERO */
 .hero {
-  padding: 120px 48px 64px;
+  padding:80px 48px 64px;
   max-width: 800px;
   margin: 0 auto;
 }
 .hero-tag {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap:8px;
   background: var(--teal-g);
   border: 1px solid var(--teal-b);
   border-radius: 100px;
-  padding: 5px 14px 5px 8px;
+  padding:4px 12px 4px 8px;
   margin-bottom: 24px;
 }
 .hero-dot {
@@ -107,7 +107,7 @@ onMounted(cargarEventos)
 }
 .hero-tag-text {
   font-family: var(--fm);
-  font-size: 9px;
+  font-size:var(--t-2xs);
   font-weight: 500;
   color: var(--teal);
   letter-spacing: .1em;
@@ -116,7 +116,7 @@ onMounted(cargarEventos)
 .hero-title { margin-bottom: 16px; }
 .hero-t1 {
   display: block;
-  font-size: 52px;
+  font-size:var(--t-4xl);
   font-weight: 800;
   color: var(--white);
   letter-spacing: -.05em;
@@ -126,12 +126,12 @@ onMounted(cargarEventos)
   display: block;
   font-family: var(--fs);
   font-style: italic;
-  font-size: 46px;
+  font-size:var(--t-4xl);
   color: var(--teal);
   line-height: 1.1;
 }
 .hero-desc {
-  font-size: 15px;
+  font-size:var(--t-md);
   font-weight: 300;
   color: var(--w3);
   line-height: 1.8;
@@ -142,22 +142,22 @@ onMounted(cargarEventos)
 .events-section {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 0 48px 80px;
+  padding:0 48px 80px;
 }
-.empty { text-align: center; color: var(--w4); padding: 64px 0; }
+.empty { text-align: center; color: var(--w4); padding:64px 0; }
 .events-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
+  gap:16px;
 }
 .event-card {
   background: var(--card);
   border: 1px solid var(--line2);
   border-radius: 16px;
-  padding: 24px;
+  padding:24px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap:16px;
   transition: border-color .15s, transform .15s;
 }
 .event-card:hover {
@@ -171,18 +171,18 @@ onMounted(cargarEventos)
 }
 .event-date {
   font-family: var(--fm);
-  font-size: 10px;
+  font-size:var(--t-2xs);
   color: var(--teal);
   background: var(--teal-g);
   border: 1px solid var(--teal-b);
-  padding: 4px 10px;
+  padding:4px 8px;
   border-radius: 100px;
   letter-spacing: .05em;
 }
-.event-stock { font-size: 11px; color: var(--w4); }
-.event-lugar { font-size: 11px; color: var(--w4); font-weight: 300; margin-top: -8px; }
+.event-stock { font-size:var(--t-xs); color: var(--w4); }
+.event-lugar { font-size:var(--t-xs); color: var(--w4); font-weight: 300; margin-top: -8px; }
 .event-title {
-  font-size: 17px;
+  font-size:var(--t-lg);
   font-weight: 700;
   color: var(--white);
   letter-spacing: -.02em;
@@ -197,12 +197,12 @@ onMounted(cargarEventos)
   padding-top: 16px;
 }
 .event-price {
-  font-size: 22px;
+  font-size:var(--t-xl);
   font-weight: 800;
   color: var(--white);
   letter-spacing: -.04em;
 }
-.event-price small { font-size: 11px; color: var(--w4); font-weight: 400; }
+.event-price small { font-size:var(--t-xs); color: var(--w4); font-weight: 400; }
 
 /* BUTTONS */
 .btn-primary-sm {
@@ -210,9 +210,9 @@ onMounted(cargarEventos)
   color: var(--bg);
   border: none;
   border-radius: 8px;
-  padding: 8px 16px;
+  padding:8px 16px;
   font-family: var(--f);
-  font-size: 12px;
+  font-size:var(--t-sm);
   font-weight: 700;
   cursor: pointer;
   transition: background .15s;
@@ -228,9 +228,9 @@ onMounted(cargarEventos)
   color: var(--w3);
   border: 1px solid var(--line2);
   border-radius: 8px;
-  padding: 8px 16px;
+  padding:8px 16px;
   font-family: var(--f);
-  font-size: 12px;
+  font-size:var(--t-sm);
   cursor: pointer;
   transition: all .15s;
 }
@@ -238,10 +238,10 @@ onMounted(cargarEventos)
 
 /* RESPONSIVE */
 @media (max-width: 640px) {
-  .hero { padding: 100px 20px 48px; }
-  .hero-t1 { font-size: 36px; }
-  .hero-t2 { font-size: 30px; }
-  .events-section { padding: 0 20px 56px; }
+  .hero { padding:80px 16px 48px; }
+  .hero-t1 { font-size:var(--t-4xl); }
+  .hero-t2 { font-size:var(--t-3xl); }
+  .events-section { padding:0 16px 48px; }
   .events-grid { grid-template-columns: 1fr; }
 }
 </style>
