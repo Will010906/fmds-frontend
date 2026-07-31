@@ -14,7 +14,7 @@
           <div class="dl">Eventos 2026</div>
           <router-link to="/eventos" class="da">
             <div class="da-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-            <div><div class="da-t">Todos los eventos</div><div class="da-s">Congresos, simposios y summits</div></div>
+            <div><div class="da-t">Todos los eventos</div><div class="da-s">Congresos, simposios y encuentros</div></div>
           </router-link>
           <div class="dsep"></div>
           <div class="dl">Programa</div>
@@ -94,7 +94,7 @@
         </div>
       </div>
 
-      <router-link to="/registro" class="nbn" :class="{ active: route.name === 'registro' }">Registro & Pago</router-link>
+      <router-link to="/registro" class="nbn" :class="{ active: route.name === 'registro' }">Registro y pago</router-link>
     </div>
 
     <div class="nav-e">
@@ -109,7 +109,7 @@
       </template>
     </div>
 
-    <button class="nav-burger" @click="mobileOpen = !mobileOpen" :aria-expanded="mobileOpen" aria-label="Abrir menú">
+    <button class="nav-burger" @click="mobileOpen = !mobileOpen" :aria-expanded="mobileOpen" :aria-label="mobileOpen ? 'Cerrar menú' : 'Abrir menú'">
       <svg v-if="!mobileOpen" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
@@ -123,7 +123,7 @@
     <router-link to="/cursos" class="nbn" @click="mobileOpen = false">Cursos</router-link>
     <router-link to="/galeria" class="nbn" @click="mobileOpen = false">Galería</router-link>
     <router-link to="/nosotros" class="nbn" @click="mobileOpen = false">Nosotros</router-link>
-    <router-link to="/registro" class="nbn" @click="mobileOpen = false">Registro & Pago</router-link>
+    <router-link to="/registro" class="nbn" @click="mobileOpen = false">Registro y pago</router-link>
     <template v-if="!token">
       <router-link to="/login" class="ng" @click="mobileOpen = false">Iniciar sesión</router-link>
       <router-link to="/crear-cuenta" class="nf" @click="mobileOpen = false">Crear cuenta →</router-link>

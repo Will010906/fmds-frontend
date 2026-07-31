@@ -1,23 +1,23 @@
-﻿<template>
+<template>
   <div class="page">
 
     <AppNav />
 
     <!-- HERO -->
     <div class="mb-hero">
-      <div class="pill"><div class="pill-d"></div><span class="pill-t">Tu cuenta Â· Compras</span></div>
+      <div class="pill"><div class="pill-d"></div><span class="pill-t">Tu cuenta · Compras</span></div>
       <h1 class="mb-title"><strong>Mis</strong> <em>boletos</em></h1>
-      <p class="mb-sub">AquÃ­ aparecen todas tus compras. Presenta tu folio en el acceso del evento.</p>
+      <p class="mb-sub">Aquí aparecen todas tus compras. Presenta tu folio en el acceso del evento.</p>
     </div>
 
     <div class="mb-wrap">
 
-      <div v-if="cargando" class="mb-empty">Cargando tus boletosâ€¦</div>
+      <div v-if="cargando" class="mb-empty">Cargando tus boletos…</div>
 
       <div v-else-if="compras.length === 0" class="mb-empty">
-        <div class="mb-empty-t">AÃºn no tienes boletos</div>
-        <p class="mb-empty-s">Cuando compres tu acceso a un evento, aparecerÃ¡ aquÃ­ con su folio.</p>
-        <router-link to="/registro" class="mb-btn">Ver planes y precios âŸ¶</router-link>
+        <div class="mb-empty-t">Aún no tienes boletos</div>
+        <p class="mb-empty-s">Cuando compres tu acceso a un evento, aparecerá aquí con su folio.</p>
+        <router-link to="/registro" class="mb-btn">Ver planes y precios ⟶</router-link>
       </div>
 
       <div v-else class="mb-list">
@@ -25,7 +25,7 @@
 
           <div class="tk-main">
             <div class="tk-top">
-              <span class="tk-estado">â— Pagado</span>
+              <span class="tk-estado">● Pagado</span>
               <span class="tk-fecha">Comprado el {{ formatFecha(compra.fechaPago) }}</span>
             </div>
 
@@ -33,7 +33,7 @@
               <div class="tk-nombre">{{ detalle.titulo }}</div>
               <div class="tk-meta">
                 <span>{{ formatFechaEvento(detalle.fechaEvento) }}</span>
-                <span class="tk-dot">Â·</span>
+                <span class="tk-dot">·</span>
                 <span>{{ detalle.cantidad }} {{ detalle.cantidad === 1 ? 'boleto' : 'boletos' }}</span>
               </div>
             </div>
@@ -69,7 +69,7 @@ const formatFecha = (fecha) => {
 }
 
 // Las fechas de evento llegan como medianoche UTC: se formatean en UTC
-// para que no se recorran un dÃ­a al convertir a hora local
+// para que no se recorran un día al convertir a hora local
 const formatFechaEvento = (fecha) => {
   if (!fecha) return ''
   return new Date(fecha).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })

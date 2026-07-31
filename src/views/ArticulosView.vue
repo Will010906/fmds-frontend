@@ -1,13 +1,13 @@
-﻿<template>
+<template>
   <div class="page">
 
     <AppNav />
 
     <!-- HERO -->
     <div class="art-hero">
-      <div class="pill"><div class="pill-d"></div><span class="pill-t">Repositorio cientÃ­fico</span></div>
-      <h1 class="art-title"><strong>ArtÃ­culos</strong> <em>recientes</em></h1>
-      <p class="art-sub">{{ articulos.length }} {{ articulos.length === 1 ? 'publicaciÃ³n' : 'publicaciones' }} con revisiÃ³n por pares. Sin vÃ­nculos comerciales ni sesgos institucionales.</p>
+      <div class="pill"><div class="pill-d"></div><span class="pill-t">Repositorio científico</span></div>
+      <h1 class="art-title"><strong>Artículos</strong> <em>recientes</em></h1>
+      <p class="art-sub">{{ articulos.length }} {{ articulos.length === 1 ? 'publicación' : 'publicaciones' }} con revisión por pares. Sin vínculos comerciales ni sesgos institucionales.</p>
     </div>
 
     <!-- FILTROS -->
@@ -26,7 +26,7 @@
 
       <!-- LISTA -->
       <div v-if="articulosFiltrados.length === 0" class="art-empty">
-        {{ articulos.length === 0 ? 'AÃºn no hay artÃ­culos publicados en el repositorio.' : 'No hay artÃ­culos disponibles en esta categorÃ­a.' }}
+        {{ articulos.length === 0 ? 'Aún no hay artículos publicados en el repositorio.' : 'No hay artículos disponibles en esta categoría.' }}
       </div>
       <div v-else class="art-list">
         <div
@@ -40,7 +40,7 @@
               <span class="art-cat" :style="{ color: colorDe(art.categoria) }">{{ art.categoria }}</span>
             </div>
             <div class="art-nm">{{ art.titulo }}</div>
-            <div class="art-by">{{ art.autor }} Â· {{ formatFecha(art.fechaPublicacion) }}</div>
+            <div class="art-by">{{ art.autor }} · {{ formatFecha(art.fechaPublicacion) }}</div>
           </div>
           <div class="art-badge">Revisado</div>
         </div>
@@ -48,7 +48,7 @@
 
       <!-- CTA -->
       <div class="art-cta">
-        <router-link :to="{ name: 'nosotros', query: { asunto: 'Publicar artÃ­culo' }, hash: '#contacto' }" class="art-btn">Publicar artÃ­culo âŸ¶</router-link>
+        <router-link :to="{ name: 'nosotros', query: { asunto: 'Publicar artículo' }, hash: '#contacto' }" class="art-btn">Publicar artículo ⟶</router-link>
       </div>
     </div>
 
@@ -65,17 +65,17 @@ import AppFooter from '../components/AppFooter.vue'
 const categoriaActiva = ref('Todos')
 const articulos = ref([])
 
-// Color de acento por categorÃ­a (las categorÃ­as vienen de la BD)
+// Color de acento por categoría (las categorías vienen de la BD)
 const COLORES = {
   'Arquitectura': '#2DD4B4',
   'Seguridad': '#F59E0B',
-  'MetodologÃ­as': '#818CF8',
+  'Metodologías': '#818CF8',
   'IA': '#34D399',
   'Base de Datos': '#60A5FA',
 }
 const colorDe = (categoria) => COLORES[categoria] || '#2DD4B4'
 
-// Chips de filtro generados a partir de las categorÃ­as reales registradas
+// Chips de filtro generados a partir de las categorías reales registradas
 const categorias = computed(() => ['Todos', ...new Set(articulos.value.map(a => a.categoria))])
 
 const articulosFiltrados = computed(() => {

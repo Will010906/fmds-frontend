@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="page">
 
     <AppNav />
@@ -33,7 +33,7 @@
           </div>
           <h3 class="event-title">{{ evento.titulo }}</h3>
           <div class="event-lugar" v-if="evento.sede || evento.ciudad">
-            {{ [evento.sede, evento.ciudad].filter(Boolean).join(' Â· ') }}
+            {{ [evento.sede, evento.ciudad].filter(Boolean).join(' · ') }}
           </div>
           <div class="event-card-bottom">
             <span class="event-price">${{ evento.precio }} <small>MXN</small></span>
@@ -62,7 +62,7 @@ const cargarEventos = async () => {
   eventos.value = res.data
 }
 
-// timeZone:'UTC' evita que la fecha del evento se muestre un dÃ­a antes en MÃ©xico
+// timeZone:'UTC' evita que la fecha del evento se muestre un día antes en México
 const formatFecha = (fecha) => {
   return new Date(fecha).toLocaleDateString('es-MX', {
     year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC'
@@ -81,7 +81,7 @@ onMounted(cargarEventos)
 
 /* HERO */
 .hero {
-  padding:80px 48px 64px;
+  padding:var(--sec-y) var(--sec-x);
   max-width: 800px;
   margin: 0 auto;
 }
@@ -142,7 +142,7 @@ onMounted(cargarEventos)
 .events-section {
   max-width: 1100px;
   margin: 0 auto;
-  padding:0 48px 80px;
+  padding:0 var(--sec-x) calc(var(--sec-y) + var(--s5));
 }
 .empty { text-align: center; color: var(--w4); padding:64px 0; }
 .events-grid {
@@ -238,10 +238,7 @@ onMounted(cargarEventos)
 
 /* RESPONSIVE */
 @media (max-width: 640px) {
-  .hero { padding:80px 16px 48px; }
-  .hero-t1 { font-size:var(--t-4xl); }
   .hero-t2 { font-size:var(--t-3xl); }
-  .events-section { padding:0 16px 48px; }
   .events-grid { grid-template-columns: 1fr; }
 }
 </style>

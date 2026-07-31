@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="page">
 
     <AppNav />
@@ -12,7 +12,7 @@
 
     <!-- TABS -->
     <div class="ag-wrap">
-      <div v-if="sesiones.length === 0" class="ag-empty">AÃºn no hay sesiones registradas en la agenda.</div>
+      <div v-if="sesiones.length === 0" class="ag-empty">Aún no hay sesiones registradas en la agenda.</div>
       <template v-else>
         <div class="ag-tabs">
           <button
@@ -22,7 +22,7 @@
             :class="{ active: diaActivo === dia }"
             @click="diaActivo = dia"
           >
-            DÃ­a {{ dia }}
+            Día {{ dia }}
           </button>
         </div>
 
@@ -55,7 +55,7 @@
 
       <!-- CTA -->
       <div class="ag-cta">
-        <router-link to="/eventos" class="ag-btn">Reservar mi lugar âŸ¶</router-link>
+        <router-link to="/eventos" class="ag-btn">Reservar mi lugar ⟶</router-link>
       </div>
     </div>
 
@@ -88,18 +88,18 @@ const sesionesDelDia = computed(() =>
 )
 
 // Resumen del encabezado calculado desde la agenda real, para que nunca
-// prometa mÃ¡s sesiones o talleres de los que estÃ¡n efectivamente cargados.
+// prometa más sesiones o talleres de los que están efectivamente cargados.
 const resumen = computed(() => {
-  if (sesiones.value.length === 0) return 'El programa se publicarÃ¡ conforme se confirmen las sesiones.'
+  if (sesiones.value.length === 0) return 'El programa se publicará conforme se confirmen las sesiones.'
   const dias = diasDisponibles.value.length
   const total = sesiones.value.length
   const talleres = sesiones.value.filter(s => /workshop|taller/i.test(s.tipo || '')).length
   const partes = [
-    `${dias} ${dias === 1 ? 'dÃ­a' : 'dÃ­as'}`,
-    `${total} ${total === 1 ? 'sesiÃ³n' : 'sesiones'}`,
+    `${dias} ${dias === 1 ? 'día' : 'días'}`,
+    `${total} ${total === 1 ? 'sesión' : 'sesiones'}`,
   ]
-  if (talleres > 0) partes.push(`${talleres} ${talleres === 1 ? 'taller prÃ¡ctico' : 'talleres prÃ¡cticos'}`)
-  return partes.join(' Â· ')
+  if (talleres > 0) partes.push(`${talleres} ${talleres === 1 ? 'taller práctico' : 'talleres prácticos'}`)
+  return partes.join(' · ')
 })
 
 const cargarSesiones = async () => {

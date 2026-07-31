@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="page">
 
     <AppNav />
@@ -6,36 +6,36 @@
     <!-- HERO -->
     <div class="ph">
       <div class="pill"><div class="pill-d"></div><span class="pill-t">Memoria del congreso</span></div>
-      <h1 class="ph-ttl">GalerÃ­a <em>FMDS</em></h1>
-      <p class="ph-sub">AquÃ­ publicaremos las fotografÃ­as, ponencias y memorias de cada ediciÃ³n del congreso.</p>
+      <h1 class="ph-ttl">Galería <em>FMDS</em></h1>
+      <p class="ph-sub">Aquí publicaremos las fotografías, ponencias y memorias de cada edición del congreso.</p>
     </div>
 
     <div class="sec">
-      <!-- ESTADO: aÃºn sin ediciones celebradas -->
+      <!-- ESTADO: aún sin ediciones celebradas -->
       <div class="gal-soon">
         <div class="gs-ic">
           <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         </div>
-        <div class="gs-ttl">La primera ediciÃ³n estÃ¡ por venir</div>
+        <div class="gs-ttl">La primera edición está por venir</div>
         <p class="gs-txt">
-          La FederaciÃ³n Mexicana de Desarrolladores de Software es una organizaciÃ³n de reciente creaciÃ³n.
-          En cuanto se celebre nuestro primer congreso, esta secciÃ³n reunirÃ¡ la galerÃ­a fotogrÃ¡fica
+          La Federación Mexicana de Desarrolladores de Software es una organización de reciente creación.
+          En cuanto se celebre nuestro primer congreso, esta sección reunirá la galería fotográfica
           y las memorias de las ponencias.
         </p>
 
-        <!-- PrÃ³ximo evento real -->
+        <!-- Próximo evento real -->
         <div class="gs-ev" v-if="proximoEvento">
           <div class="gs-ev-l">
-            <div class="gs-ev-tag">PrÃ³ximo evento</div>
+            <div class="gs-ev-tag">Próximo evento</div>
             <div class="gs-ev-nm">{{ proximoEvento.titulo }}</div>
             <div class="gs-ev-dt">{{ formatFecha(proximoEvento.fecha) }}</div>
           </div>
           <router-link :to="{ name: 'evento', params: { id: proximoEvento.idEvento } }" class="gs-btn">
-            Ver el evento âŸ¶
+            Ver el evento ⟶
           </router-link>
         </div>
 
-        <p class="gs-nota">Â¿Quieres estar cuando ocurra? SÃ© parte de la primera ediciÃ³n.</p>
+        <p class="gs-nota">¿Quieres estar cuando ocurra? Sé parte de la primera edición.</p>
       </div>
     </div>
 
@@ -85,7 +85,7 @@ onMounted(async () => {
 
 .sec { padding:var(--sec-y) var(--sec-x); }
 
-/* ESTADO PRÃ“XIMAMENTE */
+/* ESTADO PRÓXIMAMENTE */
 .gal-soon { max-width:640px;margin:0 auto;text-align:center;background:var(--card);border:1px solid var(--line3);border-radius:18px;padding:48px 48px; }
 .gs-ic { width:56px;height:56px;margin:0 auto 24px;background:var(--teal-g);border:1px solid var(--teal-b);border-radius:14px;display:flex;align-items:center;justify-content:center; }
 .gs-ic svg { width:26px;height:26px; }

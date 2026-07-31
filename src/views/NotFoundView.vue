@@ -1,14 +1,14 @@
-﻿<template>
+<template>
   <div class="page">
 
     <AppNav />
 
     <div class="nf-wrap">
       <div class="nf-code">404</div>
-      <h1 class="nf-title"><strong>PÃ¡gina</strong> <em>no encontrada</em></h1>
-      <p class="nf-sub">La direcciÃ³n que buscas no existe o fue movida. Revisa la URL o vuelve al inicio.</p>
+      <h1 class="nf-title"><strong>Página</strong> <em>no encontrada</em></h1>
+      <p class="nf-sub">La dirección que buscas no existe o fue movida. Revisa la URL o vuelve al inicio.</p>
       <div class="nf-actions">
-        <router-link to="/" class="nf-btn">Volver al inicio âŸ¶</router-link>
+        <router-link to="/" class="nf-btn">Volver al inicio ⟶</router-link>
         <router-link to="/eventos" class="nf-ghost">Ver eventos</router-link>
       </div>
     </div>

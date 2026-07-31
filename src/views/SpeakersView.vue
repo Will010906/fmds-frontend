@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="page">
 
     <AppNav />
@@ -7,12 +7,12 @@
     <div class="sp-hero">
       <div class="pill"><div class="pill-d"></div><span class="pill-t">Ponentes 2026</span></div>
       <h1 class="sp-title"><strong>Speakers</strong> <em>magistrales</em></h1>
-      <p class="sp-sub">LÃ­deres, investigadores e innovadores que comparten su visiÃ³n del futuro del software en MÃ©xico y el mundo.</p>
+      <p class="sp-sub">Líderes, investigadores e innovadores que comparten su visión del futuro del software en México y el mundo.</p>
     </div>
 
     <!-- GRID -->
     <div class="sp-wrap">
-      <div v-if="speakers.length === 0" class="sp-empty">AÃºn no hay speakers registrados.</div>
+      <div v-if="speakers.length === 0" class="sp-empty">Aún no hay speakers registrados.</div>
       <div v-else class="sp-grid">
 
         <!-- Featured speaker -->
@@ -47,7 +47,7 @@
 
       <!-- CTA -->
       <div class="sp-cta">
-        <router-link to="/registro" class="sp-btn">Quiero ser ponente âŸ¶</router-link>
+        <router-link to="/registro" class="sp-btn">Quiero ser ponente ⟶</router-link>
       </div>
     </div>
 

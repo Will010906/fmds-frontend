@@ -8,7 +8,7 @@
   <div class="h-l">
     <div class="h-tag">
       <div class="h-tag-d"></div>
-      <span class="h-tag-t">Federación Mexicana Desarrolladores de Software</span>
+      <span class="h-tag-t">Federación Mexicana de Desarrolladores de Software</span>
     </div>
     <div class="h-titles">
       <span class="hh1">El ecosistema</span>

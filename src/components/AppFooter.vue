@@ -32,7 +32,7 @@
       <div class="ft-col">
         <div class="ft-lbl">Tu cuenta</div>
         <div class="ft-lnks">
-          <router-link to="/registro">Registro & pago</router-link>
+          <router-link to="/registro">Registro y pago</router-link>
           <router-link to="/crear-cuenta">Crear cuenta</router-link>
           <router-link to="/mis-boletos">Mis boletos</router-link>
         </div>

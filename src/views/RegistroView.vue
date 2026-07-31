@@ -1,13 +1,13 @@
-﻿<template>
+<template>
   <div class="page">
 
     <AppNav />
 
     <!-- HERO -->
     <div class="rg-hero">
-      <div class="pill"><div class="pill-d"></div><span class="pill-t">Registro & Pago Seguro</span></div>
+      <div class="pill"><div class="pill-d"></div><span class="pill-t">Registro y pago seguro</span></div>
       <h1 class="rg-title"><strong>Elige tu</strong> <em>plan</em></h1>
-      <p class="rg-sub">Selecciona el acceso que mejor se adapte a tu perfil. Proceso 100% seguro con confirmaciÃ³n inmediata.</p>
+      <p class="rg-sub">Selecciona el acceso que mejor se adapte a tu perfil. Proceso 100% seguro con confirmación inmediata.</p>
     </div>
 
     <!-- PLANES -->
@@ -27,7 +27,7 @@
           <span class="plan-per" v-if="plan.precio !== 'Gratis'">MXN</span>
         </div>
         <div class="plan-save" v-if="plan.precio !== 'Gratis' && eventoActual">
-          Boleto para <strong>{{ eventoActual.titulo }}</strong> Â· {{ formatFecha(eventoActual.fecha) }}
+          Boleto para <strong>{{ eventoActual.titulo }}</strong> · {{ formatFecha(eventoActual.fecha) }}
         </div>
         <div class="plan-name">{{ plan.nombre }}</div>
         <div class="plan-desc">{{ plan.desc }}</div>
@@ -41,10 +41,10 @@
       </div>
     </div>
 
-    <!-- PAQUETES (solo si la federaciÃ³n cargÃ³ alguno para este evento) -->
+    <!-- PAQUETES (solo si la federación cargó alguno para este evento) -->
     <div class="rg-paq" v-if="planesPaquete.length">
       <div class="paq-hd">
-        <div class="cmp-title"><strong>Â¿Vienen</strong> <em>en equipo?</em></div>
+        <div class="cmp-title"><strong>¿Vienen</strong> <em>en equipo?</em></div>
         <p class="paq-sub">Los paquetes incluyen varios accesos en una sola compra y cuestan menos que comprarlos por separado.</p>
       </div>
       <div class="paq-grid">
@@ -68,7 +68,7 @@
             <span class="paq-mxn">MXN</span>
           </div>
           <div class="paq-unit">
-            â‰ˆ ${{ porPersonaDe(paquetes[k]).toLocaleString('es-MX') }} por persona Â· vs {{ paquetes[k].cantidadBoletos }} boletos por separado
+            ≈ ${{ porPersonaDe(paquetes[k]).toLocaleString('es-MX') }} por persona · vs {{ paquetes[k].cantidadBoletos }} boletos por separado
           </div>
 
           <p class="paq-desc">{{ plan.desc }}</p>
@@ -78,7 +78,7 @@
               {{ f }}
             </li>
           </ul>
-          <div class="paq-sel">{{ planActivo === plan.i ? 'âœ“ Seleccionado' : 'Elegir este paquete' }}</div>
+          <div class="paq-sel">{{ planActivo === plan.i ? '✓ Seleccionado' : 'Elegir este paquete' }}</div>
         </div>
       </div>
     </div>
@@ -107,8 +107,8 @@
             <tr v-for="fila in comparativa" :key="fila.nombre">
               <td class="cmp-feat">{{ fila.nombre }}</td>
               <td v-for="(valor, i) in fila.valores" :key="i" class="cmp-v" :class="{ active: planActivo === i }">
-                <span v-if="valor === true" class="cmp-si">âœ“</span>
-                <span v-else-if="valor === false" class="cmp-no">â€”</span>
+                <span v-if="valor === true" class="cmp-si">✓</span>
+                <span v-else-if="valor === false" class="cmp-no">—</span>
                 <span v-else class="cmp-txt">{{ valor }}</span>
               </td>
             </tr>
@@ -131,44 +131,44 @@
           <div class="rg-grid">
             <div class="field">
               <label class="field-label">Nombre(s)</label>
-              <input v-model="form.nombre" type="text" placeholder="AndrÃ©s" class="field-input" />
+              <input v-model="form.nombre" type="text" placeholder="Andrés" class="field-input" />
             </div>
             <div class="field">
               <label class="field-label">Apellidos</label>
-              <input v-model="form.apellidos" type="text" placeholder="LÃ³pez Gaecia" class="field-input" />
+              <input v-model="form.apellidos" type="text" placeholder="López García" class="field-input" />
             </div>
             <div class="field">
-              <label class="field-label">Correo electrÃ³nico</label>
+              <label class="field-label">Correo electrónico</label>
               <input v-model="form.correo" type="email" placeholder="correo@ejemplo.com" class="field-input" />
             </div>
             <div class="field">
-              <label class="field-label">TelÃ©fono</label>
+              <label class="field-label">Teléfono</label>
               <input v-model="form.telefono" type="tel" placeholder="+52 (443) 000-0000" class="field-input" />
             </div>
             <div class="field">
-              <label class="field-label">InstituciÃ³n</label>
+              <label class="field-label">Institución</label>
               <input v-model="form.institucion" type="text" placeholder="UTM, UNAM, TEC..." class="field-input" />
             </div>
             <div class="field">
               <label class="field-label">Estado</label>
-              <input v-model="form.estado" type="text" placeholder="MichoacÃ¡n" class="field-input" />
+              <input v-model="form.estado" type="text" placeholder="Michoacán" class="field-input" />
             </div>
           </div>
         </div>
 
-        <!-- MÃ©todo de pago -->
+        <!-- Método de pago -->
         <div class="rg-sec" v-if="planes[planActivo].precio !== 'Gratis'">
           <div class="rg-sec-h">
             <div class="rg-sec-ic"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
-            <span>MÃ©todo de pago</span>
+            <span>Método de pago</span>
           </div>
           <div class="rg-grid">
             <div class="field full">
-              <label class="field-label">NÃºmero de tarjeta</label>
+              <label class="field-label">Número de tarjeta</label>
               <input v-model="pago.numero" type="text" placeholder="1234 5678 9012 3456" class="field-input" />
             </div>
             <div class="field">
-              <label class="field-label">ExpiraciÃ³n</label>
+              <label class="field-label">Expiración</label>
               <input v-model="pago.expiracion" type="text" placeholder="MM / AA" class="field-input" />
             </div>
             <div class="field">
@@ -180,7 +180,7 @@
               <input v-model="pago.nombre" type="text" placeholder="Como aparece en la tarjeta" class="field-input" />
             </div>
           </div>
-          <p class="pay-secure">ðŸ”’ Pago procesado de forma segura con Openpay. Aceptamos Visa, MasterCard y American Express.</p>
+          <p class="pay-secure">🔒 Pago procesado de forma segura con Openpay. Aceptamos Visa, MasterCard y American Express.</p>
         </div>
 
       </div>
@@ -207,9 +207,9 @@
           <div class="sum-line total"><span>Total</span><span :class="{ teal: planes[planActivo].precio === 'Gratis' }">{{ planes[planActivo].precio === 'Gratis' ? 'Gratis' : '$' + planes[planActivo].precio + ' MXN' }}</span></div>
         </div>
         <button class="sum-btn" @click="confirmar" :disabled="!eventoActual">
-          {{ planes[planActivo].precio === 'Gratis' ? 'Enviar mi propuesta â†’' : 'Confirmar y pagar â†’' }}
+          {{ planes[planActivo].precio === 'Gratis' ? 'Enviar mi propuesta →' : 'Confirmar y pagar →' }}
         </button>
-        <p class="sum-secure">ðŸ”’ Pago 100% seguro Â· con Openpay</p>
+        <p class="sum-secure">🔒 Pago 100% seguro · con Openpay</p>
         <div class="sum-incl">
           <div class="sum-incl-t">Incluye en tu plan</div>
           <div class="sum-incl-i" v-for="f in planes[planActivo].feats.slice(0,4)" :key="f">
@@ -240,15 +240,15 @@ const paquetes = ref([])
 const form = ref({ nombre: '', apellidos: '', correo: '', telefono: '', institucion: '', estado: '' })
 const pago = ref({ numero: '', expiracion: '', cvv: '', nombre: '' })
 
-// timeZone:'UTC' evita que la fecha del evento se muestre un dÃ­a antes en MÃ©xico
+// timeZone:'UTC' evita que la fecha del evento se muestre un día antes en México
 const formatFecha = (fecha) => {
   return new Date(fecha).toLocaleDateString('es-MX', {
     year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'
   })
 }
 
-// Se registra al evento mÃ¡s prÃ³ximo que todavÃ­a no ocurre. Si ya pasaron todos,
-// se toma el primero de la lista para no dejar la pÃ¡gina sin contexto.
+// Se registra al evento más próximo que todavía no ocurre. Si ya pasaron todos,
+// se toma el primero de la lista para no dejar la página sin contexto.
 const cargarEvento = async () => {
   const res = await api.get('/eventos')
   const ahora = Date.now()
@@ -256,8 +256,8 @@ const cargarEvento = async () => {
   eventoActual.value = futuros[0] || res.data[0] || null
 }
 
-// Paquetes activos del evento. Si la federaciÃ³n no ha cargado ninguno, el
-// arreglo queda vacÃ­o y la secciÃ³n de paquetes simplemente no se muestra.
+// Paquetes activos del evento. Si la federación no ha cargado ninguno, el
+// arreglo queda vacío y la sección de paquetes simplemente no se muestra.
 const cargarPaquetes = async () => {
   if (!eventoActual.value) return
   try {
@@ -274,7 +274,7 @@ onMounted(async () => {
 })
 
 // Ahorro de un paquete frente a comprar esos boletos por separado. Los dos
-// nÃºmeros salen de la base de datos, asÃ­ que no puede quedar desfasado.
+// números salen de la base de datos, así que no puede quedar desfasado.
 const ahorroDe = (paquete) => {
   const porSeparado = Number(paquete.precioEvento) * paquete.cantidadBoletos
   return Math.round(porSeparado - Number(paquete.precio))
@@ -289,34 +289,34 @@ const precioEvento = computed(() => {
 })
 
 // Solo hay dos formas reales de entrar: comprando el boleto o presentando una
-// ponencia aprobada. El acceso de ponente no se cobra aquÃ­, se solicita.
+// ponencia aprobada. El acceso de ponente no se cobra aquí, se solicita.
 const planes = computed(() => [
   {
     label: 'Acceso al congreso',
     badge: 'Disponible', badgeColor: 'green',
-    precio: precioEvento.value === null ? 'â€”' : String(precioEvento.value),
+    precio: precioEvento.value === null ? '—' : String(precioEvento.value),
     nombre: 'Acceso General',
-    desc: 'Para estudiantes, profesionales, docentes e investigadores. Es el boleto que se compra en lÃ­nea.',
+    desc: 'Para estudiantes, profesionales, docentes e investigadores. Es el boleto que se compra en línea.',
     sumDesc: 'Acceso completo a las sesiones',
-    feats: ['Todas las sesiones del programa', 'Talleres del congreso', 'Constancia de participaciÃ³n', 'Boleto con folio en "Mis boletos"'],
+    feats: ['Todas las sesiones del programa', 'Talleres del congreso', 'Constancia de participación', 'Boleto con folio en "Mis boletos"'],
     featured: true,
   },
   {
-    label: 'Requiere aprobaciÃ³n',
+    label: 'Requiere aprobación',
     badge: null,
     precio: 'Gratis',
     nombre: 'Acceso Ponente',
-    desc: 'Para quienes presenten una ponencia aprobada por el comitÃ© acadÃ©mico.',
-    sumDesc: 'Acceso completo y espacio de presentaciÃ³n',
-    feats: ['Acceso completo al evento', 'Espacio de presentaciÃ³n propio', 'Constancia de ponente'],
+    desc: 'Para quienes presenten una ponencia aprobada por el comité académico.',
+    sumDesc: 'Acceso completo y espacio de presentación',
+    feats: ['Acceso completo al evento', 'Espacio de presentación propio', 'Constancia de ponente'],
     featured: false,
   },
-  // Los paquetes cargados por la federaciÃ³n se suman como opciones mÃ¡s. Al
+  // Los paquetes cargados por la federación se suman como opciones más. Al
   // llevar idPaquete, el cobro se resuelve por paquete y no por boleto suelto.
   ...paquetes.value.map((p) => ({
     idPaquete: p.idPaquete,
     label: `${p.cantidadBoletos} entradas`,
-    badge: p.destacado ? 'MÃ¡s elegido' : null, badgeColor: 'green',
+    badge: p.destacado ? 'Más elegido' : null, badgeColor: 'green',
     precio: String(Math.round(Number(p.precio))),
     nombre: p.nombre,
     desc: p.descripcion || `Incluye ${p.cantidadBoletos} accesos al congreso en una sola compra.`,
@@ -324,7 +324,7 @@ const planes = computed(() => [
     feats: [
       `${p.cantidadBoletos} accesos al congreso`,
       `Ahorras $${ahorroDe(p)} frente a comprarlos por separado`,
-      'Constancia de participaciÃ³n para cada asistente',
+      'Constancia de participación para cada asistente',
       'Boleto con folio en "Mis boletos"',
     ],
     featured: !!p.destacado,
@@ -332,7 +332,7 @@ const planes = computed(() => [
 ])
 
 // Las dos formas individuales de entrar y los paquetes se muestran por
-// separado, pero comparten el mismo Ã­ndice de selecciÃ³n para que el resumen y
+// separado, pero comparten el mismo índice de selección para que el resumen y
 // el cobro funcionen igual con cualquiera.
 const planesIndividuales = computed(() =>
   planes.value.map((p, i) => ({ ...p, i })).filter((p) => !p.idPaquete)
@@ -346,15 +346,15 @@ const comparativa = [
   { nombre: 'Todas las sesiones del programa', valores: [true, true] },
   { nombre: 'Talleres del congreso', valores: [true, true] },
   { nombre: 'Constancia', valores: ['De asistente', 'De ponente'] },
-  { nombre: 'Espacio de presentaciÃ³n propio', valores: [false, true] },
-  { nombre: 'Se compra en lÃ­nea', valores: [true, false] },
+  { nombre: 'Espacio de presentación propio', valores: [false, true] },
+  { nombre: 'Se compra en línea', valores: [true, false] },
 ]
 
 const confirmar = async () => {
   const plan = planes.value[planActivo.value]
 
   if (!eventoActual.value) {
-    alert('No hay ningÃºn evento disponible para registrarte en este momento.')
+    alert('No hay ningún evento disponible para registrarte en este momento.')
     return
   }
 
@@ -364,13 +364,13 @@ const confirmar = async () => {
     return
   }
 
-  // Sin sesiÃ³n iniciada se compra como invitado: nombre y correo obligatorios
+  // Sin sesión iniciada se compra como invitado: nombre y correo obligatorios
   if (!localStorage.getItem('token') && (!form.value.nombre || !form.value.correo)) {
-    alert('Completa tu nombre y correo electrÃ³nico para continuar.')
+    alert('Completa tu nombre y correo electrónico para continuar.')
     return
   }
 
-  // La expiraciÃ³n se captura como "MM / AA"; el servicio la espera separada
+  // La expiración se captura como "MM / AA"; el servicio la espera separada
   const [mes, anio] = pago.value.expiracion.split('/').map((p) => p?.trim())
 
   try {
@@ -384,10 +384,10 @@ const confirmar = async () => {
     })
 
     if (localStorage.getItem('token')) {
-      alert('Â¡Pago exitoso! Tu boleto ya aparece en "Mis boletos".')
+      alert('¡Pago exitoso! Tu boleto ya aparece en "Mis boletos".')
       router.push({ name: 'mis-boletos' })
     } else {
-      alert('Â¡Pago exitoso! Crea una cuenta con este mismo correo para consultar tus boletos cuando quieras.')
+      alert('¡Pago exitoso! Crea una cuenta con este mismo correo para consultar tus boletos cuando quieras.')
       router.push({ name: 'crear-cuenta' })
     }
   } catch (err) {
@@ -542,7 +542,7 @@ const confirmar = async () => {
   .field.full { grid-column:span 1; }
   .rg-sec { padding:16px; }
 
-  /* Tarjetas de plan compactas: el detalle completo estÃ¡ en la tabla comparativa */
+  /* Tarjetas de plan compactas: el detalle completo está en la tabla comparativa */
   .plan-card { padding:16px 16px;gap:8px; }
   .plan-feats { display:none; }
   .plan-num { font-size:var(--t-3xl); }
