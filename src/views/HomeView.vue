@@ -21,13 +21,13 @@
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#06090F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         Ver congresos 2026
       </router-link>
-      <router-link to="/articulos" class="btn-s">Explorar artículos</router-link>
+      <router-link to="/agenda" class="btn-s">Ver el programa</router-link>
     </div>
     <div class="h-nums">
       <div class="hn"><div class="hn-v"><AnimatedNumber :value="eventos.length" /></div><div class="hn-l">Eventos</div></div>
       <div class="hn"><div class="hn-v"><AnimatedNumber :value="speakers.length" /></div><div class="hn-l">Ponentes</div></div>
       <div class="hn"><div class="hn-v"><AnimatedNumber :value="totalSesiones" /></div><div class="hn-l">Sesiones</div></div>
-      <div class="hn"><div class="hn-v"><AnimatedNumber :value="totalArticulos" /></div><div class="hn-l">Artículos</div></div>
+      <div class="hn"><div class="hn-v"><AnimatedNumber :value="totalCursos" /></div><div class="hn-l">Cursos</div></div>
     </div>
   </div>
 
@@ -78,7 +78,7 @@
           <span>Divulgación científica neutral</span><span>·</span>
           <span>Congresos internacionales</span><span>·</span>
           <span>Cursos de actualización</span><span>·</span>
-          <span>Revisión por pares</span><span>·</span>
+          <span>Comité académico independiente</span><span>·</span>
           <span>Comunidad tecnológica de México</span><span>·</span>
         </template>
       </div>
@@ -97,10 +97,6 @@
   <div class="fsc" @click="$router.push('/agenda')">
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
     <div class="fsc-n">Agenda</div><div class="fsc-s">{{ totalSesiones }} {{ totalSesiones === 1 ? 'sesión' : 'sesiones' }}</div>
-  </div>
-  <div class="fsc" @click="$router.push('/articulos')">
-    <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-    <div class="fsc-n">Artículos</div><div class="fsc-s">{{ totalArticulos }} {{ totalArticulos === 1 ? 'publicación' : 'publicaciones' }}</div>
   </div>
   <div class="fsc" @click="$router.push('/cursos')">
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
@@ -167,7 +163,6 @@
       <div class="sh"><div class="sh-n"><AnimatedNumber :value="eventos.length" /></div><div class="sh-l">Eventos programados</div></div>
       <div class="sh"><div class="sh-n"><AnimatedNumber :value="speakers.length" /></div><div class="sh-l">Ponentes</div></div>
       <div class="sh"><div class="sh-n"><AnimatedNumber :value="totalSesiones" /></div><div class="sh-l">Sesiones en agenda</div></div>
-      <div class="sh"><div class="sh-n"><AnimatedNumber :value="totalArticulos" /></div><div class="sh-l">Artículos publicados</div></div>
       <div class="sh"><div class="sh-n"><AnimatedNumber :value="totalCursos" /></div><div class="sh-l">Cursos en línea</div></div>
     </div>
 
@@ -193,7 +188,7 @@
         <div class="pq-c">
           <div class="pq-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
           <div class="pq-t">Impulsa tu carrera</div>
-          <p class="pq-s">Convocatorias abiertas para publicar artículos con revisión por pares y para presentar tu propia ponencia.</p>
+          <p class="pq-s">Convocatoria abierta para presentar tu propia ponencia ante la comunidad y el comité académico.</p>
         </div>
         <div class="pq-c">
           <div class="pq-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
@@ -237,7 +232,7 @@
         <div class="val">
           <div class="vn">03</div>
           <div class="vi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z"/></svg></div>
-          <div><div class="vttl">Rigor internacional</div><div class="vdesc">Ponentes globales y revisión por pares de alto nivel.</div></div>
+          <div><div class="vttl">Rigor internacional</div><div class="vdesc">Ponencias evaluadas por un comité académico antes de programarse.</div></div>
         </div>
         <div class="val">
           <div class="vn">04</div>
@@ -287,28 +282,6 @@
         <div class="sm-rl">{{ s.rol }}</div>
         <div class="sm-tp">{{ s.tema }}</div>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- ARTÍCULOS -->
-<div v-reveal class="sec sup-grid sup-edge" style="background:var(--bg2)">
-  <div class="s-hd">
-    <div>
-      <div class="pill"><div class="pill-d"></div><span class="pill-t">Repositorio científico</span></div>
-      <div class="s-ttl">Artículos <em>recientes</em></div>
-    </div>
-    <router-link to="/articulos" class="s-all">Ver todos →</router-link>
-  </div>
-  <div class="art-ed">
-    <div class="ae" v-for="(art, i) in articulos" :key="art.idArticulo">
-      <div class="ae-n">0{{ i+1 }}</div>
-      <div>
-        <div class="ae-cat">{{ art.categoria }}</div>
-        <div class="ae-ttl">{{ art.titulo }}</div>
-        <div class="ae-by">{{ art.autor }} · {{ formatFecha(art.fechaPublicacion) }}</div>
-      </div>
-      <div class="ae-badge">Revisado</div>
     </div>
   </div>
 </div>
@@ -371,7 +344,7 @@
     <div class="bol-ttl"><strong>Mantente</strong><br><em>al frente</em></div>
   </div>
   <div class="bol-r">
-    <p class="bol-desc">Convocatorias, artículos y descuentos anticipados para congresos. Directo en tu correo, sin spam.</p>
+    <p class="bol-desc">Convocatorias, programa y precios anticipados de cada congreso. Directo en tu correo, sin spam.</p>
     <div class="bol-form" v-if="!suscrito">
       <input v-model="bolCorreo" type="email" placeholder="tucorreo@ejemplo.com" class="bol-in" @keyup.enter="suscribir" />
       <button class="bol-btn" @click="suscribir" :disabled="suscribiendo">{{ suscribiendo ? 'Enviando...' : 'Suscribirse →' }}</button>
@@ -397,11 +370,9 @@ import { inicialesDe as iniciales, estiloAvatar } from '../utils/avatar'
 
 const eventos = ref([])
 const proximoEvento = ref(null)
-const articulos = ref([])
 const speakers = ref([])
 
 // Conteos reales para la tira de accesos rápidos
-const totalArticulos = ref(0)
 const totalSesiones = ref(0)
 const totalCursos = ref(0)
 
@@ -458,12 +429,6 @@ const precioMin = computed(() => {
   return precios.length ? Math.min(...precios).toLocaleString('en-US') : null
 })
 
-const cargarArticulos = async () => {
-  const res = await api.get('/articulos')
-  totalArticulos.value = res.data.length
-  articulos.value = res.data.slice(0, 4)
-}
-
 const cargarSpeakers = async () => {
   const res = await api.get('/speakers')
   speakers.value = res.data
@@ -482,7 +447,6 @@ const cargarConteos = async () => {
 
 onMounted(() => {
   cargarEventos()
-  cargarArticulos()
   cargarSpeakers()
   cargarConteos()
 })
@@ -505,7 +469,7 @@ const formatFecha = (fecha) => {
 const faqAbierta = ref(0)
 const faqs = [
   { q: '¿Cómo compro mi boleto?', a: 'Selecciona el evento y paga en línea con tarjeta. Tu boleto queda registrado al instante con su folio en la sección "Mis boletos".' },
-  { q: '¿Puedo publicar un artículo?', a: 'Sí. Docentes, estudiantes y profesionales pueden enviar artículos para revisión por pares antes de publicarse.' },
+  { q: '¿Puedo presentar una ponencia?', a: 'Sí. Docentes, estudiantes y profesionales pueden enviar su propuesta desde el formulario de contacto; el comité académico la revisa y te contacta.' },
   { q: '¿Qué incluye el boleto?', a: 'El acceso a todas las sesiones del programa y a los talleres del congreso, además de tu constancia de participación.' },
   { q: '¿Cómo me registro como ponente?', a: 'Envía tu propuesta desde el formulario de contacto. El comité académico la revisa y te contacta al correo que dejes.' },
   { q: '¿Dónde veo el programa?', a: 'La agenda completa está publicada en la sección Agenda, organizada por día y con el ponente de cada sesión.' },
@@ -682,7 +646,7 @@ const scrollBoletin = () => {
 .bc-btn:hover { background:var(--teal-s); }
 
 /* STATS */
-.stats-h { background:var(--bg3);border-top:1px solid var(--line3);border-bottom:1px solid var(--line3);display:grid;grid-template-columns:repeat(5,1fr); }
+.stats-h { background:var(--bg3);border-top:1px solid var(--line3);border-bottom:1px solid var(--line3);display:grid;grid-template-columns:repeat(4,1fr); }
 .sh { padding:32px 24px;border-right:1px solid var(--line3);position:relative;overflow:hidden; }
 .sh:last-child { border-right:none; }
 .sh::before { content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:var(--teal);opacity:0;transition:opacity .15s; }
@@ -730,15 +694,6 @@ const scrollBoletin = () => {
 .sm-fq { font-family:var(--fs);font-style:italic;font-size:var(--t-md);color:var(--w3);line-height:1.65; }
 
 /* ARTÍCULOS */
-.art-ed { border:1px solid var(--line3);border-radius:14px;overflow:hidden; }
-.ae { display:grid;grid-template-columns:20px 1fr auto;gap:12px;padding:24px 24px;border-bottom:1px solid var(--line3);cursor:pointer;transition:background .15s;align-items:start; }
-.ae:last-child { border-bottom:none; }
-.ae:hover { background:var(--card2); }
-.ae-n { font-family:var(--fm);font-size:var(--t-2xs);font-weight:500;color:var(--w4);padding-top:2px; }
-.ae-cat { font-family:var(--fm);font-size:var(--t-2xs);font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);margin-bottom:6px; }
-.ae-ttl { font-family:var(--fs);font-style:italic;font-size:var(--t-md);color:var(--white);line-height:1.42;margin-bottom:4px; }
-.ae-by { font-size:var(--t-xs);color:var(--w4);font-weight:300; }
-.ae-badge { font-size:var(--t-2xs);font-weight:600;padding:4px 8px;border-radius:100px;background:var(--teal-g);color:var(--teal);border:1px solid var(--teal-b);white-space:nowrap;align-self:center; }
 
 /* GALERÍA */
 /* FAQ */

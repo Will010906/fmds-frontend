@@ -30,15 +30,11 @@
       </div>
 
       <div class="ni">
-        <button class="nbn" :class="{ active: ['articulos','cursos','galeria'].includes(route.name) }">
+        <button class="nbn" :class="{ active: ['cursos','galeria'].includes(route.name) }">
           Conocimiento
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div class="dd">
-          <router-link to="/articulos" class="da">
-            <div class="da-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
-            <div><div class="da-t">Artículos científicos</div><div class="da-s">Publicaciones con revisión por pares</div></div>
-          </router-link>
           <router-link to="/cursos" class="da">
             <div class="da-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
             <div><div class="da-t">Cursos de actualización</div><div class="da-s">Formación técnica en línea</div></div>
@@ -129,7 +125,6 @@
 
     <div class="nm-grupo">
       <div class="nm-lbl">Conocimiento</div>
-      <router-link to="/articulos" class="nm-i" @click="mobileOpen = false">Artículos</router-link>
       <router-link to="/cursos" class="nm-i" @click="mobileOpen = false">Cursos</router-link>
       <router-link to="/galeria" class="nm-i" @click="mobileOpen = false">Galería</router-link>
       <router-link to="/nosotros" class="nm-i" @click="mobileOpen = false">Nosotros</router-link>

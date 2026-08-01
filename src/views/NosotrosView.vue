@@ -23,8 +23,8 @@
           <p class="ns-p">
             La FMDS nace para llenar el vacío de una comunidad académica neutral en México: sin
             patrocinios que comprometan la objetividad, sin barreras de acceso y con estándares de
-            rigor internacional. Organizamos congresos, publicamos artículos con revisión por pares
-            y ofrecemos cursos de actualización abiertos a todo el país.
+            rigor internacional. Organizamos congresos con ponencias evaluadas por un comité
+            académico y ofrecemos cursos de actualización abiertos a todo el país.
           </p>
         </div>
         <div class="ns-vals">
@@ -49,10 +49,10 @@
           <p class="ns-card-d">Encuentros presenciales con ponentes, talleres prácticos y espacios de vinculación para la comunidad.</p>
           <span class="ns-card-l">Ver eventos →</span>
         </router-link>
-        <router-link to="/articulos" class="ns-card">
-          <div class="ns-card-t">Divulgación científica</div>
-          <p class="ns-card-d">Repositorio abierto de artículos con revisión por pares, sin vínculos comerciales ni sesgos institucionales.</p>
-          <span class="ns-card-l">Leer artículos →</span>
+        <router-link to="/speakers" class="ns-card">
+          <div class="ns-card-t">Red de ponentes</div>
+          <p class="ns-card-d">Investigadores y profesionales que comparten su trabajo con la comunidad, sin vínculos comerciales ni sesgos institucionales.</p>
+          <span class="ns-card-l">Ver ponentes →</span>
         </router-link>
         <router-link to="/cursos" class="ns-card">
           <div class="ns-card-t">Formación continua</div>
@@ -69,8 +69,8 @@
           <div class="ns-lbl">Contacto</div>
           <h2 class="ns-h2">Escríbenos</h2>
           <p class="ns-p">
-            ¿Quieres presentar una ponencia, publicar un artículo o proponer una alianza?
-            Cuéntanos y te respondemos al correo que nos dejes.
+            ¿Quieres presentar una ponencia o proponer una alianza? Cuéntanos y te
+            respondemos al correo que nos dejes.
           </p>
           <div class="ns-datos">
             <div class="ns-dato">
@@ -142,14 +142,13 @@ const route = useRoute()
 const valores = [
   { titulo: 'Neutralidad académica', desc: 'Sin afiliaciones comerciales que condicionen lo que se publica.' },
   { titulo: 'Accesibilidad nacional', desc: 'Precios justos para estudiantes de cualquier estado del país.' },
-  { titulo: 'Rigor en la revisión', desc: 'Los artículos pasan por revisión de pares antes de publicarse.' },
+  { titulo: 'Rigor en la revisión', desc: 'Las ponencias pasan por el comité académico antes de programarse.' },
   { titulo: 'Tecnología propia', desc: 'Plataforma autoadministrable desarrollada en México.' },
 ]
 
 const asuntos = [
   'Consulta general',
   'Propuesta de ponencia',
-  'Publicar artículo',
   'Alianzas y patrocinios',
 ]
 
@@ -158,7 +157,7 @@ const enviando = ref(false)
 const enviado = ref(false)
 const error = ref('')
 
-// Los botones del sitio (ser ponente, publicar artículo, alianzas) llegan aquí
+// Los botones del sitio (ser ponente, alianzas) llegan aquí
 // con el asunto ya elegido mediante ?asunto=
 onMounted(() => {
   const a = route.query.asunto

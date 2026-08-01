@@ -16,7 +16,6 @@
       <div class="ft-col">
         <div class="ft-lbl">Conocimiento</div>
         <div class="ft-lnks">
-          <router-link to="/articulos">Artículos científicos</router-link>
           <router-link to="/cursos">Cursos en línea</router-link>
           <router-link to="/galeria">Galería</router-link>
           <router-link :to="{ name: 'nosotros', query: { asunto: 'Propuesta de ponencia' }, hash: '#contacto' }">Ser ponente</router-link>
