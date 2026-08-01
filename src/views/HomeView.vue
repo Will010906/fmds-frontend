@@ -85,7 +85,7 @@
     </div>
 
 <!-- FEATURE STRIP -->
-<div class="fstrip">
+<div class="fstrip" v-carrusel>
   <div class="fsc" @click="$router.push('/eventos')">
     <div class="fsc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
     <div class="fsc-n">Congresos</div><div class="fsc-s">{{ eventos.length }} {{ eventos.length === 1 ? 'evento' : 'eventos' }}</div>
@@ -257,7 +257,7 @@
     <router-link to="/speakers" class="s-all">Ver todos →</router-link>
   </div>
   <div v-if="speakers.length === 0" class="spk-empty">Aún no hay speakers registrados.</div>
-  <div v-else class="spk-mag">
+  <div v-else class="spk-mag" v-carrusel>
     <div class="sm" v-for="(s, i) in otrosSpeakers.slice(0,2)" :key="s.idSpeaker" @click="$router.push('/speakers')">
       <img v-if="s.fotoUrl" :src="s.fotoUrl" :alt="s.nombre" class="sm-foto" />
       <div v-else class="sm-av" :style="estiloAvatar(s.nombre)">{{ iniciales(s.nombre) }}</div>
@@ -847,8 +847,11 @@ const scrollBoletin = () => {
   /* Hero compacto: menos aire, stats en 2x2 */
   .h-tag-t { font-size:var(--t-2xs); }
   .h-l { padding:32px 16px 24px; }
-  .hh1, .hh3 { font-size:var(--t-3xl); }
-  .hh2 { font-size:var(--t-2xl); }
+  /* El titular es lo primero que se ve y a 26px se quedaba corto para lo que
+     tiene que sostener. A 32px sigue cabiendo la línea más larga
+     ("científico del software") sin partirse. */
+  .hh1, .hh3 { font-size:var(--t-4xl); }
+  .hh2 { font-size:var(--t-3xl); }
   .h-desc { font-size:var(--t-sm); }
   .h-ctas { flex-direction:column; }
   .h-ctas .btn-p, .h-ctas .btn-s { width:100%;justify-content:center; }
@@ -875,13 +878,16 @@ const scrollBoletin = () => {
 
 
 
-  /* Por qué asistir: 2x2 compacta */
-  .pq-g { grid-template-columns:1fr 1fr;gap:8px; }
-  .pq-c { padding:16px 16px; }
-  .pq-ic { width:30px;height:30px;margin-bottom:10px; }
-  .pq-ic svg { width:14px;height:14px; }
-  .pq-t { font-size:var(--t-sm); }
-  .pq-s { font-size:var(--t-xs);line-height:1.6; }
+  /* Por qué asistir: una sola columna. En 2x2 cada tarjeta quedaba en 164px
+     de ancho, y con icono, título y párrafo dentro el texto salía a tres o
+     cuatro palabras por renglón, que se lee a tirones. En una columna el
+     icono va al lado del texto y todo cabe holgado. */
+  .pq-g { grid-template-columns:1fr;gap:10px; }
+  .pq-c { display:grid;grid-template-columns:40px 1fr;grid-template-rows:auto auto;column-gap:16px;padding:20px; }
+  .pq-ic { width:40px;height:40px;margin-bottom:0;grid-row:1 / span 2; }
+  .pq-ic svg { width:18px;height:18px; }
+  .pq-t { font-size:var(--t-md);align-self:center;margin-bottom:4px; }
+  .pq-s { font-size:var(--t-sm);line-height:1.65; }
 
   .cierre { padding:48px 16px; }
   .cierre-ttl { font-size:var(--t-2xl); }

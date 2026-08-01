@@ -127,6 +127,22 @@
           </div>
         </aside>
       </div>
+
+      <!-- Barra de compra fija en móvil. La tarjeta lateral queda muy arriba
+           en cuanto se empieza a leer el programa, y con esto el precio y el
+           botón siguen a mano en todo momento. -->
+      <div class="ev-barra">
+        <div class="ev-barra-p">
+          <span class="ev-barra-lbl">Acceso al evento</span>
+          <span class="ev-barra-n">${{ Math.round(evento.precio) }} <small>MXN</small></span>
+        </div>
+        <router-link
+          v-if="!agotado && !countdown.terminado"
+          :to="{ name: 'checkout', params: { idEvento: evento.idEvento } }"
+          class="ev-barra-btn"
+        >Comprar</router-link>
+        <span v-else class="ev-barra-btn dis">{{ agotado ? 'Agotado' : 'Cerrado' }}</span>
+      </div>
     </template>
 
     <AppFooter />
@@ -308,6 +324,9 @@ watch(() => route.params.id, cargar)
 .ev-in span { color:var(--teal);font-weight:800;flex-shrink:0; }
 .ev-seg { font-size:var(--t-xs);color:var(--w4);font-weight:300;line-height:1.6;margin-top:18px;padding-top:16px;border-top:1px solid var(--line3); }
 
+/* La barra fija solo existe en móvil */
+.ev-barra { display:none; }
+
 @media (max-width: 960px) {
   .ev-body { grid-template-columns:1fr;padding:32px 16px 64px;gap:32px; }
   .ev-side { position:static;order:-1; }
@@ -317,5 +336,24 @@ watch(() => route.params.id, cargar)
   .ev-spk { grid-template-columns:1fr; }
   .ev-se { grid-template-columns:56px 1fr;gap:12px; }
   .ev-se-b { grid-column:2;justify-self:start; }
+
+  /* Barra de compra siempre visible */
+  .ev-barra {
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    position:fixed;left:0;right:0;bottom:0;z-index:900;
+    background:rgba(10,17,25,.97);backdrop-filter:blur(20px);
+    border-top:1px solid var(--teal-b);
+    padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+    box-shadow:0 -12px 32px rgba(0,0,0,.45);
+  }
+  .ev-barra-p { display:flex;flex-direction:column;gap:2px;line-height:1.1; }
+  .ev-barra-lbl { font-family:var(--fm);font-size:var(--t-2xs);font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--w4); }
+  .ev-barra-n { font-size:var(--t-xl);font-weight:800;color:var(--white);letter-spacing:-.03em; }
+  .ev-barra-n small { font-size:var(--t-xs);font-weight:400;color:var(--w4); }
+  .ev-barra-btn { display:flex;align-items:center;justify-content:center;min-height:48px;padding:0 32px;border-radius:10px;background:var(--teal);color:var(--bg);font-family:var(--f);font-size:var(--t-md);font-weight:700;text-decoration:none;white-space:nowrap; }
+  .ev-barra-btn.dis { background:var(--w5);color:var(--w4);border:1px solid var(--line2); }
+
+  /* Espacio para que la barra no tape el final del pie de página */
+  .page { padding-bottom:84px; }
 }
 </style>

@@ -115,28 +115,42 @@
     </button>
   </nav>
 
+  <!-- Capa oscura: tocar fuera del panel lo cierra, que es lo que uno intenta
+       por instinto antes de buscar la equis. -->
+  <div class="nav-velo" v-if="mobileOpen" @click="mobileOpen = false"></div>
+
   <div class="nav-mobile" v-if="mobileOpen">
-    <router-link to="/eventos" class="nbn" @click="mobileOpen = false">Congresos</router-link>
-    <router-link to="/agenda" class="nbn" @click="mobileOpen = false">Agenda</router-link>
-    <router-link to="/speakers" class="nbn" @click="mobileOpen = false">Speakers</router-link>
-    <router-link to="/articulos" class="nbn" @click="mobileOpen = false">Artículos</router-link>
-    <router-link to="/cursos" class="nbn" @click="mobileOpen = false">Cursos</router-link>
-    <router-link to="/galeria" class="nbn" @click="mobileOpen = false">Galería</router-link>
-    <router-link to="/nosotros" class="nbn" @click="mobileOpen = false">Nosotros</router-link>
-    <router-link to="/registro" class="nbn" @click="mobileOpen = false">Registro y pago</router-link>
-    <template v-if="!token">
-      <router-link to="/login" class="ng" @click="mobileOpen = false">Iniciar sesión</router-link>
-      <router-link to="/crear-cuenta" class="nf" @click="mobileOpen = false">Crear cuenta →</router-link>
-    </template>
-    <template v-else>
-      <router-link to="/mis-boletos" class="ng" @click="mobileOpen = false">Mis boletos</router-link>
-      <button class="ng" @click="logout">Cerrar sesión</button>
-    </template>
+    <div class="nm-grupo">
+      <div class="nm-lbl">El congreso</div>
+      <router-link to="/eventos" class="nm-i" @click="mobileOpen = false">Congresos</router-link>
+      <router-link to="/agenda" class="nm-i" @click="mobileOpen = false">Agenda</router-link>
+      <router-link to="/speakers" class="nm-i" @click="mobileOpen = false">Ponentes</router-link>
+    </div>
+
+    <div class="nm-grupo">
+      <div class="nm-lbl">Conocimiento</div>
+      <router-link to="/articulos" class="nm-i" @click="mobileOpen = false">Artículos</router-link>
+      <router-link to="/cursos" class="nm-i" @click="mobileOpen = false">Cursos</router-link>
+      <router-link to="/galeria" class="nm-i" @click="mobileOpen = false">Galería</router-link>
+      <router-link to="/nosotros" class="nm-i" @click="mobileOpen = false">Nosotros</router-link>
+    </div>
+
+    <div class="nm-pie">
+      <router-link to="/registro" class="nm-cta" @click="mobileOpen = false">Comprar boleto ⟶</router-link>
+      <template v-if="!token">
+        <router-link to="/login" class="nm-sec" @click="mobileOpen = false">Iniciar sesión</router-link>
+        <router-link to="/crear-cuenta" class="nm-sec" @click="mobileOpen = false">Crear cuenta</router-link>
+      </template>
+      <template v-else>
+        <router-link to="/mis-boletos" class="nm-sec" @click="mobileOpen = false">Mis boletos</router-link>
+        <button class="nm-sec" @click="logout">Cerrar sesión</button>
+      </template>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -152,7 +166,20 @@ onMounted(() => {
   onScroll()
   window.addEventListener('scroll', onScroll, { passive: true })
 })
-onUnmounted(() => window.removeEventListener('scroll', onScroll))
+// Con el menú abierto se bloquea el desplazamiento de la página: si no, al
+// deslizar sobre el menú se mueve el contenido de atrás y se pierde el sitio.
+watch(mobileOpen, (abierto) => {
+  document.body.style.overflow = abierto ? 'hidden' : ''
+})
+
+// Cerrar al cambiar de página cubre también la navegación con el botón atrás
+// del navegador, que no pasa por los @click de los enlaces.
+watch(() => route.fullPath, () => { mobileOpen.value = false })
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScroll)
+  document.body.style.overflow = ''
+})
 
 const logout = () => {
   localStorage.clear()
@@ -198,14 +225,38 @@ const logout = () => {
    se falla seguido, y en móvil es el control más importante de la barra. */
 .nav-burger { display:none;background:none;border:none;color:var(--white);cursor:pointer;width:44px;height:44px;margin-right:-8px;align-items:center;justify-content:center;border-radius:8px; }
 .nav-burger:active { background:var(--w5); }
-.nav-mobile { display:none; }
+.nav-mobile, .nav-velo { display:none; }
 
 @media (max-width: 968px) {
   .nav { padding:0 16px; }
   .nav-m, .nav-e { display:none; }
   .nav-burger { display:flex; }
-  .nav-mobile { display:flex;flex-direction:column;gap:4px;position:fixed;top:60px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--line3);padding:16px 16px;z-index:999;max-height:calc(100vh - 60px);overflow-y:auto; }
-  .nav-mobile .nbn { text-align:left;padding:8px 12px; }
-  .nav-mobile .ng, .nav-mobile .nf { text-align:center;margin-top:6px; }
+  /* Capa que atenúa la página detrás del menú */
+  .nav-velo { display:block;position:fixed;inset:60px 0 0;background:rgba(6,9,15,.72);backdrop-filter:blur(3px);z-index:998;animation:velo .18s ease; }
+  @keyframes velo { from { opacity:0 } to { opacity:1 } }
+
+  .nav-mobile {
+    display:flex;flex-direction:column;position:fixed;top:60px;left:0;right:0;
+    background:var(--bg2);border-bottom:1px solid var(--line3);
+    padding:8px 16px calc(16px + env(safe-area-inset-bottom));
+    z-index:999;max-height:calc(100vh - 60px);overflow-y:auto;
+    box-shadow:0 24px 48px rgba(0,0,0,.5);
+    animation:menuBaja .2s cubic-bezier(.22,.61,.36,1);
+  }
+  @keyframes menuBaja { from { opacity:0;transform:translateY(-8px) } to { opacity:1;transform:none } }
+
+  /* Los enlaces se agrupan por tema en vez de ir en una lista corrida de diez,
+     que obliga a leerla entera para encontrar algo. */
+  .nm-grupo { display:flex;flex-direction:column;padding:8px 0;border-bottom:1px solid var(--line3); }
+  .nm-lbl { font-family:var(--fm);font-size:var(--t-2xs);font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--w4);padding:8px 12px 4px; }
+  /* 48px de alto: cómodo para el pulgar sin tener que apuntar */
+  .nm-i { display:flex;align-items:center;min-height:48px;padding:0 12px;border-radius:10px;font-family:var(--f);font-size:var(--t-md);font-weight:500;color:var(--w2);text-decoration:none;transition:background .12s,color .12s; }
+  .nm-i:active { background:var(--w5); }
+  .nm-i.router-link-active { color:var(--teal);background:var(--teal-g); }
+
+  .nm-pie { display:flex;flex-direction:column;gap:8px;padding-top:16px; }
+  .nm-cta { display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:10px;background:var(--teal);color:var(--bg);font-family:var(--f);font-size:var(--t-md);font-weight:700;text-decoration:none; }
+  .nm-sec { display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:10px;background:var(--w5);border:1px solid var(--line2);color:var(--w2);font-family:var(--f);font-size:var(--t-sm);font-weight:500;text-decoration:none;cursor:pointer; }
+  .nm-sec:active { border-color:var(--teal-b);color:var(--white); }
 }
 </style>

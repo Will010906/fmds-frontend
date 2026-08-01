@@ -135,10 +135,15 @@ body {
 
 html { scroll-behavior: smooth; }
 
-/* Transición entre páginas */
+/* Transición entre páginas.
+   Solo opacidad, a propósito: un `transform` sobre el contenedor de la vista
+   convierte a ese elemento en el marco de referencia de todo lo que lleve
+   position:fixed dentro, así que la barra de navegación, el menú móvil y la
+   barra de compra dejaban de anclarse a la pantalla y se pegaban al final del
+   documento. El desvanecido se ve igual de bien y no rompe nada. */
 .page-fade-enter-active,
-.page-fade-leave-active { transition: opacity .18s ease, transform .18s ease; }
-.page-fade-enter-from { opacity: 0; transform: translateY(10px); }
+.page-fade-leave-active { transition: opacity .2s ease; }
+.page-fade-enter-from,
 .page-fade-leave-to { opacity: 0; }
 
 /* Aparición de secciones al hacer scroll (directiva v-reveal) */
@@ -196,6 +201,52 @@ html { scroll-behavior: smooth; }
   pointer-events: none;
   background: linear-gradient(90deg, transparent, rgba(45,212,180,.35), transparent);
 }
+
+/* ===========================================================================
+   Carruseles horizontales en móvil
+   ---------------------------------------------------------------------------
+   Varias tiras de tarjetas se desplazan de lado en pantallas chicas. El
+   problema no era que no funcionaran, sino que nada lo indicaba: la última
+   tarjeta quedaba cortada limpiamente contra el borde y parecía el final.
+   El desvanecido resuelve eso — al ver una tarjeta esfumándose se entiende
+   que hay más y que el gesto es deslizar.
+   =========================================================================== */
+@media (max-width: 900px) {
+  #app .fstrip,
+  #app .spk-mag,
+  #app .ag-evs,
+  #app .pq-chips {
+    /* El degradado corta el contenido justo antes del borde derecho */
+    -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 40px), transparent 100%);
+    mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 40px), transparent 100%);
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: var(--sec-x);
+    /* Inercia suave en iOS */
+    -webkit-overflow-scrolling: touch;
+  }
+  /* Al llegar al final se quita el desvanecido: ya no hay nada más que ver */
+  #app .fstrip.fin,
+  #app .spk-mag.fin,
+  #app .ag-evs.fin {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  #app .fstrip > *,
+  #app .spk-mag > * { scroll-snap-align: start; }
+}
+
+/* La barra de scroll horizontal estorba en estas tiras: el desvanecido ya
+   comunica que hay más contenido. */
+#app .fstrip::-webkit-scrollbar,
+#app .spk-mag::-webkit-scrollbar,
+#app .ag-evs::-webkit-scrollbar,
+#app .cmp-scroll::-webkit-scrollbar,
+#app .table-card::-webkit-scrollbar { height: 4px; }
+#app .fstrip::-webkit-scrollbar-thumb,
+#app .spk-mag::-webkit-scrollbar-thumb,
+#app .ag-evs::-webkit-scrollbar-thumb,
+#app .cmp-scroll::-webkit-scrollbar-thumb,
+#app .table-card::-webkit-scrollbar-thumb { background: var(--teal-b); border-radius: 2px; }
 
 /* Microinteracciones: glow en botones primarios (el prefijo #app gana a los estilos scoped) */
 #app .btn-p, #app .tp-buy, #app .bol-btn, #app .sum-btn,

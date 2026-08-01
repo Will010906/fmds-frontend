@@ -10,7 +10,7 @@
       <p class="ag-sub">{{ resumen }}</p>
 
       <!-- Selector de evento: solo tiene sentido si hay más de uno programado -->
-      <div class="ag-evs" v-if="eventos.length > 1">
+      <div class="ag-evs" v-carrusel v-if="eventos.length > 1">
         <button
           v-for="e in eventos"
           :key="e.idEvento"
