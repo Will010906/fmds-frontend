@@ -8,6 +8,20 @@
       <div class="pill"><div class="pill-d"></div><span class="pill-t">Programa oficial</span></div>
       <h1 class="ag-title"><strong>Agenda</strong> <em>del congreso</em></h1>
       <p class="ag-sub">{{ resumen }}</p>
+
+      <!-- Selector de evento: solo tiene sentido si hay más de uno programado -->
+      <div class="ag-evs" v-if="eventos.length > 1">
+        <button
+          v-for="e in eventos"
+          :key="e.idEvento"
+          class="ag-ev"
+          :class="{ active: eventoActivo === e.idEvento }"
+          @click="cambiarEvento(e.idEvento)"
+        >
+          {{ e.titulo }}
+          <span class="ag-ev-f">{{ fechaCorta(e.fecha) }}</span>
+        </button>
+      </div>
     </div>
 
     <!-- TABS -->
@@ -44,7 +58,18 @@
                 {{ sesion.tipo }}
               </div>
               <div class="ag-nm">{{ sesion.nombre }}</div>
-              <div class="ag-by">{{ sesion.ponente }}</div>
+
+              <!-- Si la sesión está ligada a un ponente del catálogo se muestra
+                   su ficha, para que agenda y página de ponentes coincidan. -->
+              <router-link v-if="sesion.speakerNombre" to="/speakers" class="ag-pon">
+                <img v-if="sesion.speakerFoto" :src="sesion.speakerFoto" :alt="sesion.speakerNombre" class="ag-pon-foto" />
+                <span v-else class="ag-pon-av" :style="estiloAvatar(sesion.speakerNombre)">{{ iniciales(sesion.speakerNombre) }}</span>
+                <span class="ag-pon-txt">
+                  <span class="ag-pon-nm">{{ sesion.speakerNombre }}</span>
+                  <span class="ag-pon-rl" v-if="sesion.speakerRol">{{ sesion.speakerRol }}</span>
+                </span>
+              </router-link>
+              <div v-else class="ag-by">{{ sesion.ponente }}</div>
             </div>
             <div class="ag-badge" :style="{ borderColor: colorBadge(sesion.badge), color: colorBadge(sesion.badge) }">
               {{ sesion.badge }}
@@ -68,8 +93,11 @@ import { ref, computed, onMounted } from 'vue'
 import api from '../services/api'
 import AppNav from '../components/AppNav.vue'
 import AppFooter from '../components/AppFooter.vue'
+import { inicialesDe as iniciales, estiloAvatar } from '../utils/avatar'
 
 const sesiones = ref([])
+const eventos = ref([])
+const eventoActivo = ref(null)
 const diaActivo = ref(1)
 
 const COLORES = { Keynote: '#2DD4B4', Workshop: '#F59E0B', Panel: '#6B7280', Social: '#6B7280' }
@@ -102,13 +130,37 @@ const resumen = computed(() => {
   return partes.join(' · ')
 })
 
+const fechaCorta = (fecha) =>
+  new Date(fecha).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', timeZone: 'UTC' })
+
+// El programa se pide por evento: cada congreso tiene el suyo.
 const cargarSesiones = async () => {
-  const res = await api.get('/sesiones')
+  const res = await api.get('/sesiones', {
+    params: eventoActivo.value ? { idEvento: eventoActivo.value } : {},
+  })
   sesiones.value = res.data
   if (res.data.length) diaActivo.value = diasDisponibles.value[0]
 }
 
-onMounted(cargarSesiones)
+const cambiarEvento = async (idEvento) => {
+  eventoActivo.value = idEvento
+  await cargarSesiones()
+}
+
+onMounted(async () => {
+  try {
+    const res = await api.get('/eventos')
+    eventos.value = res.data
+    // Se abre en el próximo congreso pendiente, que es el que le interesa
+    // a quien está consultando el programa.
+    const ahora = Date.now()
+    const proximo = res.data.find((e) => new Date(e.fecha).getTime() >= ahora) || res.data[0]
+    eventoActivo.value = proximo ? proximo.idEvento : null
+  } catch {
+    eventos.value = []
+  }
+  await cargarSesiones()
+})
 </script>
 
 <style scoped>
@@ -123,6 +175,14 @@ onMounted(cargarSesiones)
 .ag-title strong { color:var(--white); }
 .ag-title em { font-family:var(--fs);font-style:italic;font-weight:400;color:var(--teal); }
 .ag-sub { font-size:var(--t-md);color:var(--w3);font-weight:300; }
+
+/* Selector de congreso */
+.ag-evs { display:flex;gap:8px;flex-wrap:wrap;margin-top:24px; }
+.ag-ev { display:flex;flex-direction:column;gap:4px;align-items:flex-start;background:var(--w5);border:1px solid var(--line2);border-radius:12px;padding:12px 16px;font-family:var(--f);font-size:var(--t-sm);font-weight:600;color:var(--w2);cursor:pointer;transition:all .15s;text-align:left; }
+.ag-ev:hover { border-color:var(--teal-b);color:var(--white); }
+.ag-ev.active { background:var(--teal-g);border-color:var(--teal);color:var(--teal); }
+.ag-ev-f { font-family:var(--fm);font-size:var(--t-2xs);font-weight:500;color:var(--w4);letter-spacing:.06em;text-transform:uppercase; }
+.ag-ev.active .ag-ev-f { color:var(--teal); }
 
 .ag-wrap { max-width:900px;margin:0 auto;padding:var(--sec-y) var(--sec-x); }
 .ag-empty { text-align:center;color:var(--w4);padding:48px 0; }
@@ -147,6 +207,16 @@ onMounted(cargarSesiones)
 .ag-dot { width:5px;height:5px;border-radius:50%; }
 .ag-nm { font-size:var(--t-md);font-weight:700;color:var(--white);letter-spacing:-.02em; }
 .ag-by { font-size:var(--t-sm);color:var(--w3);font-weight:300; }
+
+/* Ponente del catálogo: se muestra con su avatar y enlaza a su ficha */
+.ag-pon { display:inline-flex;align-items:center;gap:8px;text-decoration:none;margin-top:4px;padding:8px 16px 8px 8px;border-radius:100px;border:1px solid transparent;transition:all .15s; }
+.ag-pon:hover { border-color:var(--teal-b);background:var(--teal-g); }
+.ag-pon-foto, .ag-pon-av { width:28px;height:28px;border-radius:50%;flex-shrink:0; }
+.ag-pon-foto { object-fit:cover;border:1px solid var(--teal-b); }
+.ag-pon-av { display:flex;align-items:center;justify-content:center;font-family:var(--f);font-size:var(--t-2xs);font-weight:800; }
+.ag-pon-txt { display:flex;flex-direction:column;line-height:1.25; }
+.ag-pon-nm { font-size:var(--t-sm);font-weight:600;color:var(--white); }
+.ag-pon-rl { font-size:var(--t-xs);color:var(--w3);font-weight:300; }
 
 .ag-badge { font-size:var(--t-2xs);font-weight:600;padding:4px 12px;border-radius:100px;border:1px solid;background:transparent;white-space:nowrap; }
 

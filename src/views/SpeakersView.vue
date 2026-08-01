@@ -26,6 +26,18 @@
             <div class="spk-feat-nm">{{ featured.nombre }}</div>
             <div class="spk-feat-rl">{{ featured.rol }}</div>
             <div class="spk-feat-q" v-if="featured.frase">"{{ featured.frase }}"</div>
+            <div class="spk-ses" v-if="sesionesDe(featured.idSpeaker).length">
+              <div class="spk-ses-l">En el programa</div>
+              <router-link
+                v-for="s in sesionesDe(featured.idSpeaker)"
+                :key="s.idSesion"
+                to="/agenda"
+                class="spk-ses-i"
+              >
+                <span class="spk-ses-h">Día {{ s.dia }} · {{ formatHora(s.hora) }}</span>
+                <span class="spk-ses-n">{{ s.nombre }}</span>
+              </router-link>
+            </div>
           </div>
         </div>
 
@@ -39,7 +51,19 @@
           <div class="spk-card-info">
             <div class="spk-nm">{{ s.nombre }}</div>
             <div class="spk-rl">{{ s.rol }}</div>
-            <div class="spk-tp">{{ s.tema }}</div>
+            <!-- Si tiene sesiones en la agenda se muestran esas, que son el
+                 dato verificable; el tema suelto queda como respaldo. -->
+            <router-link
+              v-if="sesionesDe(s.idSpeaker).length"
+              to="/agenda"
+              class="spk-tp enlace"
+            >
+              {{ sesionesDe(s.idSpeaker)[0].nombre }}
+              <span class="spk-tp-mas" v-if="sesionesDe(s.idSpeaker).length > 1">
+                +{{ sesionesDe(s.idSpeaker).length - 1 }} más
+              </span>
+            </router-link>
+            <div v-else class="spk-tp">{{ s.tema }}</div>
           </div>
         </div>
 
@@ -63,16 +87,37 @@ import AppFooter from '../components/AppFooter.vue'
 import { inicialesDe as iniciales, estiloAvatar } from '../utils/avatar'
 
 const speakers = ref([])
+const sesiones = ref([])
 
 const featured = computed(() => speakers.value.find(s => s.featured))
 const otros = computed(() => speakers.value.filter(s => !s.featured))
 
-const cargarSpeakers = async () => {
-  const res = await api.get('/speakers')
-  speakers.value = res.data
+// Sesiones que imparte cada ponente, indexadas por su id. Así la ficha muestra
+// lo que esa persona realmente presenta, en vez de un tema suelto sin respaldo
+// en la agenda.
+const sesionesPorSpeaker = computed(() => {
+  const mapa = new Map()
+  for (const s of sesiones.value) {
+    if (!s.idSpeaker) continue
+    if (!mapa.has(s.idSpeaker)) mapa.set(s.idSpeaker, [])
+    mapa.get(s.idSpeaker).push(s)
+  }
+  return mapa
+})
+const sesionesDe = (idSpeaker) => sesionesPorSpeaker.value.get(idSpeaker) || []
+
+const formatHora = (hora) => {
+  const [h, m] = String(hora).split(':')
+  return `${parseInt(h)}:${m}`
 }
 
-onMounted(cargarSpeakers)
+const cargar = async () => {
+  const [spk, ses] = await Promise.all([api.get('/speakers'), api.get('/sesiones')])
+  speakers.value = spk.data
+  sesiones.value = ses.data
+}
+
+onMounted(cargar)
 </script>
 
 <style scoped>
@@ -129,6 +174,17 @@ onMounted(cargarSpeakers)
 .spk-nm { font-size:var(--t-lg);font-weight:700;color:var(--white);letter-spacing:-.02em;padding:0 16px;margin-bottom:4px; }
 .spk-rl { font-size:var(--t-sm);color:var(--w3);font-weight:300;padding:0 16px;margin-bottom:14px; }
 .spk-tp { font-size:var(--t-sm);font-weight:600;color:var(--teal);padding:12px 16px;border-top:1px solid var(--line3);margin-top:auto; }
+.spk-tp.enlace { display:block;text-decoration:none;transition:background .15s; }
+.spk-tp.enlace:hover { background:var(--teal-g); }
+.spk-tp-mas { display:inline-block;font-size:var(--t-2xs);font-weight:500;color:var(--w3);margin-left:6px; }
+
+/* Sesiones del ponente destacado */
+.spk-ses { margin-top:24px;border-top:1px solid var(--line3);padding-top:16px; }
+.spk-ses-l { font-family:var(--fm);font-size:var(--t-2xs);font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--w4);margin-bottom:12px; }
+.spk-ses-i { display:flex;flex-direction:column;gap:2px;text-decoration:none;padding:8px 12px;border-radius:8px;border:1px solid var(--line3);margin-bottom:8px;transition:all .15s; }
+.spk-ses-i:hover { border-color:var(--teal-b);background:var(--teal-g); }
+.spk-ses-h { font-family:var(--fm);font-size:var(--t-2xs);color:var(--teal);letter-spacing:.06em; }
+.spk-ses-n { font-size:var(--t-sm);color:var(--white);font-weight:500;line-height:1.4; }
 
 .sp-cta { text-align:center;margin-top:52px; }
 .sp-btn { background:var(--teal);color:var(--bg);border:none;border-radius:10px;padding:16px 32px;font-family:var(--f);font-size:var(--t-md);font-weight:700;cursor:pointer;transition:background .15s;text-decoration:none;display:inline-block; }

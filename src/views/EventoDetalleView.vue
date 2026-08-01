@@ -69,7 +69,7 @@
                 <div class="ev-se-h">{{ formatHora(s.hora) }}</div>
                 <div>
                   <div class="ev-se-n">{{ s.nombre }}</div>
-                  <div class="ev-se-p">{{ s.ponente }}</div>
+                  <div class="ev-se-p">{{ s.speakerNombre || s.ponente }}</div>
                 </div>
                 <span class="ev-se-b">{{ s.tipo }}</span>
               </div>
@@ -77,13 +77,13 @@
           </section>
 
           <!-- PONENTES -->
-          <section class="ev-sec" v-if="speakers.length">
+          <section class="ev-sec" v-if="ponentesDelEvento.length">
             <div class="ev-h2-row">
               <h2 class="ev-h2">Ponentes</h2>
               <router-link to="/speakers" class="ev-link">Ver todos →</router-link>
             </div>
             <div class="ev-spk">
-              <div class="ev-sp" v-for="s in speakers.slice(0, 6)" :key="s.idSpeaker">
+              <div class="ev-sp" v-for="s in ponentesDelEvento.slice(0, 6)" :key="s.idSpeaker">
                 <img v-if="s.fotoUrl" :src="s.fotoUrl" :alt="s.nombre" class="ev-sp-foto" />
                 <div v-else class="ev-sp-ini" :style="estiloAvatar(s.nombre)">{{ iniciales(s.nombre) }}</div>
                 <div>
@@ -152,6 +152,15 @@ const agotado = computed(() => Number(evento.value?.stockBoletos) === 0)
 const dias = computed(() => [...new Set(sesiones.value.map(s => s.dia))].sort((a, b) => a - b))
 const sesionesDelDia = computed(() => sesiones.value.filter(s => s.dia === diaActivo.value))
 
+// Ponentes de esta edición: los que tienen alguna sesión en su programa.
+// Mientras no haya ninguna sesión ligada a un ponente del catálogo se muestran
+// todos, para no dejar la sección vacía durante la captura.
+const ponentesDelEvento = computed(() => {
+  const ids = new Set(sesiones.value.map(s => s.idSpeaker).filter(Boolean))
+  if (ids.size === 0) return speakers.value
+  return speakers.value.filter(s => ids.has(s.idSpeaker))
+})
+
 const pad = (n) => String(n).padStart(2, '0')
 
 const formatFecha = (fecha) => {
@@ -202,9 +211,13 @@ const cargar = async () => {
   } finally {
     cargando.value = false
   }
-  // El programa y los ponentes son de la edición: si fallan, la página sigue útil
+  // El programa es el de este evento, no el de todos. Si falla, la página
+  // sigue siendo útil con la información de compra.
   try {
-    const [ses, spk] = await Promise.all([api.get('/sesiones'), api.get('/speakers')])
+    const [ses, spk] = await Promise.all([
+      api.get('/sesiones', { params: { idEvento: route.params.id } }),
+      api.get('/speakers'),
+    ])
     sesiones.value = ses.data
     speakers.value = spk.data
     if (dias.value.length) diaActivo.value = dias.value[0]

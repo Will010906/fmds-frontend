@@ -260,6 +260,15 @@
           <h3 class="form-title">{{ editandoId ? 'Editar Sesión' : 'Nueva Sesión' }}</h3>
           <div class="form-grid">
             <div class="field full">
+              <label class="field-label">Evento al que pertenece</label>
+              <select v-model="formSesion.idEvento" class="field-input">
+                <option value="">Sin asignar — aparece en todos los eventos</option>
+                <option v-for="e in eventos" :key="e.idEvento" :value="e.idEvento">
+                  {{ e.titulo }} · {{ formatFecha(e.fecha) }}{{ eventoYaPaso(e) ? ' (ya se celebró)' : '' }}
+                </option>
+              </select>
+            </div>
+            <div class="field full">
               <label class="field-label">Nombre de la sesión</label>
               <input v-model="formSesion.nombre" type="text" placeholder="Seguridad en APIs REST: del JWT al Zero Trust" class="field-input" />
             </div>
@@ -280,10 +289,6 @@
               <input v-model="formSesion.tipo" type="text" placeholder="Conferencia magistral" class="field-input" />
             </div>
             <div class="field">
-              <label class="field-label">Ponente</label>
-              <input v-model="formSesion.ponente" type="text" placeholder="Dra. Ana López · TEC" class="field-input" />
-            </div>
-            <div class="field">
               <label class="field-label">Categoría</label>
               <select v-model="formSesion.badge" class="field-input">
                 <option>Keynote</option>
@@ -292,22 +297,45 @@
                 <option>Social</option>
               </select>
             </div>
+            <div class="field full">
+              <label class="field-label">Ponente registrado</label>
+              <select v-model="formSesion.idSpeaker" class="field-input">
+                <option value="">No es un ponente del catálogo (panel, comité, actividad abierta…)</option>
+                <option v-for="s in speakers" :key="s.idSpeaker" :value="s.idSpeaker">
+                  {{ s.nombre }} — {{ s.rol }}
+                </option>
+              </select>
+            </div>
+            <div class="field full" v-if="!formSesion.idSpeaker">
+              <label class="field-label">¿Quién la imparte?</label>
+              <input v-model="formSesion.ponente" type="text" placeholder="Panel con 4 ponentes internacionales" class="field-input" />
+            </div>
           </div>
+          <p v-if="formSesion.idSpeaker" class="admin-sub" style="margin-bottom:14px">
+            En la agenda aparecerá como <strong>{{ nombreSpeaker(formSesion.idSpeaker) }}</strong>, igual que en la página de ponentes.
+          </p>
           <button @click="guardarSesion" class="btn-primary">{{ editandoId ? 'Guardar cambios' : 'Guardar Sesión' }}</button>
         </div>
 
         <div class="table-card">
           <table class="table" style="min-width:680px">
             <thead>
-              <tr><th>Día</th><th>Hora</th><th>Sesión</th><th>Ponente</th><th>Categoría</th><th>Acciones</th></tr>
+              <tr><th>Día</th><th>Hora</th><th>Sesión</th><th>Evento</th><th>Ponente</th><th>Categoría</th><th>Acciones</th></tr>
             </thead>
             <tbody>
-              <tr v-if="sesiones.length === 0"><td colspan="6" class="empty">No hay sesiones registradas</td></tr>
+              <tr v-if="sesiones.length === 0"><td colspan="7" class="empty">No hay sesiones registradas</td></tr>
               <tr v-for="sesion in sesiones" :key="sesion.idSesion">
                 <td class="td-teal">Día {{ sesion.dia }}</td>
                 <td class="td-muted">{{ String(sesion.hora).slice(0, 5) }} · {{ sesion.duracion }}</td>
                 <td class="td-title">{{ sesion.nombre }}</td>
-                <td class="td-muted">{{ sesion.ponente }}</td>
+                <td>
+                  <span v-if="sesion.tituloEvento" class="td-muted">{{ sesion.tituloEvento }}</span>
+                  <span v-else class="stock-badge" title="Aparece en el programa de todos los eventos">Sin asignar</span>
+                </td>
+                <td>
+                  <span v-if="sesion.speakerNombre" class="td-teal">{{ sesion.speakerNombre }}</span>
+                  <span v-else class="td-muted">{{ sesion.ponente }}</span>
+                </td>
                 <td><span class="stock-badge">{{ sesion.badge }}</span></td>
                 <td class="td-actions">
                   <button @click="editarSesion(sesion)" class="btn-edit">Editar</button>
@@ -637,7 +665,7 @@ const iniciales = (nombreCompleto) => {
 const formEvento = ref({ titulo: '', fecha: '', precio: '', stockBoletos: '', hora: '', modalidad: 'Presencial', sede: '', ciudad: '', descripcion: '' })
 const formArticulo = ref({ titulo: '', cuerpo: '', autor: '', categoria: '', fechaPublicacion: '' })
 const formSpeaker = ref({ nombre: '', rol: '', area: '', tema: '', frase: '', featured: false, fotoUrl: '' })
-const formSesion = ref({ dia: 1, hora: '', duracion: '', tipo: '', nombre: '', ponente: '', badge: 'Keynote' })
+const formSesion = ref({ idEvento: '', idSpeaker: '', dia: 1, hora: '', duracion: '', tipo: '', nombre: '', ponente: '', badge: 'Keynote' })
 const formCurso = ref({ nombre: '', descripcion: '', horas: '', nivel: '', precio: '', badge: '' })
 const formPaquete = ref({ idEvento: '', nombre: '', descripcion: '', cantidadBoletos: '', precio: '', destacado: false, activo: true })
 const errorPaquete = ref('')
@@ -659,7 +687,7 @@ const resetFormularioActivo = () => {
   formEvento.value = { titulo: '', fecha: '', precio: '', stockBoletos: '', hora: '', modalidad: 'Presencial', sede: '', ciudad: '', descripcion: '' }
   formArticulo.value = { titulo: '', cuerpo: '', autor: '', categoria: '', fechaPublicacion: '' }
   formSpeaker.value = { nombre: '', rol: '', area: '', tema: '', frase: '', featured: false, fotoUrl: '' }
-  formSesion.value = { dia: 1, hora: '', duracion: '', tipo: '', nombre: '', ponente: '', badge: 'Keynote' }
+  formSesion.value = { idEvento: '', idSpeaker: '', dia: 1, hora: '', duracion: '', tipo: '', nombre: '', ponente: '', badge: 'Keynote' }
   formCurso.value = { nombre: '', descripcion: '', horas: '', nivel: '', precio: '', badge: '' }
   formPaquete.value = { idEvento: '', nombre: '', descripcion: '', cantidadBoletos: '', precio: '', destacado: false, activo: true }
   errorPaquete.value = ''
@@ -795,6 +823,8 @@ const guardarSesion = async () => {
 const editarSesion = (sesion) => {
   editandoId.value = sesion.idSesion
   formSesion.value = {
+    idEvento: sesion.idEvento || '',
+    idSpeaker: sesion.idSpeaker || '',
     dia: sesion.dia,
     hora: String(sesion.hora).slice(0, 5),
     duracion: sesion.duracion,
@@ -805,6 +835,10 @@ const editarSesion = (sesion) => {
   }
   mostrarFormulario.value = true
 }
+
+// Nombre del ponente elegido, para confirmar en el formulario cómo se verá
+// la sesión en la agenda antes de guardarla.
+const nombreSpeaker = (id) => speakers.value.find((s) => s.idSpeaker === Number(id))?.nombre || ''
 const eliminarSesion = async (id) => {
   if (!confirm('¿Eliminar esta sesión de la agenda?')) return
   await api.delete(`/sesiones/${id}`)
