@@ -607,7 +607,13 @@ const scrollBoletin = () => {
 @keyframes roll { 0%{transform:translateX(0)}100%{transform:translateX(-50%)} }
 
 /* FEATURE STRIP */
-.fstrip { background:var(--bg3);border-top:1px solid var(--line3);border-bottom:1px solid var(--line3);display:grid;grid-template-columns:repeat(7,1fr); }.fsc { flex:1;padding:24px 16px;border-right:1px solid var(--line3);display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:background .15s;position:relative;overflow:hidden; }
+/* Reparto flexible en vez de un número fijo de columnas: la tira tenía siete
+   y al quitar una tarjeta quedaba una columna vacía a la derecha. Con flex
+   las que haya se reparten el ancho completo, sean seis o nueve. */
+.fstrip { background:var(--bg3);border-top:1px solid var(--line3);border-bottom:1px solid var(--line3);display:flex; }
+.fsc { flex:1 1 0;min-width:0;padding:24px 16px;border-right:1px solid var(--line3);display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:background .15s;position:relative;overflow:hidden; }
+/* La última no lleva línea: si no, se dibuja pegada al borde de la pantalla */
+.fsc:last-child { border-right:none; }
 .fsc:last-child { border-right:none; }
 .fsc::after { content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--teal);transform:scaleX(0);transition:transform .2s; }
 .fsc:hover::after { transform:scaleX(1); }
