@@ -1,7 +1,11 @@
 import axios from 'axios'
 
+// La dirección del backend se toma de VITE_API_URL para que cambiar de
+// servidor sea cuestión de tocar una variable en Vercel y volver a publicar,
+// sin editar código. El valor de respaldo es el despliegue actual, así que en
+// local funciona sin configurar nada.
 const api = axios.create({
-  baseURL: 'https://fmds-backend-production-9925.up.railway.app/api',
+  baseURL: import.meta.env.VITE_API_URL || 'https://fmds-backend-production-9925.up.railway.app/api',
 })
 
 // Agrega el token automáticamente a cada request
