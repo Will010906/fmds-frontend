@@ -252,7 +252,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import AppNav from '../components/AppNav.vue'
 import AppFooter from '../components/AppFooter.vue'
-import { pagarConTarjeta } from '../services/pago'
+import { pagarConTarjeta, nuevaReferencia } from '../services/pago'
 
 const router = useRouter()
 
@@ -378,8 +378,14 @@ const textoBotón = computed(() => {
 
 // Cambiar de opción a mitad del flujo puede invalidar el paso en el que estás
 // (por ejemplo, elegir ponente estando en el pago), así que se vuelve al inicio.
+// Referencia del intento de compra: la misma en todos los reintentos, para que
+// Openpay pueda rechazar un cobro repetido. Se renueva al cambiar de opción,
+// porque a partir de ahí se está comprando otra cosa.
+const referencia = ref(nuevaReferencia())
+
 watch(planActivo, () => {
   error.value = ''
+  referencia.value = nuevaReferencia()
   if (paso.value > 1) paso.value = 1
 })
 
@@ -434,6 +440,7 @@ const avanzar = async () => {
     const plan = planSel.value
     await pagarConTarjeta({
       tarjeta: { numero: pago.value.numero, nombre: pago.value.nombre, mes, anio, cvv: pago.value.cvv },
+      referencia: referencia.value,
       idEvento:  plan.idPaquete ? undefined : eventoActual.value.idEvento,
       cantidad:  plan.idPaquete ? undefined : 1,
       idPaquete: plan.idPaquete,

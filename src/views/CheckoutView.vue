@@ -76,10 +76,10 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import api from '../services/api'
-import { pagarConTarjeta } from '../services/pago'
+import { pagarConTarjeta, nuevaReferencia } from '../services/pago'
 
 const route   = useRoute()
 const router  = useRouter()
@@ -95,6 +95,12 @@ const comprador = ref({ nombre: '', correo: '' })
 const total = computed(() => {
   return evento.value ? (evento.value.precio * form.value.cantidad).toFixed(2) : 0
 })
+
+// Referencia del intento de compra: se conserva entre reintentos para que
+// Openpay rechace un cobro repetido, y se renueva al cambiar la cantidad
+// porque entonces el importe ya es otro.
+const referencia = ref(nuevaReferencia())
+watch(() => form.value.cantidad, () => { referencia.value = nuevaReferencia() })
 
 const cargarEvento = async () => {
   const res = await api.get(`/eventos/${route.params.idEvento}`)
@@ -120,6 +126,7 @@ const pagar = async () => {
         anio:   form.value.anio,
         cvv:    form.value.cvv,
       },
+      referencia: referencia.value,
       idEvento: parseInt(route.params.idEvento),
       cantidad: Number(form.value.cantidad),
       nombre:   comprador.value.nombre,
